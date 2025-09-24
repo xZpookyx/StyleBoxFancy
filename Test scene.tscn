@@ -7,7 +7,6 @@
 border_width_left = 20
 border_width_top = 20
 corner_radius_top_left = 35
-corner_detail = 1
 
 [sub_resource type="Resource" id="Resource_dc28n"]
 script = ExtResource("1_20hsm")
@@ -30,8 +29,8 @@ script = ExtResource("1_n4lvk")
 color = Color(1, 0.27595, 0.58477, 1)
 draw_center = false
 borders = Array[ExtResource("1_20hsm")]([SubResource("Resource_dc28n")])
-corner_detail = 1
-corner_radius_top_left = 11
+corner_detail = 8
+corner_radius_top_left = 9
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 0
@@ -56,8 +55,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_20hsm")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 15.0
-offset_top = 22.0
-offset_right = 109.0
-offset_bottom = 93.0
+offset_left = 14.0
+offset_top = 2.0
+offset_right = 120.0
+offset_bottom = 103.0
 theme_override_styles/panel = SubResource("StyleBox_20hsm")

@@ -20,7 +20,7 @@ extends StyleBox
 		emit_changed()
 
 # Corners
-@export_range(1, 1, 1, "or_greater") var corner_detail: int = 8:
+@export_range(1, 20, 1) var corner_detail: int = 8:
 	set(v):
 		corner_detail = v
 		emit_changed()
@@ -80,17 +80,18 @@ func triangulate(outside_polygon: PackedVector2Array, inside_polygon: PackedVect
 
 	var points_idx: PackedInt32Array
 	var inside_offset = outside_polygon.size()
-	for i in range(outside_polygon.size()):
-		var i_plus_one = (i + 1) % inside_polygon.size()
-		# First triangle
-		points_idx.append(i)
-		points_idx.append(i + inside_offset)
-		points_idx.append(i_plus_one)
-
-		# Second triangle
-		points_idx.append(i + inside_offset)
-		points_idx.append(i_plus_one + inside_offset)
-		points_idx.append(i_plus_one)
+	var total_points = outside_polygon.size() + inside_polygon.size()
+	for i in range(total_points):
+		if i % 2 == 0:
+			# First triangle
+			points_idx.append(i / 2)
+			points_idx.append(i / 2 % inside_polygon.size() + inside_offset)
+			points_idx.append((i / 2 + 1) % outside_polygon.size())
+		else:
+			# Second triangle
+			points_idx.append(i / 2 + inside_offset)
+			points_idx.append((i / 2 + 1) % inside_polygon.size() + inside_offset)
+			points_idx.append(ceili(i / 2.0) % outside_polygon.size())
 
 	print(points_idx)
 	return points_idx
@@ -141,11 +142,13 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 	else:
 		# Create rounded polygon
 		border_outside = _get_rounded_polygon(rect, corner_radius, corner_detail)
+		#border_inside = _get_rounded_polygon(inside_rect, [0,0,0,0], corner_detail)
 		var inside_corner_radius = _get_border_adjusted_corner_radius(border, corner_radius)
 		border_inside = _get_rounded_polygon(inside_rect, inside_corner_radius, corner_detail)
 
 	var polygon_indices = triangulate(border_outside, border_inside)
-	var combined_polygon = border_inside + border_outside
+	var combined_polygon = border_outside + border_inside
+	print(combined_polygon)
 
 	var uv_points: PackedVector2Array
 	uv_points.resize(combined_polygon.size())
