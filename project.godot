@@ -1,0 +1,13 @@
+config_version=5
+
+[application]
+
+config/name="StyleboxFancy"
+run/main_scene="uid://cd4j4bo4f3t6w"
+config/features=PackedStringArray("4.4", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

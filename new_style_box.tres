@@ -1,0 +1,22 @@
+[gd_resource type="StyleBox" script_class="RPGStyleBox" load_steps=5 format=3 uid="uid://c0u8wlof3ppic"]
+
+[ext_resource type="Script" uid="uid://bmdqtt3p02lmo" path="res://new_script.gd" id="1_dkxjn"]
+
+[sub_resource type="Gradient" id="Gradient_dkxjn"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v1nlt"]
+gradient = SubResource("Gradient_dkxjn")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dkxjn"]
+
+[resource]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("1_dkxjn")
+center_texture = SubResource("GradientTexture2D_v1nlt")
+style_box = SubResource("StyleBoxFlat_dkxjn")
+metadata/_custom_type_script = "uid://bmdqtt3p02lmo"

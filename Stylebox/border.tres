@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="StyleBorder" load_steps=2 format=3 uid="uid://dfth862f23yhn"]
+
+[ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://Stylebox/StyleBorder.gd" id="1_pppub"]
+
+[resource]
+script = ExtResource("1_pppub")
+border_width_left = 0
+border_width_top = 0
+border_width_right = 0
+border_width_bottom = 0
+color = Color(0.8, 0.8, 0.8, 1)
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
