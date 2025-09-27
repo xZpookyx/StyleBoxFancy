@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cd4j4bo4f3t6w"]
+[gd_scene load_steps=5 format=3 uid="uid://cd4j4bo4f3t6w"]
 
-[ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://Stylebox/StyleBoxPlus.gd" id="1_0fbet"]
+[ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://Stylebox/StyleBoxFancy.gd" id="1_0fbet"]
 [ext_resource type="Script" uid="uid://cl4fgqya32xyr" path="res://grid_container.gd" id="1_62e2m"]
+[ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://Stylebox/StyleBorder.gd" id="2_qtu10"]
 
 [sub_resource type="StyleBox" id="StyleBox_ee4bf"]
 resource_local_to_scene = false
@@ -11,10 +12,17 @@ content_margin_top = -1.0
 content_margin_right = -1.0
 content_margin_bottom = -1.0
 script = ExtResource("1_0fbet")
-borders = null
+color = Color(0.6, 0.6, 0.6, 1)
+draw_center = true
+borders = Array[ExtResource("2_qtu10")]([])
+corner_detail = 8
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
-[node name="Control" type="Control"]
+[node name="Control2" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
