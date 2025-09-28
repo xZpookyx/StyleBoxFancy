@@ -89,26 +89,6 @@ func _get_rounded_polygon(rect: Rect2, corner_radius: PackedInt32Array, corner_d
 	return polygon
 
 
-func triangulate(outside_polygon: PackedVector2Array, inside_polygon: PackedVector2Array) -> PackedInt32Array:
-	var points_idx: PackedInt32Array
-	var inside_offset = outside_polygon.size()
-	var total_points = outside_polygon.size() + inside_polygon.size()
-	for i in range(total_points):
-		@warning_ignore_start("integer_division")
-		if i % 2 == 0:
-			# First triangle
-			points_idx.append(i / 2)
-			points_idx.append(i / 2 % inside_polygon.size() + inside_offset)
-			points_idx.append((i / 2 + 1) % outside_polygon.size())
-		else:
-			# Second triangle
-			points_idx.append(i / 2 + inside_offset)
-			points_idx.append((i / 2 + 1) % inside_polygon.size() + inside_offset)
-			points_idx.append(ceili(i / 2.0) % outside_polygon.size())
-		@warning_ignore_restore("integer_division")
-	return points_idx
-
-
 func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
 	var points: PackedVector2Array = [
 		rect.position,
@@ -120,7 +100,13 @@ func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
 
 
 func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: PackedInt32Array, corner_detail: int):
+	# Inset
 	rect = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
+	if not rect.has_area():
+		return
+
+	# Geometry
+	var polygons: Array[PackedVector2Array]
 
 	var inside_rect = rect.grow_individual(
 		-border.width_left,
@@ -129,51 +115,31 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 		-border.width_bottom,
 	)
 
-	# If there isn't space available to do a proper border, just render the
-	# texture in the space left
-	if not inside_rect.has_area():
-		if border.texture:
-			RenderingServer.canvas_item_add_nine_patch(
-				to_canvas_item,
-				rect,
-				border.region_rect,
-				border.texture.get_rid(),
-				Vector2(border.patch_margin_left, border.patch_margin_top),
-				Vector2(border.patch_margin_right, border.patch_margin_bottom),
-				border.axis_stretch_horizontal,
-				border.axis_stretch_vertical,
-				true,
-				border.color
-			)
-			#RenderingServer.canvas_item_add_texture_rect(
-			#	to_canvas_item,
-			#	rect,
-			#	border.texture.get_rid(),
-			#	false,
-			#	border.color
-			#)
+	if inside_rect.has_area(): # Has hole
+		var outside_polygon: PackedVector2Array
+		var inside_polygon: PackedVector2Array
+		if corner_radius.count(0) == 4:
+			outside_polygon = _get_points_from_rect(rect)
+			inside_polygon = _get_points_from_rect(inside_rect)
 		else:
-			RenderingServer.canvas_item_add_rect(
-				to_canvas_item,
-				rect,
-				border.color
+			var inside_corner_radius = _get_border_adjusted_corner_radius(border, corner_radius)
+			inside_corner_radius = _get_adjusted_corner_radius(inside_corner_radius, inside_rect)
+
+			outside_polygon = _get_rounded_polygon(rect, corner_radius, corner_detail)
+			inside_polygon = _get_rounded_polygon(
+				inside_rect,
+				inside_corner_radius,
+				corner_detail
 			)
-		return
+		polygons = Geometry2D.clip_polygons(outside_polygon, inside_polygon)
 
-	var outside_polygon: PackedVector2Array
-	var inside_polygon: PackedVector2Array
-	if corner_radius.count(0) == 4:
-		outside_polygon = _get_points_from_rect(rect)
-		inside_polygon = _get_points_from_rect(inside_rect)
-	else:
-		outside_polygon = _get_rounded_polygon(rect, corner_radius, corner_detail)
-		inside_polygon = _get_rounded_polygon(
-			inside_rect,
-			_get_border_adjusted_corner_radius(border, corner_radius),
-			corner_detail
-		)
+	else: # Not enought size to cut a hole
+		if corner_radius.count(0) == 4:
+			polygons = [_get_points_from_rect(rect)]
+		else:
+			polygons = [_get_rounded_polygon(rect, corner_radius, corner_detail)]
 
-	var polygons = Geometry2D.clip_polygons(outside_polygon, inside_polygon)
+	# Cut polygon if there's an enclosed hole
 	if polygons.size() == 2:
 		if Geometry2D.is_polygon_clockwise(polygons[1]):
 			var fixed_polygon: PackedVector2Array
@@ -186,6 +152,7 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			fixed_polygon.append(polygons[0][0])
 			polygons = [fixed_polygon]
 
+	# Render
 	for polygon in polygons:
 		if border.texture:
 			var uv: PackedVector2Array
@@ -204,15 +171,21 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			RenderingServer.canvas_item_add_polygon(to_canvas_item, polygon, [border.color])
 
 
-func _get_border_adjusted_corner_radius(border: StyleBorder, corner_radius: PackedInt32Array) -> PackedInt32Array:
-	corner_radius[0] -= mini(border.width_left, border.width_top)
-	corner_radius[1] -= mini(border.width_top, border.width_right)
-	corner_radius[2] -= mini(border.width_right, border.width_bottom)
-	corner_radius[3] -= mini(border.width_bottom, border.width_left)
-	for corner_idx in range(4):
-		if corner_radius[corner_idx] < 0:
-			corner_radius[corner_idx] = 0
-	return corner_radius
+func _get_border_adjusted_corner_radius(border: StyleBorder, corner_radius: PackedInt32Array, use_inset: bool = false) -> PackedInt32Array:
+	var adjusted: PackedInt32Array
+	adjusted.resize(4)
+
+	if use_inset:
+		adjusted[0] = maxi(0, corner_radius[0] - maxi(0, mini(border.inset_left, border.inset_top)))
+		adjusted[1] = maxi(0, corner_radius[1] - maxi(0, mini(border.inset_top, border.inset_right)))
+		adjusted[2] = maxi(0, corner_radius[2] - maxi(0, mini(border.inset_right, border.inset_bottom)))
+		adjusted[3] = maxi(0, corner_radius[3] - maxi(0, mini(border.inset_bottom, border.inset_left)))
+	else:
+		adjusted[0] = maxi(0, corner_radius[0] - mini(border.width_left, border.width_top))
+		adjusted[1] = maxi(0, corner_radius[1] - mini(border.width_top, border.width_right))
+		adjusted[2] = maxi(0, corner_radius[2] - mini(border.width_right, border.width_bottom))
+		adjusted[3] = maxi(0, corner_radius[3] - mini(border.width_bottom, border.width_left))
+	return adjusted
 
 
 func _get_polygon_uv(polygon: PackedVector2Array, rect: Rect2) -> PackedVector2Array:
@@ -222,6 +195,21 @@ func _get_polygon_uv(polygon: PackedVector2Array, rect: Rect2) -> PackedVector2A
 		uv[point_idx] = (polygon[point_idx] - rect.position) / rect.size
 	return uv
 
+
+func _get_adjusted_corner_radius(corners: PackedInt32Array, rect: Rect2):
+	var adjusted: PackedInt32Array
+	adjusted.resize(4)
+	var scale = min(
+		1,
+		rect.size.x / (corners[0] + corners[1]),
+		rect.size.y / (corners[1] + corners[2]),
+		rect.size.x / (corners[2] + corners[3]),
+		rect.size.y / (corners[3] + corners[0]),
+	)
+
+	for i in range(4):
+		adjusted[i] = corners[i] * scale
+	return adjusted
 
 func _draw(to_canvas_item, rect):
 	if cached_rect == rect:
@@ -248,12 +236,13 @@ func _draw(to_canvas_item, rect):
 			else:
 				RenderingServer.canvas_item_add_rect(to_canvas_item, rect, color)
 		else:
+			var adjusted_corner_radius = _get_adjusted_corner_radius(corner_radius, rect)
 			var polygon: PackedVector2Array = _get_rounded_polygon(
 					rect,
-					corner_radius,
+					adjusted_corner_radius,
 					corner_detail
 				)
-			#print(polygon)
+
 			if texture:
 				var uv = _get_polygon_uv(polygon, rect)
 				RenderingServer.canvas_item_add_polygon(
@@ -266,26 +255,30 @@ func _draw(to_canvas_item, rect):
 			else:
 				RenderingServer.canvas_item_add_polygon(to_canvas_item, polygon, [color])
 
-
 	if borders:
 		var border_rect = rect
 		var border_corner_radius = corner_radius
 		for border in borders:
 			if not border: continue
 
+
 			if border.ignore_stack:
+				border_corner_radius = _get_adjusted_corner_radius(border_corner_radius, border_rect)
 				_draw_border(to_canvas_item, rect, border, corner_radius, corner_detail)
-				#border_corner_radius = _get_border_adjusted_corner_radius(border, border_corner_radius)
 				continue
 
 			if not border_rect.has_area(): continue
 
-			_draw_border(to_canvas_item, border_rect, border, corner_radius, corner_detail)
-			#border_corner_radius = _get_border_adjusted_corner_radius(border, border_corner_radius)
+			# Apply inset first
+			border_corner_radius = _get_border_adjusted_corner_radius(border, border_corner_radius, true)
+			border_corner_radius = _get_adjusted_corner_radius(border_corner_radius, border_rect)
 
-			border_rect	= border_rect.grow_individual(
-				-border.width_left,
-				-border.width_top,
-				-border.width_right,
-				-border.width_bottom,
+			_draw_border(to_canvas_item, border_rect, border, border_corner_radius, corner_detail)
+			border_corner_radius = _get_border_adjusted_corner_radius(border, border_corner_radius)
+
+			border_rect = border_rect.grow_individual(
+				-border.width_left - border.inset_left,
+				-border.width_top - border.inset_top,
+				-border.width_right - border.inset_right,
+				-border.width_bottom - border.inset_bottom,
 			)

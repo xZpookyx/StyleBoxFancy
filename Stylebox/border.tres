@@ -4,9 +4,21 @@
 
 [resource]
 script = ExtResource("1_pppub")
-border_width_left = 0
-border_width_top = 0
-border_width_right = 0
-border_width_bottom = 0
 color = Color(0.8, 0.8, 0.8, 1)
+ignore_stack = false
+width_left = 0
+width_top = 0
+width_right = 0
+width_bottom = 0
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 0
+patch_margin_top = 0
+patch_margin_right = 0
+patch_margin_bottom = 0
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
 metadata/_custom_type_script = "uid://cjmmhbp1b5312"
