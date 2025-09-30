@@ -11,6 +11,10 @@ class_name StyleBorder
 	set(v):
 		ignore_stack = v
 		emit_changed()
+@export var anti_aliasing: bool = true:
+	set(v):
+		anti_aliasing = v
+		emit_changed()
 
 @export_group("Border width", "width")
 @export_range(0, 1, 1, "or_greater", "suffix:px") var width_left: int:
