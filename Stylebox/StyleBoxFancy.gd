@@ -110,6 +110,44 @@ func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
 	]
 	return points
 
+func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corner_radius: Vector4, ring_color: Color, ring_texture: Texture2D, texture_rect: Rect2, fade: bool, fade_inside: bool = false):
+	if inner_rect.encloses(outer_rect):
+		return
+
+	# left, top, right, bottom
+	var inner_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(inner_rect, outer_rect))
+	var inner_points: PackedVector2Array = _get_rounded_polygon(inner_rect, inner_corner_radius)
+	var outer_points: PackedVector2Array = _get_rounded_polygon(outer_rect, corner_radius)
+	var all_points: PackedVector2Array = inner_points + outer_points
+	var indices: PackedInt32Array = _triangulate_ring(inner_points, outer_points, corner_radius, inner_corner_radius)
+
+	var colors: PackedColorArray
+	if fade:
+		if fade_inside:
+			colors = _get_faded_color_array(ring_color, inner_points.size(), outer_points.size(), true)
+		else:
+			colors = _get_faded_color_array(ring_color, inner_points.size(), outer_points.size())
+	else:
+		colors = [ring_color]
+
+	if ring_texture != null:
+		RenderingServer.canvas_item_add_triangle_array(
+			to_canvas_item,
+			indices,
+			all_points,
+			colors,
+			_get_polygon_uv(all_points, texture_rect),
+			PackedInt32Array(),
+			PackedFloat32Array(),
+			ring_texture.get_rid()
+		)
+	else:
+		RenderingServer.canvas_item_add_triangle_array(
+			to_canvas_item,
+			indices,
+			all_points,
+			colors,
+		)
 
 func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D):
 	# Simple rect check
@@ -136,9 +174,9 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 			rect.grow(aa * 0.5),
 			outer_corner_radius,
 			rect_color,
-			true,
 			texture,
-			rect
+			rect,
+			true
 		)
 
 	var points = _get_rounded_polygon(center_rect, center_corner_radius)
@@ -157,183 +195,57 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 			[rect_color]
 		)
 
-func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corner_radius: Vector4, ring_color: Color, fade: bool, ring_texture: Texture2D, texture_rect: Rect2):
-	# left, top, right, bottom
-	var inner_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(inner_rect, outer_rect))
-	var inner_points: PackedVector2Array = _get_rounded_polygon(inner_rect, inner_corner_radius)
-	var outer_points: PackedVector2Array = _get_rounded_polygon(outer_rect, corner_radius)
-	var all_points: PackedVector2Array = inner_points + outer_points
-	var indices: PackedInt32Array = _triangulate_ring(inner_points, outer_points, corner_radius, inner_corner_radius)
-	var colors: PackedColorArray = _get_faded_color_array(ring_color, inner_points.size(), outer_points.size()) if fade else [ring_color]
+func _draw_border2(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
+	var outer_rect = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
+	var inner_rect = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
+	var fill_corner_radius = corner_radius
 
-	if ring_texture != null:
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			indices,
-			all_points,
-			colors,
-			_get_polygon_uv(all_points, texture_rect),
-			PackedInt32Array(),
-			PackedFloat32Array(),
-			ring_texture.get_rid()
-		)
-	else:
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			indices,
-			all_points,
-			colors,
-		)
-
-func _draw_antialiased_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
-	var border_outer_rect = rect.grow_individual(
-		-border.inset_left,
-		-border.inset_top,
-		-border.inset_right,
-		-border.inset_bottom
-	)
-	var border_inner_rect = border_outer_rect.grow_individual(
-		-border.width_left,
-		-border.width_top,
-		-border.width_right,
-		-border.width_bottom,
-	)
-
-	if not anti_aliasing:
-		var outer_ring = _get_rounded_polygon(border_outer_rect, corner_radius)
-		var inner_ring = _get_rounded_polygon(border_inner_rect, corner_radius)
-		var fill_points = inner_ring + outer_ring
-		if border.texture != null:
-			RenderingServer.canvas_item_add_triangle_array(
-				to_canvas_item,
-				_triangulate_ring(inner_ring, outer_ring, corner_radius),
-				fill_points,
-				[border.color],
-				_get_polygon_uv(fill_points, rect),
-				PackedInt32Array(),
-				PackedFloat32Array(),
-				border.texture.get_rid()
-			)
-		else:
-			RenderingServer.canvas_item_add_triangle_array(
-				to_canvas_item,
-				_triangulate_ring(inner_ring, outer_ring, corner_radius),
-				fill_points,
-				[border.color]
-			)
+	if not outer_rect.has_area():
 		return
 
-	# GEOMETRY
-	var rings: Array[PackedVector2Array]
-	var inner_rect
-	var outer_rect
+	if anti_aliasing:
+		outer_rect = outer_rect.grow(-anti_aliasing_size * 0.5)
+		inner_rect = inner_rect.grow(anti_aliasing_size * 0.5)
+		#print(fill_corner_radius)
+		fill_corner_radius = _adjust_corner_radius(corner_radius, Vector4.ONE * anti_aliasing_size * 0.5)
+		#print(fill_corner_radius)
 
-	# Outside
-	inner_rect = border_outer_rect.grow_individual(
-		-anti_aliasing_size / 2 if border.width_left else 0,
-		-anti_aliasing_size / 2 if border.width_top else 0,
-		-anti_aliasing_size / 2 if border.width_right else 0,
-		-anti_aliasing_size / 2 if border.width_bottom else 0
+		# Outer aa
+		_draw_ring(
+			to_canvas_item,
+			outer_rect,
+			outer_rect.grow(anti_aliasing_size),
+			_adjust_corner_radius(corner_radius, -Vector4.ONE * anti_aliasing_size * 0.5),
+			border.color,
+			border.texture,
+			rect,
+			true,
+		)
+
+		# Inner aa
+		_draw_ring(
+			to_canvas_item,
+			inner_rect.grow(-anti_aliasing_size),
+			inner_rect,
+			_adjust_corner_radius(corner_radius, _get_sides_width_from_rects(inner_rect, outer_rect) + Vector4i.ONE * anti_aliasing_size * 0.5),
+			border.color,
+			border.texture,
+			rect,
+			true,
+			true
+		)
+
+	# Border
+	_draw_ring(
+		to_canvas_item,
+		inner_rect,
+		outer_rect,
+		fill_corner_radius,
+		border.color,
+		border.texture,
+		rect,
+		false,
 	)
-	outer_rect = border_outer_rect.grow_individual(
-		anti_aliasing_size / 2 if border.width_left else 0,
-		anti_aliasing_size / 2 if border.width_top else 0,
-		anti_aliasing_size / 2 if border.width_right else 0,
-		anti_aliasing_size / 2 if border.width_bottom else 0
-	)
-
-	rings.append_array([
-		_get_rounded_polygon(outer_rect, corner_radius),
-		_get_rounded_polygon(inner_rect, corner_radius)
-	])
-
-	# Inside
-	inner_rect = border_inner_rect.grow_individual(
-		-anti_aliasing_size / 2 if border.width_left else 0,
-		-anti_aliasing_size / 2 if border.width_top else 0,
-		-anti_aliasing_size / 2 if border.width_right else 0,
-		-anti_aliasing_size / 2 if border.width_bottom else 0
-	)
-	outer_rect = border_inner_rect.grow_individual(
-		anti_aliasing_size / 2 if border.width_left else 0,
-		anti_aliasing_size / 2 if border.width_top else 0,
-		anti_aliasing_size / 2 if border.width_right else 0,
-		anti_aliasing_size / 2 if border.width_bottom else 0
-	)
-
-	rings.append_array([
-		_get_rounded_polygon(outer_rect, corner_radius),
-		_get_rounded_polygon(inner_rect, corner_radius),
-	])
-
-
-	# RENDER
-	var outer_ring_points = rings[1] + rings[0]
-	var inner_ring_points = rings[2] + rings[3]
-	var fill_points = rings[1] + rings[2]
-	if border.texture != null:
-		# TEXTURE
-		# Outer ring
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			_triangulate_ring(rings[1], rings[0], corner_radius),
-			outer_ring_points,
-			_get_faded_color_array(border.color, rings[1].size(), rings[0].size()),
-			_get_polygon_uv(outer_ring_points, rect),
-			PackedInt32Array(),
-			PackedFloat32Array(),
-			border.texture.get_rid()
-		)
-
-		# Inner ring
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			_triangulate_ring(rings[2], rings[3], corner_radius),
-			inner_ring_points,
-			_get_faded_color_array(border.color, rings[2].size(), rings[3].size()),
-			_get_polygon_uv(inner_ring_points, rect),
-			PackedInt32Array(),
-			PackedFloat32Array(),
-			border.texture.get_rid()
-		)
-
-		# Fill
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			_triangulate_ring(rings[1], rings[2], corner_radius),
-			rings[1] + rings[2],
-			[border.color],
-			_get_polygon_uv(fill_points, rect),
-			PackedInt32Array(),
-			PackedFloat32Array(),
-			border.texture.get_rid()
-		)
-	else:
-		# NO TEXTURE
-		# Outer ring
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			_triangulate_ring(rings[1], rings[0], corner_radius),
-			outer_ring_points,
-			_get_faded_color_array(border.color, rings[1].size(), rings[0].size())
-		)
-
-		# Inner ring
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			_triangulate_ring(rings[2], rings[3], corner_radius),
-			inner_ring_points,
-			_get_faded_color_array(border.color, rings[2].size(), rings[3].size())
-		)
-
-		RenderingServer.canvas_item_add_triangle_array(
-			to_canvas_item,
-			_triangulate_ring(rings[1], rings[2], corner_radius),
-			rings[1] + rings[2],
-			[border.color]
-		)
-
-
 
 func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4 = Vector4()) -> PackedInt32Array:
 	var triangle_indices: PackedInt32Array
@@ -381,65 +293,25 @@ func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2
 	return triangle_indices
 
 
-func _get_faded_color_array(fill_color: Color, opaque: int, transparent: int) -> PackedColorArray:
+func _get_faded_color_array(fill_color: Color, opaque: int, transparent: int, inverse: bool = false) -> PackedColorArray:
 	var colors: PackedColorArray
 	colors.resize(opaque + transparent)
 
-	for i in range(opaque):
-		colors[i] = fill_color
+	if inverse:
+		for i in range(opaque):
+			colors[i] = fill_color * Color.TRANSPARENT
 
-	for i in range(opaque, opaque + transparent):
-		colors[i] = fill_color * Color.TRANSPARENT
+		for i in range(opaque, opaque + transparent):
+			colors[i] = fill_color
+	else:
+		for i in range(opaque):
+			colors[i] = fill_color
+
+		for i in range(opaque, opaque + transparent):
+			colors[i] = fill_color * Color.TRANSPARENT
 
 	return colors
 
-
-func _draw_border2(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
-	var outer_rect = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
-	var inner_rect = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
-
-	if not outer_rect.has_area():
-		return
-
-	if anti_aliasing:
-		outer_rect = outer_rect.grow(-anti_aliasing_size * 0.5)
-		inner_rect = inner_rect.grow(anti_aliasing_size * 0.5)
-
-		# Outer aa
-		_draw_ring(
-			to_canvas_item,
-			outer_rect,
-			outer_rect.grow(anti_aliasing_size),
-			corner_radius,
-			border.color,
-			true,
-			border.texture,
-			rect
-		)
-
-		# Inner aa
-		_draw_ring(
-			to_canvas_item,
-			inner_rect,
-			inner_rect.grow(-anti_aliasing_size),
-			corner_radius,
-			border.color,
-			true,
-			border.texture,
-			rect
-		)
-
-	# Border
-	_draw_ring(
-		to_canvas_item,
-		inner_rect,
-		outer_rect,
-		corner_radius,
-		border.color,
-		false,
-		border.texture,
-		rect
-	)
 
 func _get_sides_width_from_rects(inner_rect: Rect2, outer_rect: Rect2):
 	return Vector4(
@@ -449,13 +321,18 @@ func _get_sides_width_from_rects(inner_rect: Rect2, outer_rect: Rect2):
 		(outer_rect.position.y + outer_rect.size.y) - (inner_rect.position.y + inner_rect.size.y)
 	)
 
-func _adjust_corner_radius(corner_radius: Vector4, sides_width: Vector4):
+func _adjust_corner_radius(corner_radius: Vector4, sides_width: Vector4, cap: bool = true):
 	var adjusted: Vector4
-
 	adjusted[0] = max(0, corner_radius[0] - min(sides_width[0], sides_width[1]))
 	adjusted[1] = max(0, corner_radius[1] - min(sides_width[1], sides_width[2]))
 	adjusted[2] = max(0, corner_radius[2] - min(sides_width[2], sides_width[3]))
 	adjusted[3] = max(0, corner_radius[3] - min(sides_width[3], sides_width[0]))
+	#if cap:
+		#adjusted[0] = max(0, corner_radius[0] - max(0, min(sides_width[0], sides_width[1])))
+		#adjusted[1] = max(0, corner_radius[1] - max(0, min(sides_width[1], sides_width[2])))
+		#adjusted[2] = max(0, corner_radius[2] - max(0, min(sides_width[2], sides_width[3])))
+		#adjusted[3] = max(0, corner_radius[3] - max(0, min(sides_width[3], sides_width[0])))
+	#else:
 	return adjusted
 
 func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
