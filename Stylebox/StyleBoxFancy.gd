@@ -98,6 +98,7 @@ func _get_rounded_polygon(rect: Rect2, corner_radius: Vector4) -> PackedVector2A
 			var x = cos(angle_step) * corner_radius[corner_idx]
 			var y = sin(angle_step) * corner_radius[corner_idx]
 			polygon.append(corners[corner_idx] + offsets[corner_idx] + Vector2(x, y))
+
 	return polygon
 
 
@@ -120,6 +121,14 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 	var outer_points: PackedVector2Array = _get_rounded_polygon(outer_rect, corner_radius)
 	var all_points: PackedVector2Array = inner_points + outer_points
 	var indices: PackedInt32Array = _triangulate_ring(inner_points, outer_points, corner_radius, inner_corner_radius)
+
+
+	for point_idx in range(all_points.size()):
+		all_points[point_idx] = all_points[point_idx].clamp(outer_rect.position, outer_rect.end)
+		#print(inner_points[point_idx])
+		#inner_points[point_idx] = inner_points[point_idx].clamp(outer_rect.position, outer_rect.end)
+	#for point_idx in range(outer_points.size()):
+		#outer_points[point_idx] = outer_points[point_idx].clamp(outer_rect.position, outer_rect.end)
 
 	var colors: PackedColorArray
 	if fade:
@@ -160,26 +169,25 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 
 	# Rounded rect
 	var center_rect = rect
-	var center_corner_radius = corner_radius
+	var center_corner_radius = _fit_corner_radius_in_rect(corner_radius, rect)
 
 	if aa != 0: # if antialiasing
 		center_rect = rect.grow(-aa * 0.5)
 		center_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(rect, rect.grow(aa * 0.5)))
 		var outer_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(rect, rect.grow(-aa * 0.5)))
-		#print(corner_radius)
-		#print(center_cr)
+
 		_draw_ring(
 			to_canvas_item,
 			center_rect,
 			rect.grow(aa * 0.5),
-			outer_corner_radius,
+			_fit_corner_radius_in_rect(outer_corner_radius, rect.grow(aa * 0.5)),
 			rect_color,
-			texture,
+			rect_texture,
 			rect,
 			true
 		)
 
-	var points = _get_rounded_polygon(center_rect, center_corner_radius)
+	var points = _get_rounded_polygon(center_rect, _fit_corner_radius_in_rect(center_corner_radius, center_rect))
 	if rect_texture:
 		RenderingServer.canvas_item_add_polygon(
 			to_canvas_item,
@@ -198,16 +206,29 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 func _draw_border2(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
 	var outer_rect = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
 	var inner_rect = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
+	#var fill_corner_radius = _fit_corner_radius_in_rect(corner_radius, outer_rect)
 	var fill_corner_radius = corner_radius
 
 	if not outer_rect.has_area():
+		return
+
+	if not inner_rect.has_area():
+		# Since it is filled, drawing just the rect is more performant
+		_draw_rect(
+			to_canvas_item,
+			outer_rect,
+			border.color,
+			corner_radius,
+			anti_aliasing_size if anti_aliasing else 0,
+			border.texture,
+		)
 		return
 
 	if anti_aliasing:
 		outer_rect = outer_rect.grow(-anti_aliasing_size * 0.5)
 		inner_rect = inner_rect.grow(anti_aliasing_size * 0.5)
 		#print(fill_corner_radius)
-		fill_corner_radius = _adjust_corner_radius(corner_radius, Vector4.ONE * anti_aliasing_size * 0.5)
+		fill_corner_radius = _adjust_corner_radius(fill_corner_radius, Vector4.ONE * anti_aliasing_size * 0.5)
 		#print(fill_corner_radius)
 
 		# Outer aa
@@ -234,6 +255,7 @@ func _draw_border2(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner
 			true,
 			true
 		)
+
 
 	# Border
 	_draw_ring(
@@ -299,7 +321,7 @@ func _get_faded_color_array(fill_color: Color, opaque: int, transparent: int, in
 
 	if inverse:
 		for i in range(opaque):
-			colors[i] = fill_color * Color.TRANSPARENT
+			colors[i] = fill_color * Color("white", 0.1)
 
 		for i in range(opaque, opaque + transparent):
 			colors[i] = fill_color
@@ -308,7 +330,7 @@ func _get_faded_color_array(fill_color: Color, opaque: int, transparent: int, in
 			colors[i] = fill_color
 
 		for i in range(opaque, opaque + transparent):
-			colors[i] = fill_color * Color.TRANSPARENT
+			colors[i] = fill_color * Color("white", 0.1)
 
 	return colors
 
@@ -359,7 +381,7 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			inside_polygon = _get_points_from_rect(inside_rect)
 		else:
 			var inside_corner_radius = _get_border_adjusted_corner_radius(border, corner_radius)
-			inside_corner_radius = _get_adjusted_corner_radius(inside_corner_radius, inside_rect)
+			inside_corner_radius = _fit_corner_radius_in_rect(inside_corner_radius, inside_rect)
 
 			#outside_polygon = _get_rounded_polygon(rect, corner_radius, corner_detail)
 			inside_polygon = _get_rounded_polygon(inside_rect, inside_corner_radius)
@@ -369,8 +391,8 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 		if corner_radius:
 			polygons = [_get_points_from_rect(rect)]
 		else:
-			pass
-			#polygons = [_get_rounded_polygon(rect, corner_radius, corner_detail)]
+			#pass
+			polygons = [_get_rounded_polygon(rect, corner_radius)]
 
 	# Cut polygon if there's an enclosed hole
 	if polygons.size() == 2:
@@ -428,7 +450,7 @@ func _get_polygon_uv(polygon: PackedVector2Array, rect: Rect2) -> PackedVector2A
 	return uv
 
 
-func _get_adjusted_corner_radius(corners: Vector4, rect: Rect2):
+func _fit_corner_radius_in_rect(corners: Vector4, rect: Rect2):
 	var adjusted: Vector4
 
 	var scale = min(
@@ -440,7 +462,7 @@ func _get_adjusted_corner_radius(corners: Vector4, rect: Rect2):
 	)
 
 	for i in range(4):
-		adjusted[i] = corners[i] * scale - 1
+		adjusted[i] = corners[i] * scale
 	return adjusted
 
 
@@ -452,6 +474,8 @@ func _draw(to_canvas_item, rect):
 		corner_radius_bottom_right,
 		corner_radius_bottom_left
 	)
+
+	corner_radius = _fit_corner_radius_in_rect(corner_radius, rect)
 
 	var transform = Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
 	RenderingServer.canvas_item_add_set_transform(to_canvas_item, transform)
@@ -467,12 +491,42 @@ func _draw(to_canvas_item, rect):
 		)
 
 	if borders:
+		var border_rect = rect
+		var border_corner_radius: Vector4 = corner_radius
+
 		for border in borders:
+			if border == null: continue
+
+			if border.ignore_stack:
+				_draw_border2(
+					to_canvas_item,
+					rect,
+					border,
+					corner_radius
+
+				)
+				continue
+
 			_draw_border2(
 				to_canvas_item,
-				rect,
+				border_rect,
 				border,
-				corner_radius
+				border_corner_radius
+			)
+
+			# Adjust parameters for the next border
+			border_corner_radius = _adjust_corner_radius(border_corner_radius, Vector4(
+				border.width_left,
+				border.width_top,
+				border.width_right,
+				border.width_bottom,
+			))
+
+			border_rect = border_rect.grow_individual(
+				-border.width_left - border.inset_left,
+				-border.width_top - border.inset_top,
+				-border.width_right - border.inset_right,
+				-border.width_bottom - border.inset_bottom,
 			)
 
 	#if borders:
@@ -483,18 +537,19 @@ func _draw(to_canvas_item, rect):
 #
 #
 			#if border.ignore_stack:
-				#border_corner_radius = _get_adjusted_corner_radius(border_corner_radius, border_rect)
-				#_draw_border(to_canvas_item, rect, border, corner_radius, corner_detail)
+				#border_corner_radius = _fit_corner_radius_in_rect(border_corner_radius, border_rect)
+				#_draw_border(to_canvas_item, rect, border, corner_radius)
 				#continue
 #
 			#if not border_rect.has_area(): continue
 #
 			## Apply inset first
 			#border_corner_radius = _get_border_adjusted_corner_radius(border, border_corner_radius, true)
-			#border_corner_radius = _get_adjusted_corner_radius(border_corner_radius, border_rect)
+			#border_corner_radius = _fit_corner_radius_in_rect(border_corner_radius, border_rect)
 #
-			##_draw_border(to_canvas_item, border_rect, border, border_corner_radius, corner_detail)
-			#_draw_antialiased_border(to_canvas_item, border_rect, border, border_corner_radius)
+			#_draw_border(to_canvas_item, border_rect, border, border_corner_radius)
+			#print(border_corner_radius)
+			##_draw_antialiased_border(to_canvas_item, border_rect, border, border_corner_radius)
 			#border_corner_radius = _get_border_adjusted_corner_radius(border, border_corner_radius)
 #
 			#border_rect = border_rect.grow_individual(
