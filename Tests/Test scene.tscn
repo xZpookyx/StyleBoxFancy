@@ -1,0 +1,406 @@
+[gd_scene load_steps=29 format=3 uid="uid://smo0o0fa3327"]
+
+[ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://Stylebox/StyleBorder.gd" id="1_nqgo6"]
+[ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://Stylebox/StyleBoxFancy.gd" id="2_e7l11"]
+
+[sub_resource type="Gradient" id="Gradient_20hsm"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ij3co"]
+gradient = SubResource("Gradient_20hsm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dc28n"]
+texture = SubResource("GradientTexture2D_ij3co")
+
+[sub_resource type="Gradient" id="Gradient_ij3co"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.5)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dc28n"]
+gradient = SubResource("Gradient_ij3co")
+fill_from = Vector2(1, 1)
+fill_to = Vector2(0, 0)
+
+[sub_resource type="Resource" id="Resource_oj8n5"]
+script = ExtResource("1_nqgo6")
+color = Color(0.8, 0.8, 0.8, 0.611765)
+ignore_stack = false
+anti_aliasing = true
+width_left = 20
+width_top = 20
+width_right = 20
+width_bottom = 20
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+texture = SubResource("GradientTexture2D_dc28n")
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 10
+patch_margin_top = 10
+patch_margin_right = 10
+patch_margin_bottom = 10
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
+[sub_resource type="Resource" id="Resource_0hynj"]
+script = ExtResource("1_nqgo6")
+color = Color(1, 1, 1, 0.639216)
+ignore_stack = false
+anti_aliasing = true
+width_left = 2
+width_top = 2
+width_right = 2
+width_bottom = 2
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 0
+patch_margin_top = 0
+patch_margin_right = 0
+patch_margin_bottom = 0
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
+[sub_resource type="StyleBox" id="StyleBox_20hsm"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = 120.0
+content_margin_top = 93.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_e7l11")
+color = Color(0.5246, 0.86, 0.85441, 1)
+skew = Vector2(0, 0)
+draw_center = true
+borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_oj8n5"), SubResource("Resource_0hynj")])
+corner_detail = 6
+corner_radius_top_left = 0
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+anti_aliasing = true
+anti_aliasing_size = 1.0
+cached_rect = Rect2(0, 0, 192, 146)
+metadata/_custom_type_script = "uid://bkl6g25jwb47h"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_634l0"]
+bg_color = Color(1, 0.58, 0.58, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_detail = 3
+
+[sub_resource type="Gradient" id="Gradient_dc28n"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oj8n5"]
+gradient = SubResource("Gradient_dc28n")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xaixu"]
+atlas = SubResource("GradientTexture2D_oj8n5")
+region = Rect2(8, 8, 48, 48)
+margin = Rect2(-12.79, -13.805, -0.175, 8.055)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0hynj"]
+texture = SubResource("AtlasTexture_xaixu")
+
+[sub_resource type="Resource" id="Resource_20hsm"]
+script = ExtResource("1_nqgo6")
+color = Color(0, 0, 0, 0.431373)
+ignore_stack = false
+anti_aliasing = true
+width_left = 0
+width_top = 0
+width_right = 0
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = -10
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 0
+patch_margin_top = 0
+patch_margin_right = 0
+patch_margin_bottom = 0
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
+[sub_resource type="Gradient" id="Gradient_oj8n5"]
+interpolation_mode = 2
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.530055, 1)
+colors = PackedColorArray(0.831373, 0.717647, 1, 1, 1, 0.639216, 0.698039, 1, 1, 0.713726, 0.439216, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xaixu"]
+gradient = SubResource("Gradient_oj8n5")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Resource" id="Resource_634l0"]
+script = ExtResource("1_nqgo6")
+color = Color(1, 1, 1, 0)
+ignore_stack = false
+anti_aliasing = true
+width_left = 3
+width_top = 3
+width_right = 3
+width_bottom = 3
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+texture = SubResource("GradientTexture2D_xaixu")
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 0
+patch_margin_top = 0
+patch_margin_right = 0
+patch_margin_bottom = 0
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
+[sub_resource type="StyleBox" id="StyleBox_0hynj"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_e7l11")
+color = Color(0.247059, 0.207843, 0.25098, 1)
+skew = Vector2(0, 0)
+draw_center = true
+borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_20hsm"), SubResource("Resource_634l0")])
+corner_detail = 6
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+anti_aliasing = true
+anti_aliasing_size = 1.0
+cached_rect = Rect2(16, 16, 331, 118)
+metadata/_custom_type_script = "uid://bkl6g25jwb47h"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nqgo6"]
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(0.8, 0, 0, 1)
+corner_radius_top_left = 30
+corner_detail = 3
+anti_aliasing_size = 5.0
+
+[sub_resource type="Gradient" id="Gradient_nqgo6"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_e7l11"]
+gradient = SubResource("Gradient_nqgo6")
+
+[sub_resource type="Resource" id="Resource_e7l11"]
+script = ExtResource("1_nqgo6")
+color = Color(0.8, 0.8, 0.8, 0.541176)
+ignore_stack = false
+anti_aliasing = true
+width_left = 8
+width_top = 1
+width_right = 1
+width_bottom = 0
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+texture = SubResource("GradientTexture2D_e7l11")
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 0
+patch_margin_top = 0
+patch_margin_right = 0
+patch_margin_bottom = 0
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
+[sub_resource type="StyleBox" id="StyleBox_e7l11"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_e7l11")
+color = Color(1, 0.254071, 0.638421, 1)
+skew = Vector2(0, 0)
+draw_center = false
+borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_e7l11")])
+corner_detail = 3
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 1
+anti_aliasing = true
+anti_aliasing_size = 1.0
+cached_rect = Rect2(16, 16, 331, 118)
+metadata/_custom_type_script = "uid://bkl6g25jwb47h"
+
+[sub_resource type="Resource" id="Resource_nqgo6"]
+script = ExtResource("1_nqgo6")
+color = Color(0.8, 0.488, 0.488, 0.498039)
+ignore_stack = false
+anti_aliasing = true
+width_left = 10
+width_top = 10
+width_right = 10
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+region_rect = Rect2(0, 0, 0, 0)
+patch_margin_left = 0
+patch_margin_top = 0
+patch_margin_right = 0
+patch_margin_bottom = 0
+axis_stretch_horizontal = 0
+axis_stretch_vertical = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
+[sub_resource type="StyleBox" id="StyleBox_3yfbj"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_e7l11")
+color = Color(0.960366, 0.00086077, 0.976281, 1)
+skew = Vector2(0, 0)
+draw_center = false
+borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_nqgo6")])
+corner_detail = 6
+corner_radius_top_left = 35
+corner_radius_top_right = 0
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 0
+anti_aliasing = false
+anti_aliasing_size = 1.0
+cached_rect = Rect2(0, 0, 0, 0)
+metadata/_custom_type_script = "uid://bkl6g25jwb47h"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_20hsm"]
+bg_color = Color(0.988572, 0.299842, 0.574505, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.454902)
+corner_radius_top_left = 20
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+metadata/_edit_vertical_guides_ = [808.0, 208.0, 219.0, 207.0]
+metadata/_edit_horizontal_guides_ = [602.0]
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 171.0
+offset_right = 199.0
+offset_bottom = 245.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_dc28n")
+
+[node name="Label" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "GANASTE!!"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 321.0
+offset_top = 101.0
+offset_right = 513.0
+offset_bottom = 247.0
+theme_override_styles/panel = SubResource("StyleBox_20hsm")
+
+[node name="Panel4" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 447.0
+offset_top = 422.0
+offset_right = 580.0
+offset_bottom = 471.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_634l0")
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 641.0
+offset_top = 111.0
+offset_right = 715.0
+offset_bottom = 192.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_0hynj")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 595.0
+offset_top = 216.0
+offset_right = 101.0
+offset_bottom = -92.0
+texture = SubResource("GradientTexture2D_dc28n")
+patch_margin_left = 8
+patch_margin_top = 32
+patch_margin_right = 8
+patch_margin_bottom = 8
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Fancy" type="Panel" parent="Control"]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 478.0
+offset_right = 392.0
+offset_bottom = 799.0
+theme_override_styles/panel = SubResource("StyleBox_0hynj")
+
+[node name="Fancy4" type="Panel" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 204.0
+offset_top = 245.0
+offset_right = 304.0
+offset_bottom = 275.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_nqgo6")
+
+[node name="Fancy2" type="Panel" parent="Control"]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 241.0
+offset_right = 284.0
+offset_bottom = 297.0
+theme_override_styles/panel = SubResource("StyleBox_e7l11")
+
+[node name="Fancy3" type="Panel" parent="Control"]
+layout_mode = 0
+offset_left = 773.0
+offset_top = 570.0
+offset_right = 864.0
+offset_bottom = 622.0
+theme_override_styles/panel = SubResource("StyleBox_3yfbj")
+
+[node name="Flat" type="Panel" parent="Control"]
+layout_mode = 0
+offset_left = 74.0
+offset_top = -2.0
+offset_right = 99.0
+offset_bottom = 15.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_20hsm")

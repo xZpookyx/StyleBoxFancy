@@ -11,9 +11,8 @@ config_version=5
 [application]
 
 config/name="StyleboxFancy"
-run/main_scene="uid://cd4j4bo4f3t6w"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://Tests/icon.svg"
+run/max_fps=150
 
 [display]
 
@@ -21,6 +20,7 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=2
 window/stretch/mode="canvas_items"
+window/vsync/vsync_mode=0
 
 [rendering]
 
