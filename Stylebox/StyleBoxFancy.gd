@@ -85,19 +85,24 @@ func _get_rounded_polygon(rect: Rect2, corner_radius: Vector4) -> PackedVector2A
 		Vector2(corner_radius[3], -corner_radius[3])
 	]
 
-
-	for corner_idx in range(corners.size()):
-		if corner_radius[corner_idx] == 0:
+	var quarter_arc = PI * 0.5
+	for corner_idx in 4:
+		var radius = corner_radius[corner_idx]
+		if radius == 0:
 			polygon.append(corners[corner_idx])
 			continue
 
-		var quarter_arc = PI / 2.0
+		var offset = corners[corner_idx] + offsets[corner_idx]
+
+		var angle_step = PI + quarter_arc * corner_idx
 		for detail_step in range(corner_detail + 1):
-			var angle_step = PI + quarter_arc * corner_idx
-			angle_step += quarter_arc * detail_step / corner_detail
-			var x = cos(angle_step) * corner_radius[corner_idx]
-			var y = sin(angle_step) * corner_radius[corner_idx]
-			polygon.append(corners[corner_idx] + offsets[corner_idx] + Vector2(x, y))
+			angle_step += quarter_arc / corner_detail
+			var x = cos(angle_step) * radius
+			var y = sin(angle_step) * radius
+
+			#var vect = Vector2(cos(angle_step) * corner_radius[corner_idx], sin(angle_step) * corner_radius[corner_idx])
+			polygon.append(offset + Vector2(x, y))
+			#polygon.append(corners[corner_idx] + offsets[corner_idx] + vect)
 
 	return polygon
 
@@ -299,50 +304,87 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 		false,
 	)
 
-func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4 = Vector4()) -> PackedInt32Array:
-	var triangle_indices: PackedInt32Array
+#func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4 = Vector4(), corner_detail := 8) -> PackedInt32Array:
+	#var inner_count: int = inner_ring.size()
+	#var outer_count: int = outer_ring.size()
+	#var base_outer: int = inner_count
+#
+	#var triangles: PackedInt32Array
+#
+	#var inner_idx := 0
+	#var outer_idx := 0
+#
+	#for corner_idx in 4:
+		#var is_rounded := corner_radius[corner_idx] != 0
+		#var inner_is_flat := inner_corner_radius[corner_idx] == 0
+		#var steps := corner_detail if is_rounded and inner_is_flat else corner_detail + 1
+#
+		#for i in range(steps):
+			## tri 1
+			#triangles.append(inner_idx)
+			#triangles.append(base_outer + outer_idx)
+			#triangles.append(base_outer + ((outer_idx + 1) % outer_count))
+#
+			## tri 2
+			#triangles.append(inner_idx)
+			#triangles.append((inner_idx + 1) % inner_count)
+			#triangles.append(base_outer + ((outer_idx + 1) % outer_count))
+#
+			#inner_idx += 1
+			#outer_idx += 1
+#
+			#if not is_rounded:
+				#break
+#
+	#return triangles
 
-	var inner_vertex_idx = 0
-	var outer_vertex_idx = 0
+
+func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4 = Vector4()) -> PackedInt32Array:
+	var triangles: PackedInt32Array
+
+	var inner_size = inner_ring.size()
+	var outer_size = outer_ring.size()
+	var inner_idx = 0
+	var outer_idx = 0
 
 	for corner_idx in range(4):
 		var is_rounded = corner_radius[corner_idx] != 0
 
 		if is_rounded and inner_corner_radius[corner_idx] == 0:
 			for i in range(corner_detail):
-				triangle_indices.append(inner_vertex_idx)
-				triangle_indices.append(outer_vertex_idx + inner_ring.size())
-				triangle_indices.append((outer_vertex_idx + 1) % outer_ring.size() + inner_ring.size())
+				triangles.append(inner_idx)
+				triangles.append(outer_idx + inner_size)
+				triangles.append((outer_idx + 1) % outer_size + inner_size)
 
-				outer_vertex_idx += 1
+				outer_idx += 1
 
-			triangle_indices.append(inner_vertex_idx)
-			triangle_indices.append(outer_vertex_idx + inner_ring.size())
-			triangle_indices.append((outer_vertex_idx + 1) % outer_ring.size() + inner_ring.size())
+			triangles.append(inner_idx)
+			triangles.append(outer_idx + inner_size)
+			triangles.append((outer_idx + 1) % outer_size + inner_size)
 
-			triangle_indices.append(inner_vertex_idx)
-			triangle_indices.append((inner_vertex_idx + 1) % inner_ring.size())
-			triangle_indices.append((outer_vertex_idx + 1) % outer_ring.size() + inner_ring.size())
+			triangles.append(inner_idx)
+			triangles.append((inner_idx + 1) % inner_size)
+			triangles.append((outer_idx + 1) % outer_size + inner_size)
 
-			inner_vertex_idx += 1
-			outer_vertex_idx += 1
+			inner_idx += 1
+			outer_idx += 1
 
 		else:
 			for i in range(corner_detail + 1):
-				triangle_indices.append(inner_vertex_idx)
-				triangle_indices.append(outer_vertex_idx + inner_ring.size())
-				triangle_indices.append((outer_vertex_idx + 1) % outer_ring.size() + inner_ring.size())
+				triangles.append(inner_idx)
+				triangles.append(outer_idx + inner_size)
+				triangles.append((outer_idx + 1) % outer_size + inner_size)
 
-				triangle_indices.append(inner_vertex_idx)
-				triangle_indices.append((inner_vertex_idx + 1) % inner_ring.size())
-				triangle_indices.append((outer_vertex_idx + 1) % outer_ring.size() + inner_ring.size())
+				triangles.append(inner_idx)
+				triangles.append((inner_idx + 1) % inner_size)
+				triangles.append((outer_idx + 1) % outer_size + inner_size)
 
-				inner_vertex_idx += 1
-				outer_vertex_idx += 1
+				inner_idx += 1
+				outer_idx += 1
 
 				if not is_rounded:
 					break
-	return triangle_indices
+	return triangles
 
 
 func _get_faded_color_array(fill_color: Color, opaque: int, transparent: int, inverse: bool = false) -> PackedColorArray:

@@ -322,10 +322,10 @@ text = "GANASTE!!"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 321.0
-offset_top = 101.0
-offset_right = 513.0
-offset_bottom = 247.0
+offset_left = 340.0
+offset_top = 63.0
+offset_right = 532.0
+offset_bottom = 209.0
 theme_override_styles/panel = SubResource("StyleBox_20hsm")
 
 [node name="Panel4" type="Panel" parent="."]
@@ -366,10 +366,10 @@ offset_bottom = 40.0
 
 [node name="Fancy" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 42.0
-offset_top = 478.0
-offset_right = 392.0
-offset_bottom = 799.0
+offset_left = 49.0
+offset_top = 440.0
+offset_right = 399.0
+offset_bottom = 761.0
 theme_override_styles/panel = SubResource("StyleBox_0hynj")
 
 [node name="Fancy4" type="Panel" parent="Control"]
@@ -383,9 +383,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_nqgo6")
 
 [node name="Fancy2" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 208.0
+offset_left = 219.0
 offset_top = 241.0
-offset_right = 284.0
+offset_right = 295.0
 offset_bottom = 297.0
 theme_override_styles/panel = SubResource("StyleBox_e7l11")
 
