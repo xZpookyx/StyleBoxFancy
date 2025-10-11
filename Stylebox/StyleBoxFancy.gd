@@ -112,25 +112,24 @@ func _get_rounded_polygon(rect: Rect2, corner_radius: Vector4) -> PackedVector2A
 
 
 func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
-	var points: PackedVector2Array = [
+	return PackedVector2Array([
 		rect.position,
-		rect.position + Vector2(rect.size.x, 0),
+		Vector2(rect.position.x + rect.size.x, rect.position.y),
 		rect.end,
-		rect.position + Vector2(0, rect.size.y),
-	]
-	return points
+		Vector2(rect.position.x, rect.position.y + rect.size.y)
+	])
 
 func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corner_radius: Vector4, ring_color: Color, ring_texture: Texture2D, texture_rect: Rect2, fade: bool, fade_inside: bool = false):
-	if inner_rect.encloses(outer_rect):
+	if inner_rect.abs().encloses(outer_rect):
 		return
 
 	# left, top, right, bottom
 	var inner_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(inner_rect, outer_rect))
+
 	var inner_points: PackedVector2Array = _get_rounded_polygon(inner_rect, inner_corner_radius)
 	var outer_points: PackedVector2Array = _get_rounded_polygon(outer_rect, corner_radius)
 	var all_points: PackedVector2Array = inner_points + outer_points
 	var indices: PackedInt32Array = _triangulate_ring(inner_points, outer_points, corner_radius, inner_corner_radius)
-
 
 	for point_idx in range(all_points.size()):
 		all_points[point_idx] = all_points[point_idx].clamp(outer_rect.position, outer_rect.end)
@@ -162,6 +161,7 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 			all_points,
 			colors,
 		)
+		#RenderingServer.canvas_item_add_polyline(to_canvas_item, all_points, [Color.GREEN_YELLOW])
 
 func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D):
 	# Simple rect check
@@ -174,26 +174,29 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 
 	# Rounded rect
 	var center_rect = rect
-	#var center_corner_radius = _fit_corner_radius_in_rect(corner_radius, center_rect)
-	var center_corner_radius = corner_radius
+	var center_corner_radius = _fit_corner_radius_in_rect(corner_radius, center_rect)
 
 	if aa != 0: # if antialiasing
-		center_rect = rect.grow(-aa * 0.5)
-		center_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(rect, rect.grow(aa * 0.5)))
-		var outer_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(rect, rect.grow(-aa * 0.5)))
+		var inner_rect = rect.grow(-aa * 0.5)
+		var outer_rect = rect.grow(aa * 0.5)
+		var inner_corner_radius = _fit_corner_radius_in_rect(corner_radius, inner_rect)
+		var ring_corner_radius = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(outer_rect, inner_rect))
 
 		_draw_ring(
 			to_canvas_item,
-			center_rect,
-			rect.grow(aa * 0.5),
-			_fit_corner_radius_in_rect(outer_corner_radius, rect.grow(aa * 0.5)),
+			inner_rect,
+			outer_rect,
+			ring_corner_radius,
 			rect_color,
 			rect_texture,
 			rect,
 			true
 		)
 
-	var points = _get_rounded_polygon(center_rect, _fit_corner_radius_in_rect(center_corner_radius, center_rect))
+		center_rect = inner_rect
+		center_corner_radius = inner_corner_radius
+
+	var points = _get_rounded_polygon(center_rect, center_corner_radius)
 
 	if rect_texture:
 		RenderingServer.canvas_item_add_polygon(
@@ -273,7 +276,7 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			to_canvas_item,
 			outer_rect,
 			feather_outer_rect,
-			_adjust_corner_radius(corner_radius, -antialiasing_sides * 0.5),
+			_adjust_corner_radius(fill_corner_radius, -antialiasing_sides),
 			border.color,
 			border.texture,
 			rect,
@@ -285,7 +288,7 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			to_canvas_item,
 			feather_inner_rect,
 			inner_rect,
-			_adjust_corner_radius(corner_radius, _get_sides_width_from_rects(feather_inner_rect, outer_rect) - antialiasing_sides * 0.5),
+			_adjust_corner_radius(fill_corner_radius, _get_sides_width_from_rects(feather_inner_rect, outer_rect) - antialiasing_sides),
 			border.color,
 			border.texture,
 			rect,
@@ -473,7 +476,11 @@ func _fit_corner_radius_in_rect(corners: Vector4, rect: Rect2) -> Vector4:
 	return adjusted
 
 
-func _draw(to_canvas_item, rect):
+func _draw_debug_rect(to_canvas_item, rect):
+	var points = _get_points_from_rect(rect)
+	RenderingServer.canvas_item_add_polyline(to_canvas_item, points, [Color.AQUA])
+
+func _draw(to_canvas_item: RID, rect: Rect2):
 	var corner_radius = Vector4(
 		corner_radius_top_left,
 		corner_radius_top_right,
