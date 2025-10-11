@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://smo0o0fa3327"]
+[gd_scene load_steps=26 format=3 uid="uid://smo0o0fa3327"]
 
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://Stylebox/StyleBorder.gd" id="1_nqgo6"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://Stylebox/StyleBoxFancy.gd" id="2_e7l11"]
@@ -194,34 +194,6 @@ corner_radius_top_left = 30
 corner_detail = 3
 anti_aliasing_size = 5.0
 
-[sub_resource type="Gradient" id="Gradient_nqgo6"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_e7l11"]
-gradient = SubResource("Gradient_nqgo6")
-
-[sub_resource type="Resource" id="Resource_e7l11"]
-script = ExtResource("1_nqgo6")
-color = Color(0.8, 0.8, 0.8, 0.541176)
-ignore_stack = false
-anti_aliasing = true
-width_left = 8
-width_top = 1
-width_right = 1
-width_bottom = 0
-inset_left = 0
-inset_top = 0
-inset_right = 0
-inset_bottom = 0
-texture = SubResource("GradientTexture2D_e7l11")
-region_rect = Rect2(0, 0, 0, 0)
-patch_margin_left = 0
-patch_margin_top = 0
-patch_margin_right = 0
-patch_margin_bottom = 0
-axis_stretch_horizontal = 0
-axis_stretch_vertical = 0
-metadata/_custom_type_script = "uid://cjmmhbp1b5312"
-
 [sub_resource type="StyleBox" id="StyleBox_e7l11"]
 resource_local_to_scene = false
 resource_name = ""
@@ -232,14 +204,14 @@ content_margin_bottom = -1.0
 script = ExtResource("2_e7l11")
 color = Color(1, 0.254071, 0.638421, 1)
 skew = Vector2(0, 0)
-draw_center = false
-borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_e7l11")])
-corner_detail = 3
+draw_center = true
+borders = Array[ExtResource("1_nqgo6")]([])
+corner_detail = 1
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 30
-corner_radius_bottom_left = 1
-anti_aliasing = true
+corner_radius_bottom_left = 0
+anti_aliasing = false
 anti_aliasing_size = 1.0
 cached_rect = Rect2(16, 16, 331, 118)
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
@@ -322,10 +294,10 @@ text = "GANASTE!!"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 340.0
-offset_top = 63.0
-offset_right = 532.0
-offset_bottom = 209.0
+offset_left = 331.0
+offset_top = 58.0
+offset_right = 521.0
+offset_bottom = 161.0
 theme_override_styles/panel = SubResource("StyleBox_20hsm")
 
 [node name="Panel4" type="Panel" parent="."]
@@ -366,10 +338,10 @@ offset_bottom = 40.0
 
 [node name="Fancy" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 49.0
-offset_top = 440.0
-offset_right = 399.0
-offset_bottom = 761.0
+offset_left = 38.0
+offset_top = 418.0
+offset_right = 358.0
+offset_bottom = 741.0
 theme_override_styles/panel = SubResource("StyleBox_0hynj")
 
 [node name="Fancy4" type="Panel" parent="Control"]
@@ -383,10 +355,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_nqgo6")
 
 [node name="Fancy2" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 219.0
-offset_top = 241.0
-offset_right = 295.0
-offset_bottom = 297.0
+offset_left = 224.0
+offset_top = 232.0
+offset_right = 314.0
+offset_bottom = 261.0
 theme_override_styles/panel = SubResource("StyleBox_e7l11")
 
 [node name="Fancy3" type="Panel" parent="Control"]
@@ -400,7 +372,7 @@ theme_override_styles/panel = SubResource("StyleBox_3yfbj")
 [node name="Flat" type="Panel" parent="Control"]
 layout_mode = 0
 offset_left = 74.0
-offset_top = -2.0
+offset_top = -1.0
 offset_right = 99.0
-offset_bottom = 15.0
+offset_bottom = 16.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_20hsm")

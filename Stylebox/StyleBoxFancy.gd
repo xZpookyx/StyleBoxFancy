@@ -69,40 +69,44 @@ class_name StyleBoxFancy
 @export_storage var cached_rect: Rect2
 
 func _get_rounded_polygon(rect: Rect2, corner_radius: Vector4) -> PackedVector2Array:
-	var polygon: PackedVector2Array
-
-	var corners: PackedVector2Array = [
+	var corners := PackedVector2Array([
 		rect.position,
-		rect.position + Vector2(rect.size.x, 0),
+		Vector2(rect.position.x + rect.size.x, rect.position.y),
 		rect.end,
-		rect.position + Vector2(0, rect.size.y)
-	]
+		Vector2(rect.position.x, rect.position.y + rect.size.y)
+	])
 
-	var offsets: PackedVector2Array = [
-		Vector2(corner_radius[0], corner_radius[0]),
-		Vector2(-corner_radius[1], corner_radius[1]),
-		Vector2(-corner_radius[2], -corner_radius[2]),
-		Vector2(corner_radius[3], -corner_radius[3])
-	]
+	var total_points: int = 0
+	for i in 4:
+		total_points += 1 if corner_radius[i] == 0 else corner_detail + 1
 
-	var quarter_arc = PI * 0.5
-	for corner_idx in 4:
-		var radius = corner_radius[corner_idx]
+	var polygon: PackedVector2Array
+	polygon.resize(total_points)
+
+
+	const HALF_PI: float = PI * 0.5
+	var angle_step: float = HALF_PI / corner_detail
+	var idx: int = 0
+
+	for corner_idx: int in 4:
+		var radius: float = corner_radius[corner_idx]
+
+		# Square corner
 		if radius == 0:
-			polygon.append(corners[corner_idx])
+			polygon[idx] = corners[corner_idx]
+			idx += 1
 			continue
 
-		var offset = corners[corner_idx] + offsets[corner_idx]
+		var offset_x: float = radius if (corner_idx == 0 or corner_idx == 3) else -radius
+		var offset_y: float = radius if (corner_idx < 2) else -radius
+		var center: Vector2 = corners[corner_idx] + Vector2(offset_x, offset_y)
 
-		var angle_step = PI + quarter_arc * corner_idx
-		for detail_step in range(corner_detail + 1):
-			angle_step += quarter_arc / corner_detail
-			var x = cos(angle_step) * radius
-			var y = sin(angle_step) * radius
+		var base_angle: float = PI + HALF_PI * corner_idx
 
-			#var vect = Vector2(cos(angle_step) * corner_radius[corner_idx], sin(angle_step) * corner_radius[corner_idx])
-			polygon.append(offset + Vector2(x, y))
-			#polygon.append(corners[corner_idx] + offsets[corner_idx] + vect)
+		for step: int in corner_detail + 1:
+			var angle: float = base_angle + angle_step * step
+			polygon[idx] = center + Vector2(cos(angle), sin(angle)) * radius
+			idx += 1
 
 	return polygon
 
@@ -130,10 +134,6 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 
 	for point_idx in range(all_points.size()):
 		all_points[point_idx] = all_points[point_idx].clamp(outer_rect.position, outer_rect.end)
-		#print(inner_points[point_idx])
-		#inner_points[point_idx] = inner_points[point_idx].clamp(outer_rect.position, outer_rect.end)
-	#for point_idx in range(outer_points.size()):
-		#outer_points[point_idx] = outer_points[point_idx].clamp(outer_rect.position, outer_rect.end)
 
 	var colors: PackedColorArray
 	if fade:
@@ -174,7 +174,8 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 
 	# Rounded rect
 	var center_rect = rect
-	var center_corner_radius = _fit_corner_radius_in_rect(corner_radius, rect)
+	#var center_corner_radius = _fit_corner_radius_in_rect(corner_radius, center_rect)
+	var center_corner_radius = corner_radius
 
 	if aa != 0: # if antialiasing
 		center_rect = rect.grow(-aa * 0.5)
@@ -193,6 +194,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 		)
 
 	var points = _get_rounded_polygon(center_rect, _fit_corner_radius_in_rect(center_corner_radius, center_rect))
+
 	if rect_texture:
 		RenderingServer.canvas_item_add_polygon(
 			to_canvas_item,
@@ -347,7 +349,7 @@ func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2
 	var inner_idx = 0
 	var outer_idx = 0
 
-	for corner_idx in range(4):
+	for corner_idx in 4:
 		var is_rounded = corner_radius[corner_idx] != 0
 
 		if is_rounded and inner_corner_radius[corner_idx] == 0:
@@ -454,7 +456,7 @@ func _get_polygon_uv(polygon: PackedVector2Array, rect: Rect2) -> PackedVector2A
 	return uv
 
 
-func _fit_corner_radius_in_rect(corners: Vector4, rect: Rect2):
+func _fit_corner_radius_in_rect(corners: Vector4, rect: Rect2) -> Vector4:
 	var adjusted: Vector4
 
 	var scale = min(
@@ -465,8 +467,9 @@ func _fit_corner_radius_in_rect(corners: Vector4, rect: Rect2):
 		rect.size.y / (corners[3] + corners[0]),
 	)
 
-	for i in range(4):
-		adjusted[i] = corners[i] * scale
+	for i in 4:
+		# Subtracted a margin to avoid corner overflow because of floating point precision
+		adjusted[i] = max(0, corners[i] * scale - 0.001)
 	return adjusted
 
 
@@ -477,8 +480,6 @@ func _draw(to_canvas_item, rect):
 		corner_radius_bottom_right,
 		corner_radius_bottom_left
 	)
-
-	corner_radius = _fit_corner_radius_in_rect(corner_radius, rect)
 
 	var transform = Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
 	RenderingServer.canvas_item_add_set_transform(to_canvas_item, transform)
