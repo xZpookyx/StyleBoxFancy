@@ -7,13 +7,13 @@ class_name StyleBorder
 	set(v):
 		color = v
 		emit_changed()
+@export var texture: Texture2D:
+	set(v):
+		texture = v
+		emit_changed()
 @export var ignore_stack: bool = false:
 	set(v):
 		ignore_stack = v
-		emit_changed()
-@export var anti_aliasing: bool = true:
-	set(v):
-		anti_aliasing = v
 		emit_changed()
 
 @export_group("Border width", "width")
@@ -52,40 +52,36 @@ class_name StyleBorder
 		inset_bottom = v
 		emit_changed()
 
-@export_group("Texture")
-@export var texture: Texture2D:
-	set(v):
-		texture = v
-		emit_changed()
-@export var region_rect: Rect2:
-	set(v):
-		region_rect = v
-		emit_changed()
-
-@export_subgroup("Patch margin", "patch_margin")
-@export var patch_margin_left: int:
-	set(v):
-		patch_margin_left = v
-		emit_changed()
-@export var patch_margin_top: int:
-	set(v):
-		patch_margin_top = v
-		emit_changed()
-@export var patch_margin_right: int:
-	set(v):
-		patch_margin_right = v
-		emit_changed()
-@export var patch_margin_bottom: int:
-	set(v):
-		patch_margin_bottom = v
-		emit_changed()
-
-@export_subgroup("Axis strech", "axis_stretch")
-@export var axis_stretch_horizontal: RenderingServer.NinePatchAxisMode:
-	set(v):
-		axis_stretch_horizontal = v
-		emit_changed()
-@export var axis_stretch_vertical: RenderingServer.NinePatchAxisMode:
-	set(v):
-		axis_stretch_vertical = v
-		emit_changed()
+#@export_group("Texture")
+#@export var region_rect: Rect2:
+	#set(v):
+		#region_rect = v
+		#emit_changed()
+#
+#@export_subgroup("Patch margin", "patch_margin")
+#@export var patch_margin_left: int:
+	#set(v):
+		#patch_margin_left = v
+		#emit_changed()
+#@export var patch_margin_top: int:
+	#set(v):
+		#patch_margin_top = v
+		#emit_changed()
+#@export var patch_margin_right: int:
+	#set(v):
+		#patch_margin_right = v
+		#emit_changed()
+#@export var patch_margin_bottom: int:
+	#set(v):
+		#patch_margin_bottom = v
+		#emit_changed()
+#
+#@export_subgroup("Axis strech", "axis_stretch")
+#@export var axis_stretch_horizontal: RenderingServer.NinePatchAxisMode:
+	#set(v):
+		#axis_stretch_horizontal = v
+		#emit_changed()
+#@export var axis_stretch_vertical: RenderingServer.NinePatchAxisMode:
+	#set(v):
+		#axis_stretch_vertical = v
+		#emit_changed()

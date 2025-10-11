@@ -161,6 +161,7 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 			all_points,
 			colors,
 		)
+		# DEBUG
 		#RenderingServer.canvas_item_add_polyline(to_canvas_item, all_points, [Color.GREEN_YELLOW])
 
 func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D):
@@ -216,8 +217,16 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
 	var outer_rect = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
 	var inner_rect = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
-	#var fill_corner_radius = _fit_corner_radius_in_rect(corner_radius, outer_rect)
-	var fill_corner_radius = corner_radius
+	var fill_corner_radius = _fit_corner_radius_in_rect(corner_radius, rect)
+
+
+	# TODO: In StyleBoxFlat the border gives a margin to the corner radius so it doesn't
+	# overlap with itself, however it gives the border a different corner radius than the
+	# underlying center panel.
+
+	#var inner_corner_radius = _fit_corner_radius_in_rect(corner_radius, inner_rect)
+	#fill_corner_radius = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(rect, inner_rect))
+	#_draw_debug_rect(to_canvas_item, inner_rect)
 
 	if not outer_rect.has_area():
 		return
