@@ -162,9 +162,9 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 	# Simple rect check
 	if not corner_radius:
 		if rect_texture:
-			RenderingServer.canvas_item_add_texture_rect(to_canvas_item, rect, rect_texture.get_rid(), false, color)
+			RenderingServer.canvas_item_add_texture_rect(to_canvas_item, rect, rect_texture.get_rid(), false, rect_color)
 		else:
-			RenderingServer.canvas_item_add_rect(to_canvas_item, rect, color)
+			RenderingServer.canvas_item_add_rect(to_canvas_item, rect, rect_color)
 		return
 
 	# Rounded rect
@@ -193,7 +193,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 
 	var points: PackedVector2Array = _get_rounded_polygon(center_rect, center_corner_radius)
 
-	if rect_texture:
+	if rect_texture != null:
 		RenderingServer.canvas_item_add_polygon(
 			to_canvas_item,
 			points,
@@ -207,6 +207,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 			points,
 			[rect_color]
 		)
+		RenderingServer.canvas_item_add_circle(to_canvas_item, Vector2.ZERO, 20, Color.RED)
 
 
 func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4) -> void:

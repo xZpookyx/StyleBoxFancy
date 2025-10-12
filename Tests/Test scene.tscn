@@ -205,7 +205,7 @@ corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 23
-anti_aliasing = false
+anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
@@ -221,14 +221,26 @@ corner_radius_bottom_left = 35
 corner_detail = 6
 anti_aliasing_size = 4.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7l11"]
-bg_color = Color(1, 0, 0, 0.498039)
-border_color = Color(1, 1, 1, 0.454902)
-corner_radius_top_right = 35
-corner_radius_bottom_left = 35
-corner_detail = 6
+[sub_resource type="StyleBox" id="StyleBox_nqgo6"]
+resource_local_to_scene = false
+resource_name = ""
+content_margin_left = -1.0
+content_margin_top = -1.0
+content_margin_right = -1.0
+content_margin_bottom = -1.0
+script = ExtResource("2_e7l11")
+color = Color(0.6, 0.6, 0.6, 1)
+skew = Vector2(0, 0)
+draw_center = true
+borders = Array[ExtResource("1_nqgo6")]([])
+corner_detail = 8
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
 anti_aliasing = false
-anti_aliasing_size = 4.0
+anti_aliasing_size = 1.0
+metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
 [sub_resource type="Resource" id="Resource_e7l11"]
 script = ExtResource("1_nqgo6")
@@ -350,10 +362,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_nqgo6")
 
 [node name="Fancy3" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 672.0
-offset_top = 543.0
-offset_right = 747.0
-offset_bottom = 605.0
+offset_left = 731.0
+offset_top = 528.0
+offset_right = 806.0
+offset_bottom = 590.0
 theme_override_styles/panel = SubResource("StyleBox_3yfbj")
 
 [node name="Fancy5" type="Panel" parent="Control"]
@@ -374,11 +386,11 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_20hsm")
 
 [node name="Flat2" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 778.0
-offset_top = 544.0
-offset_right = 911.0
-offset_bottom = 579.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_e7l11")
+offset_left = 217.0
+offset_top = 233.0
+offset_right = 339.0
+offset_bottom = 289.0
+theme_override_styles/panel = SubResource("StyleBox_nqgo6")
 
 [node name="Fancy2" type="Panel" parent="Control"]
 layout_mode = 0
