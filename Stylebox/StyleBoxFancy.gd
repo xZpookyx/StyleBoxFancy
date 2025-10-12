@@ -66,15 +66,8 @@ class_name StyleBoxFancy
 
 #endregion
 
-@export_storage var cached_rect: Rect2
-
 func _get_rounded_polygon(rect: Rect2, corner_radius: Vector4) -> PackedVector2Array:
-	var corners := PackedVector2Array([
-		rect.position,
-		Vector2(rect.position.x + rect.size.x, rect.position.y),
-		rect.end,
-		Vector2(rect.position.x, rect.position.y + rect.size.y)
-	])
+	var corners: PackedVector2Array = _get_points_from_rect(rect)
 
 	var total_points: int = 0
 	for i in 4:
@@ -119,11 +112,11 @@ func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
 		Vector2(rect.position.x, rect.position.y + rect.size.y)
 	])
 
-func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corner_radius: Vector4, ring_color: Color, ring_texture: Texture2D, texture_rect: Rect2, fade: bool, fade_inside: bool = false):
+
+func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corner_radius: Vector4, ring_color: Color, ring_texture: Texture2D, texture_rect: Rect2, fade: bool, fade_inside: bool = false) -> void:
 	if inner_rect.abs().encloses(outer_rect):
 		return
 
-	# left, top, right, bottom
 	var inner_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(inner_rect, outer_rect))
 
 	var inner_points: PackedVector2Array = _get_rounded_polygon(inner_rect, inner_corner_radius)
@@ -164,7 +157,8 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 		# DEBUG
 		#RenderingServer.canvas_item_add_polyline(to_canvas_item, all_points, [Color.GREEN_YELLOW])
 
-func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D):
+
+func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D) -> void:
 	# Simple rect check
 	if not corner_radius:
 		if rect_texture:
@@ -174,14 +168,14 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 		return
 
 	# Rounded rect
-	var center_rect = rect
-	var center_corner_radius = _fit_corner_radius_in_rect(corner_radius, center_rect)
+	var center_rect: Rect2 = rect
+	var center_corner_radius: Vector4 = _fit_corner_radius_in_rect(corner_radius, center_rect)
 
 	if aa != 0: # if antialiasing
-		var inner_rect = rect.grow(-aa * 0.5)
-		var outer_rect = rect.grow(aa * 0.5)
-		var inner_corner_radius = _fit_corner_radius_in_rect(corner_radius, inner_rect)
-		var ring_corner_radius = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(outer_rect, inner_rect))
+		var inner_rect: Rect2 = rect.grow(-aa * 0.5)
+		var outer_rect: Rect2 = rect.grow(aa * 0.5)
+		var inner_corner_radius: Vector4 = _fit_corner_radius_in_rect(corner_radius, inner_rect)
+		var ring_corner_radius: Vector4 = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(outer_rect, inner_rect))
 
 		_draw_ring(
 			to_canvas_item,
@@ -197,7 +191,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 		center_rect = inner_rect
 		center_corner_radius = inner_corner_radius
 
-	var points = _get_rounded_polygon(center_rect, center_corner_radius)
+	var points: PackedVector2Array = _get_rounded_polygon(center_rect, center_corner_radius)
 
 	if rect_texture:
 		RenderingServer.canvas_item_add_polygon(
@@ -214,19 +208,15 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 			[rect_color]
 		)
 
-func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4):
-	var outer_rect = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
-	var inner_rect = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
-	var fill_corner_radius = _fit_corner_radius_in_rect(corner_radius, rect)
 
-
+func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4) -> void:
 	# TODO: In StyleBoxFlat the border gives a margin to the corner radius so it doesn't
 	# overlap with itself, however it gives the border a different corner radius than the
 	# underlying center panel.
 
-	#var inner_corner_radius = _fit_corner_radius_in_rect(corner_radius, inner_rect)
-	#fill_corner_radius = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(rect, inner_rect))
-	#_draw_debug_rect(to_canvas_item, inner_rect)
+	var outer_rect: Rect2 = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
+	var inner_rect: Rect2 = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
+	var fill_corner_radius: Vector4 = _fit_corner_radius_in_rect(corner_radius, rect)
 
 	if not outer_rect.has_area():
 		return
@@ -238,13 +228,13 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			outer_rect,
 			border.color,
 			corner_radius,
-			anti_aliasing_size if anti_aliasing else 0,
+			anti_aliasing_size if anti_aliasing else 0.0,
 			border.texture,
 		)
 		return
 
 	if anti_aliasing:
-		var antialiasing_sides = Vector4(
+		var antialiasing_sides := Vector4(
 			anti_aliasing_size if border.width_left else 0.0,
 			anti_aliasing_size if border.width_top else 0.0,
 			anti_aliasing_size if border.width_right else 0.0,
@@ -266,14 +256,14 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 
 		fill_corner_radius = _adjust_corner_radius(fill_corner_radius, antialiasing_sides * 0.5)
 
-		var feather_outer_rect = outer_rect.grow_individual(
+		var feather_outer_rect: Rect2 = outer_rect.grow_individual(
 			antialiasing_sides[0],
 			antialiasing_sides[1],
 			antialiasing_sides[2],
 			antialiasing_sides[3],
 		)
 
-		var feather_inner_rect = inner_rect.grow_individual(
+		var feather_inner_rect: Rect2 = inner_rect.grow_individual(
 			-antialiasing_sides[0],
 			-antialiasing_sides[1],
 			-antialiasing_sides[2],
@@ -318,86 +308,83 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 		false,
 	)
 
-#func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4 = Vector4(), corner_detail := 8) -> PackedInt32Array:
-	#var inner_count: int = inner_ring.size()
-	#var outer_count: int = outer_ring.size()
-	#var base_outer: int = inner_count
-#
-	#var triangles: PackedInt32Array
-#
-	#var inner_idx := 0
-	#var outer_idx := 0
-#
-	#for corner_idx in 4:
-		#var is_rounded := corner_radius[corner_idx] != 0
-		#var inner_is_flat := inner_corner_radius[corner_idx] == 0
-		#var steps := corner_detail if is_rounded and inner_is_flat else corner_detail + 1
-#
-		#for i in range(steps):
-			## tri 1
-			#triangles.append(inner_idx)
-			#triangles.append(base_outer + outer_idx)
-			#triangles.append(base_outer + ((outer_idx + 1) % outer_count))
-#
-			## tri 2
-			#triangles.append(inner_idx)
-			#triangles.append((inner_idx + 1) % inner_count)
-			#triangles.append(base_outer + ((outer_idx + 1) % outer_count))
-#
-			#inner_idx += 1
-			#outer_idx += 1
-#
-			#if not is_rounded:
-				#break
-#
-	#return triangles
 
-
-func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4 = Vector4()) -> PackedInt32Array:
-	var triangles: PackedInt32Array
-
-	var inner_size = inner_ring.size()
-	var outer_size = outer_ring.size()
-	var inner_idx = 0
-	var outer_idx = 0
-
+func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2Array, corner_radius: Vector4, inner_corner_radius: Vector4) -> PackedInt32Array:
+	# Triangle amount calc
+	var total_triangles: int = 0
 	for corner_idx in 4:
-		var is_rounded = corner_radius[corner_idx] != 0
+		var is_rounded: bool = corner_radius[corner_idx] != 0
+		var inner_is_point: bool = inner_corner_radius[corner_idx] == 0
 
-		if is_rounded and inner_corner_radius[corner_idx] == 0:
-			for i in range(corner_detail):
-				triangles.append(inner_idx)
-				triangles.append(outer_idx + inner_size)
-				triangles.append((outer_idx + 1) % outer_size + inner_size)
-
-				outer_idx += 1
-
-			triangles.append(inner_idx)
-			triangles.append(outer_idx + inner_size)
-			triangles.append((outer_idx + 1) % outer_size + inner_size)
-
-			triangles.append(inner_idx)
-			triangles.append((inner_idx + 1) % inner_size)
-			triangles.append((outer_idx + 1) % outer_size + inner_size)
-
-			inner_idx += 1
-			outer_idx += 1
-
+		if is_rounded:
+			if inner_is_point:
+				# Triangle per detail
+				total_triangles += corner_detail + 2
+			else:
+				# Quad per detail
+				total_triangles += (corner_detail + 1) * 2
 		else:
-			for i in range(corner_detail + 1):
-				triangles.append(inner_idx)
-				triangles.append(outer_idx + inner_size)
-				triangles.append((outer_idx + 1) % outer_size + inner_size)
+			# Square corner
+			total_triangles += 2
 
-				triangles.append(inner_idx)
-				triangles.append((inner_idx + 1) % inner_size)
-				triangles.append((outer_idx + 1) % outer_size + inner_size)
+	var triangles: PackedInt32Array
+	triangles.resize(total_triangles * 3)
 
-				inner_idx += 1
-				outer_idx += 1
+	# Triangulation
+	var inner_size: int = inner_ring.size()
+	var outer_size: int = outer_ring.size()
+	var tri_idx: int = 0
+	var inner_idx: int = 0
+	var outer_idx: int = 0
 
-				if not is_rounded:
-					break
+	for corner_idx: int in 4:
+		var is_rounded: bool = corner_radius[corner_idx] != 0
+		var inner_is_point: bool = inner_corner_radius[corner_idx] == 0
+
+		if is_rounded:
+			if inner_is_point:
+				# FIll using triangles
+				for i in corner_detail:
+					triangles[tri_idx] = inner_idx
+					triangles[tri_idx + 1] = outer_idx + inner_size
+					triangles[tri_idx + 2] = (outer_idx + 1) % outer_size + inner_size
+					tri_idx += 3
+					outer_idx += 1
+			else:
+				# Fill using quads
+				for i in corner_detail:
+					@warning_ignore_start("confusable_local_declaration") # Yeah I know
+					var next_inner: int = (inner_idx + 1) % inner_size
+					var next_outer: int = (outer_idx + 1) % outer_size + inner_size
+					var curr_outer: int = outer_idx + inner_size
+					@warning_ignore_restore("confusable_local_declaration")
+
+					triangles[tri_idx] = inner_idx
+					triangles[tri_idx + 1] = curr_outer
+					triangles[tri_idx + 2] = next_outer
+					triangles[tri_idx + 3] = inner_idx
+					triangles[tri_idx + 4] = next_inner
+					triangles[tri_idx + 5] = next_outer
+
+					tri_idx += 6
+					inner_idx += 1
+					outer_idx += 1
+
+		# Fill to the next corner
+		var next_inner: int = (inner_idx + 1) % inner_size
+		var next_outer: int = (outer_idx + 1) % outer_size + inner_size
+		var curr_outer: int = outer_idx + inner_size
+
+		triangles[tri_idx] = inner_idx
+		triangles[tri_idx + 1] = curr_outer
+		triangles[tri_idx + 2] = next_outer
+		triangles[tri_idx + 3] = inner_idx
+		triangles[tri_idx + 4] = next_inner
+		triangles[tri_idx + 5] = next_outer
+		tri_idx += 6
+
+		inner_idx += 1
+		outer_idx += 1
 	return triangles
 
 
@@ -421,7 +408,7 @@ func _get_faded_color_array(fill_color: Color, opaque: int, transparent: int, in
 	return colors
 
 
-func _get_sides_width_from_rects(inner_rect: Rect2, outer_rect: Rect2):
+func _get_sides_width_from_rects(inner_rect: Rect2, outer_rect: Rect2) -> Vector4:
 	return Vector4(
 		inner_rect.position.x - outer_rect.position.x,
 		inner_rect.position.y - outer_rect.position.y,
@@ -429,35 +416,14 @@ func _get_sides_width_from_rects(inner_rect: Rect2, outer_rect: Rect2):
 		(outer_rect.position.y + outer_rect.size.y) - (inner_rect.position.y + inner_rect.size.y)
 	)
 
-func _adjust_corner_radius(corner_radius: Vector4, sides_width: Vector4, cap: bool = true):
-	var adjusted: Vector4
-	adjusted[0] = max(0, corner_radius[0] - min(sides_width[0], sides_width[1]))
-	adjusted[1] = max(0, corner_radius[1] - min(sides_width[1], sides_width[2]))
-	adjusted[2] = max(0, corner_radius[2] - min(sides_width[2], sides_width[3]))
-	adjusted[3] = max(0, corner_radius[3] - min(sides_width[3], sides_width[0]))
-	#if cap:
-		#adjusted[0] = max(0, corner_radius[0] - max(0, min(sides_width[0], sides_width[1])))
-		#adjusted[1] = max(0, corner_radius[1] - max(0, min(sides_width[1], sides_width[2])))
-		#adjusted[2] = max(0, corner_radius[2] - max(0, min(sides_width[2], sides_width[3])))
-		#adjusted[3] = max(0, corner_radius[3] - max(0, min(sides_width[3], sides_width[0])))
-	#else:
-	return adjusted
 
-
-func _get_border_adjusted_corner_radius(border: StyleBorder, corner_radius: Vector4, use_inset: bool = false) -> Vector4:
-	var adjusted: Vector4
-
-	if use_inset:
-		adjusted[0] = maxi(0, corner_radius[0] - maxi(0, mini(border.inset_left, border.inset_top)))
-		adjusted[1] = maxi(0, corner_radius[1] - maxi(0, mini(border.inset_top, border.inset_right)))
-		adjusted[2] = maxi(0, corner_radius[2] - maxi(0, mini(border.inset_right, border.inset_bottom)))
-		adjusted[3] = maxi(0, corner_radius[3] - maxi(0, mini(border.inset_bottom, border.inset_left)))
-	else:
-		adjusted[0] = maxi(0, corner_radius[0] - mini(border.width_left, border.width_top))
-		adjusted[1] = maxi(0, corner_radius[1] - mini(border.width_top, border.width_right))
-		adjusted[2] = maxi(0, corner_radius[2] - mini(border.width_right, border.width_bottom))
-		adjusted[3] = maxi(0, corner_radius[3] - mini(border.width_bottom, border.width_left))
-	return adjusted
+func _adjust_corner_radius(corner_radius: Vector4, sides_width: Vector4) -> Vector4:
+	return Vector4(
+		max(0, corner_radius[0] - min(sides_width[0], sides_width[1])),
+		max(0, corner_radius[1] - min(sides_width[1], sides_width[2])),
+		max(0, corner_radius[2] - min(sides_width[2], sides_width[3])),
+		max(0, corner_radius[3] - min(sides_width[3], sides_width[0]))
+	)
 
 
 func _get_polygon_uv(polygon: PackedVector2Array, rect: Rect2) -> PackedVector2Array:
@@ -485,19 +451,21 @@ func _fit_corner_radius_in_rect(corners: Vector4, rect: Rect2) -> Vector4:
 	return adjusted
 
 
-func _draw_debug_rect(to_canvas_item, rect):
+func _draw_debug_rect(to_canvas_item, rect) -> void:
 	var points = _get_points_from_rect(rect)
 	RenderingServer.canvas_item_add_polyline(to_canvas_item, points, [Color.AQUA])
 
-func _draw(to_canvas_item: RID, rect: Rect2):
-	var corner_radius = Vector4(
+
+func _draw(to_canvas_item: RID, rect: Rect2) -> void:
+	var corner_radius := Vector4(
 		corner_radius_top_left,
 		corner_radius_top_right,
 		corner_radius_bottom_right,
 		corner_radius_bottom_left
 	)
 
-	var transform = Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
+	# Skew
+	var transform := Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
 	RenderingServer.canvas_item_add_set_transform(to_canvas_item, transform)
 
 	if draw_center:
@@ -506,15 +474,15 @@ func _draw(to_canvas_item: RID, rect: Rect2):
 			rect,
 			color,
 			corner_radius,
-			anti_aliasing_size if anti_aliasing else 0,
+			anti_aliasing_size if anti_aliasing else 0.0,
 			texture
 		)
 
 	if borders:
-		var border_rect = rect
+		var border_rect: Rect2 = rect
 		var border_corner_radius: Vector4 = corner_radius
 
-		for border in borders:
+		for border: StyleBorder in borders:
 			if border == null: continue
 
 			if border.ignore_stack:
