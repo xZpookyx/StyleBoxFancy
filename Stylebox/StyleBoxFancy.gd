@@ -53,6 +53,29 @@ class_name StyleBoxFancy
 		corner_radius_bottom_left = v
 		emit_changed()
 
+# Shadow
+@export_group("Shadow", "shadow_")
+@export var shadow_enabled: bool:
+	set(v):
+		shadow_enabled = v
+		emit_changed()
+@export var shadow_color: Color = Color(0.0, 0.0, 0.0, 0.6):
+	set(v):
+		shadow_color = v
+		emit_changed()
+@export_range(0, 1, 1, "or_greater") var shadow_size: int:
+	set(v):
+		shadow_size = v
+		emit_changed()
+@export var shadow_offset: Vector2:
+	set(v):
+		shadow_offset = v
+		emit_changed()
+@export_custom(PROPERTY_HINT_LINK, "") var shadow_scale: Vector2 = Vector2.ONE:
+	set(v):
+		shadow_scale = Vector2.ZERO.max(v)
+		emit_changed()
+
 # Antialiasing
 @export_group("Anti Aliasing", "anti_aliasing_")
 @export var anti_aliasing: bool = true:
@@ -158,7 +181,7 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 		#RenderingServer.canvas_item_add_polyline(to_canvas_item, all_points, [Color.GREEN_YELLOW])
 
 
-func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D) -> void:
+func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D = null) -> void:
 	# Simple rect check
 	if not corner_radius:
 		if rect_texture:
@@ -207,7 +230,6 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 			points,
 			[rect_color]
 		)
-		RenderingServer.canvas_item_add_circle(to_canvas_item, Vector2.ZERO, 20, Color.RED)
 
 
 func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4) -> void:
@@ -222,7 +244,7 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 	if not outer_rect.has_area():
 		return
 
-	if not inner_rect.has_area():
+	if not inner_rect.has_area() and not border.blend:
 		# Since it is filled, drawing just the rect is more performant
 		_draw_rect(
 			to_canvas_item,
@@ -248,12 +270,13 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 			antialiasing_sides[2] * -0.5,
 			antialiasing_sides[3] * -0.5,
 		)
-		inner_rect = inner_rect.grow_individual(
-			antialiasing_sides[0] * 0.5,
-			antialiasing_sides[1] * 0.5,
-			antialiasing_sides[2] * 0.5,
-			antialiasing_sides[3] * 0.5,
-		)
+		if not border.blend:
+			inner_rect = inner_rect.grow_individual(
+				antialiasing_sides[0] * 0.5,
+				antialiasing_sides[1] * 0.5,
+				antialiasing_sides[2] * 0.5,
+				antialiasing_sides[3] * 0.5,
+			)
 
 		fill_corner_radius = _adjust_corner_radius(fill_corner_radius, antialiasing_sides * 0.5)
 
@@ -284,17 +307,18 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 		)
 
 		# Inner aa
-		_draw_ring(
-			to_canvas_item,
-			feather_inner_rect,
-			inner_rect,
-			_adjust_corner_radius(fill_corner_radius, _get_sides_width_from_rects(feather_inner_rect, outer_rect) - antialiasing_sides),
-			border.color,
-			border.texture,
-			rect,
-			true,
-			true
-		)
+		if not border.blend:
+			_draw_ring(
+				to_canvas_item,
+				feather_inner_rect,
+				inner_rect,
+				_adjust_corner_radius(fill_corner_radius, _get_sides_width_from_rects(feather_inner_rect, outer_rect) - antialiasing_sides),
+				border.color,
+				border.texture,
+				rect,
+				true,
+				true
+			)
 
 
 	# Border
@@ -306,7 +330,8 @@ func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_
 		border.color,
 		border.texture,
 		rect,
-		false,
+		border.blend,
+		true
 	)
 
 
@@ -468,6 +493,20 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 	# Skew
 	var transform := Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
 	RenderingServer.canvas_item_add_set_transform(to_canvas_item, transform)
+
+	if shadow_enabled:
+		var shadow_rect: Rect2 = rect.grow(shadow_size * 0.5)
+		var scale_grow = rect.size * (shadow_scale - Vector2.ONE)
+		shadow_rect.size += scale_grow
+		shadow_rect.position += -scale_grow * 0.5 + shadow_offset
+
+		_draw_rect(
+			to_canvas_item,
+			shadow_rect,
+			shadow_color,
+			_adjust_corner_radius(corner_radius, Vector4.ONE * -shadow_size),
+			shadow_size
+		)
 
 	if draw_center:
 		_draw_rect(

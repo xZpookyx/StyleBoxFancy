@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://smo0o0fa3327"]
+[gd_scene load_steps=30 format=3 uid="uid://smo0o0fa3327"]
 
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://Stylebox/StyleBorder.gd" id="1_nqgo6"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://Stylebox/StyleBoxFancy.gd" id="2_e7l11"]
@@ -23,6 +23,7 @@ fill_to = Vector2(0, 0)
 [sub_resource type="Resource" id="Resource_oj8n5"]
 script = ExtResource("1_nqgo6")
 color = Color(1, 1, 1, 0.611765)
+blend = null
 texture = SubResource("GradientTexture2D_dc28n")
 ignore_stack = false
 width_left = 20
@@ -38,6 +39,7 @@ metadata/_custom_type_script = "uid://cjmmhbp1b5312"
 [sub_resource type="Resource" id="Resource_0hynj"]
 script = ExtResource("1_nqgo6")
 color = Color(1, 1, 1, 0.639216)
+blend = null
 ignore_stack = false
 width_left = 2
 width_top = 2
@@ -66,6 +68,11 @@ corner_radius_top_left = 0
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
+shadow_enabled = false
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+shadow_scale = Vector2(1, 1)
 anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
@@ -96,6 +103,7 @@ texture = SubResource("AtlasTexture_xaixu")
 [sub_resource type="Resource" id="Resource_20hsm"]
 script = ExtResource("1_nqgo6")
 color = Color(0, 0, 0, 0.431373)
+blend = null
 ignore_stack = false
 width_left = 0
 width_top = 0
@@ -120,6 +128,7 @@ fill_from = Vector2(1, 1)
 [sub_resource type="Resource" id="Resource_634l0"]
 script = ExtResource("1_nqgo6")
 color = Color(1, 1, 1, 1)
+blend = null
 texture = SubResource("GradientTexture2D_xaixu")
 ignore_stack = false
 width_left = 3
@@ -149,6 +158,11 @@ corner_radius_top_left = 100
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
 corner_radius_bottom_left = 100
+shadow_enabled = false
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+shadow_scale = Vector2(1, 1)
 anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
@@ -163,6 +177,7 @@ anti_aliasing_size = 5.0
 [sub_resource type="Resource" id="Resource_nqgo6"]
 script = ExtResource("1_nqgo6")
 color = Color(0.8, 0.8, 0.8, 1)
+blend = null
 ignore_stack = false
 width_left = 10
 width_top = 0
@@ -177,6 +192,7 @@ metadata/_custom_type_script = "uid://cjmmhbp1b5312"
 [sub_resource type="Resource" id="Resource_3yfbj"]
 script = ExtResource("1_nqgo6")
 color = Color(1, 0.704928, 0.781183, 1)
+blend = null
 ignore_stack = false
 width_left = 10
 width_top = 0
@@ -205,21 +221,40 @@ corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 23
+shadow_enabled = false
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+shadow_scale = Vector2(1, 1)
 anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_20hsm"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 10
-border_width_top = 10
-border_width_right = 10
-border_width_bottom = 10
-border_color = Color(1, 1, 1, 0.454902)
-corner_radius_top_right = 35
-corner_radius_bottom_left = 35
-corner_detail = 6
-anti_aliasing_size = 4.0
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 61
+anti_aliasing_size = 4.557
+
+[sub_resource type="Resource" id="Resource_y7dmn"]
+script = ExtResource("1_nqgo6")
+color = Color(0.8, 0.8, 0.8, 1)
+blend = null
+ignore_stack = false
+width_left = 0
+width_top = 0
+width_right = 0
+width_bottom = 0
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
 
 [sub_resource type="StyleBox" id="StyleBox_nqgo6"]
 resource_local_to_scene = false
@@ -229,27 +264,33 @@ content_margin_top = -1.0
 content_margin_right = -1.0
 content_margin_bottom = -1.0
 script = ExtResource("2_e7l11")
-color = Color(0.6, 0.6, 0.6, 1)
+color = Color(1, 0.210127, 0.705323, 1)
 skew = Vector2(0, 0)
 draw_center = true
-borders = Array[ExtResource("1_nqgo6")]([])
+borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_y7dmn")])
 corner_detail = 8
-corner_radius_top_left = 0
+corner_radius_top_left = 29
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 0
-anti_aliasing = false
+shadow_enabled = true
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 0
+shadow_offset = Vector2(0, 20)
+shadow_scale = Vector2(2, 2)
+anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
 [sub_resource type="Resource" id="Resource_e7l11"]
 script = ExtResource("1_nqgo6")
 color = Color(0.8, 0.8, 0.8, 1)
+blend = true
 ignore_stack = false
-width_left = 0
-width_top = 2
-width_right = 0
-width_bottom = 2
+width_left = 5
+width_top = 5
+width_right = 5
+width_bottom = 5
 inset_left = 0
 inset_top = 0
 inset_right = 0
@@ -269,12 +310,17 @@ skew = Vector2(0, 0)
 draw_center = true
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_e7l11")])
 corner_detail = 8
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+corner_radius_top_left = 61
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+shadow_enabled = false
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 0
+shadow_offset = Vector2(0, 0)
+shadow_scale = Vector2(1, 1)
 anti_aliasing = true
-anti_aliasing_size = 1.0
+anti_aliasing_size = 4.092
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
 [node name="Control" type="Control"]
@@ -285,7 +331,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
-metadata/_edit_horizontal_guides_ = [602.0, 192.0]
+metadata/_edit_horizontal_guides_ = [602.0, 192.0, 259.0, 257.0, 254.0]
+metadata/_edit_vertical_guides_ = [415.0]
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 0
@@ -378,24 +425,24 @@ theme_override_styles/panel = SubResource("StyleBox_3yfbj")
 
 [node name="Flat" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 661.0
-offset_top = 467.0
-offset_right = 794.0
-offset_bottom = 509.0
+offset_left = 294.0
+offset_top = 231.0
+offset_right = 337.0
+offset_bottom = 271.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_20hsm")
 
 [node name="Flat2" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 217.0
-offset_top = 233.0
-offset_right = 339.0
-offset_bottom = 289.0
+offset_left = 435.0
+offset_top = 208.0
+offset_right = 495.0
+offset_bottom = 241.0
 theme_override_styles/panel = SubResource("StyleBox_nqgo6")
 
 [node name="Fancy2" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 576.0
-offset_top = 516.0
-offset_right = 644.0
-offset_bottom = 533.0
+offset_left = 296.0
+offset_top = 278.0
+offset_right = 334.0
+offset_bottom = 316.0
 theme_override_styles/panel = SubResource("StyleBox_e7l11")

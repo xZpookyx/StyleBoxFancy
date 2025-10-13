@@ -7,6 +7,10 @@ class_name StyleBorder
 	set(v):
 		color = v
 		emit_changed()
+@export var blend: bool:
+	set(v):
+		blend = v
+		emit_changed()
 @export var texture: Texture2D:
 	set(v):
 		texture = v

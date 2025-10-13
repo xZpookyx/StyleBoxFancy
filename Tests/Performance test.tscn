@@ -48,7 +48,6 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 anti_aliasing = true
 anti_aliasing_size = 1.0
-cached_rect = Rect2(0, 0, 0, 0)
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
 [node name="Control2" type="Control"]
