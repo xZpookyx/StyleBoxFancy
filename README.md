@@ -3,6 +3,9 @@ An addon for godot that allows for more complex panel designs without creating i
 
 <img src="Assets/cover.png" width=1000>
 
+## Requierements
+The minimum Godot version required is 4.4
+
 ## Usage
 <img src="Assets/properties.png" width=400>
 
@@ -14,7 +17,8 @@ StyleBoxFancy comes with similar properties as StyleBoxFlat such as:
 * `Shadow`
 * `Antialiasing`
 
-So here are differences with it
+The new features are:
+
 ### Texture
 Allows you to apply a `Texture2D` to your panel, it is compatible with rounded corners and antialiasing. A common use for this is creating a rounded panel with a `GradientTexture2D` which is not possible using Godot's StyleBoxes.
 
@@ -57,9 +61,12 @@ This is not a problem for a majority of use cases, only games with lots of UI or
 > * StyleBoxFancy: **342.66 ms**
 
 ## Instalation
-### Asset library
+### Asset library (Not available yet)
 * In your godot project open the AssetLib tab on the top and search for "Fancy StyleBoxes".
 * Download and install into your addons folder.
-* Enable the plugin in `Project/Project Settings/Plugins`
+* Enable the plugin in `Project/Project Settings/Plugins`.
 
 ### Manual install
+* Download the latest release [here](https://github.com/xZpookyx/StyleBoxFancy/releases).
+* Inside the zip file should be an "addons" folder, uncompress it and move it to your project root folder.
+* Enable the plugin in `Project/Project Settings/Plugins`.
