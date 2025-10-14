@@ -1,7 +1,17 @@
 # Fancy Styleboxes
-An addon for godot that allows for more complex panel designs without creating images.
+A plugin for Godot that allows for more complex and visually atractive panel designs without creating textures.
 
 <img src="Assets/cover.png" width=1000>
+
+## Why does this exist?
+There were several occasions where I wanted to create panel designs that sounded quite trivial, like a gradient with rounded corners, but it was impossible to do with either `StyleBoxFlat` or `StyleBoxTexture`. I found myself having to look for alternatives, such as creating a specific texture, using shaders, creating nodes with clip children, or manually drawing my nodes. Each of these options had its drawbacks, so I created my own StyleBox seeking to expand `StyleBoxFlat` functionality to make it a much more flexible tool. 
+
+The key points of this plugin are:
+* Rounded panels with texture
+* Border textures
+* Stackable borders
+
+This plugin seeks to fill the gap between Godot's `StyleBoxFlat` and `StyleBoxTexture`.
 
 ## Requierements
 The minimum Godot version required is 4.4
@@ -56,7 +66,7 @@ Compared to `StyleBoxFlat` it is about 10~ times slower, mainly due to it being 
 This is not a problem for a majority of use cases, only games with lots of UI or constant animations may have to consider this.
 
 > [!NOTE]
-> Tested with 1000 panels constantly being redrawn each frame with both StyleBoxes having a border and antialiasing on, using godot's profiler measuring Frame Time.
+> Tested with 1000 panels constantly being redrawn each frame with both StyleBoxes having a border and antialiasing on, using Godot's profiler measuring Frame Time (ms).
 > * StyleBoxFlat: **34.24 ms**
 > * StyleBoxFancy: **342.66 ms**
 
