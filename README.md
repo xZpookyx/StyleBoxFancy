@@ -55,3 +55,11 @@ This is not a problem for a majority of use cases, only games with lots of UI or
 > Tested with 1000 panels constantly being redrawn each frame with both StyleBoxes having a border and antialiasing on, using godot's profiler measuring Frame Time.
 > * StyleBoxFlat: **34.24 ms**
 > * StyleBoxFancy: **342.66 ms**
+
+## Instalation
+### Asset library
+* In your godot project open the AssetLib tab on the top and search for "Fancy StyleBoxes".
+* Download and install into your addons folder.
+* Enable the plugin in `Project/Project Settings/Plugins`
+
+### Manual install
