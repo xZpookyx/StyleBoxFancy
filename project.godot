@@ -12,6 +12,7 @@ config_version=5
 
 config/name="StyleboxFancy"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+run/max_fps=120
 
 [display]
 
