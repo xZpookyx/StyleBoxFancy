@@ -31,7 +31,7 @@ The `scale` property allows you to scale the shadow compared to its original pan
 > `scale` has inconsistent position and corner radius.
 
 ## Borders
-<img src="Assets/border.png" width=400>
+<img src="Assets/borders.png" width=400>
 
 `StyleBoxFancy` implements borders as a list of `StyleBorder` so you can have more than 1 border, each `StyleBorder` has its own properties and are drawn stacked one on top of another. It includes the same properties as `StyleBoxFlat`'s border.
 
