@@ -1,5 +1,4 @@
 @tool
-@icon("res://Stylebox/StyleBoxFancy.svg")
 extends StyleBox
 class_name StyleBoxFancy
 

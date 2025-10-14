@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bvvu8c56q60gy"
-path="res://.godot/imported/StyleBorder.svg-2d2eb5dc4ee52c5ba1b8362bcff6dd97.ctex"
+path="res://.godot/imported/StyleBorder.svg-a166060f8f89f97da548fb364bfe7591.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Stylebox/StyleBorder.svg"
-dest_files=["res://.godot/imported/StyleBorder.svg-2d2eb5dc4ee52c5ba1b8362bcff6dd97.ctex"]
+source_file="res://addons/StyleboxFancy/StyleBorder.svg"
+dest_files=["res://.godot/imported/StyleBorder.svg-a166060f8f89f97da548fb364bfe7591.ctex"]
 
 [params]
 

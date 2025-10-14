@@ -1,5 +1,4 @@
 @tool
-@icon("res://Stylebox/StyleBorder.svg")
 extends Resource
 class_name StyleBorder
 

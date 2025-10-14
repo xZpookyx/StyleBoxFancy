@@ -1,7 +1,7 @@
 [gd_scene load_steps=32 format=3 uid="uid://smo0o0fa3327"]
 
-[ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://Stylebox/StyleBorder.gd" id="1_nqgo6"]
-[ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://Stylebox/StyleBoxFancy.gd" id="2_e7l11"]
+[ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="1_nqgo6"]
+[ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="2_e7l11"]
 
 [sub_resource type="Gradient" id="Gradient_20hsm"]
 

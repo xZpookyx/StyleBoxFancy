@@ -22,6 +22,10 @@ window/size/mode=2
 window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/StyleboxFancy/plugin.cfg", "res://addons/styleboxfancy/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
