@@ -52,6 +52,25 @@ class_name StyleBoxFancy
 		corner_radius_bottom_left = v
 		emit_changed()
 
+# Expands margins
+@export_group("Expand Margins", "expand_margin_")
+@export_range(0, 100, 1, "or_greater") var expand_margin_left: float:
+	set(v):
+		expand_margin_left = v
+		emit_changed()
+@export_range(0, 100, 1, "or_greater") var expand_margin_top: float:
+	set(v):
+		expand_margin_top = v
+		emit_changed()
+@export_range(0, 100, 1, "or_greater") var expand_margin_right: float:
+	set(v):
+		expand_margin_right = v
+		emit_changed()
+@export_range(0, 100, 1, "or_greater") var expand_margin_bottom: float:
+	set(v):
+		expand_margin_bottom = v
+		emit_changed()
+
 # Shadow
 @export_group("Shadow", "shadow_")
 @export var shadow_enabled: bool:
@@ -487,6 +506,13 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 		corner_radius_top_right,
 		corner_radius_bottom_right,
 		corner_radius_bottom_left
+	)
+
+	rect = rect.grow_individual(
+		expand_margin_left,
+		expand_margin_top,
+		expand_margin_right,
+		expand_margin_bottom
 	)
 
 	# Skew
