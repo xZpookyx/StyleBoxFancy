@@ -1,5 +1,5 @@
 # Fancy Styleboxes
-A plugin for Godot that allows for more complex and visually atractive panel designs without creating textures.
+A plugin for Godot that allows for more complex and visually attractive panel designs without creating textures.
 
 <img src="Assets/cover.png" width=1000>
 
@@ -70,7 +70,7 @@ This is not a problem for a majority of use cases, only games with lots of UI or
 > * StyleBoxFlat: **34.24 ms**
 > * StyleBoxFancy: **342.66 ms**
 
-## Instalation
+## Installation
 ### Asset library (Not available yet)
 * In your godot project open the AssetLib tab on the top and search for "Fancy StyleBoxes".
 * Download and install into your addons folder.
