@@ -54,19 +54,19 @@ class_name StyleBoxFancy
 
 # Expands margins
 @export_group("Expand Margins", "expand_margin_")
-@export_range(0, 100, 1, "or_greater") var expand_margin_left: float:
+@export var expand_margin_left: float:
 	set(v):
 		expand_margin_left = v
 		emit_changed()
-@export_range(0, 100, 1, "or_greater") var expand_margin_top: float:
+@export var expand_margin_top: float:
 	set(v):
 		expand_margin_top = v
 		emit_changed()
-@export_range(0, 100, 1, "or_greater") var expand_margin_right: float:
+@export var expand_margin_right: float:
 	set(v):
 		expand_margin_right = v
 		emit_changed()
-@export_range(0, 100, 1, "or_greater") var expand_margin_bottom: float:
+@export var expand_margin_bottom: float:
 	set(v):
 		expand_margin_bottom = v
 		emit_changed()
@@ -81,17 +81,17 @@ class_name StyleBoxFancy
 	set(v):
 		shadow_color = v
 		emit_changed()
-@export_range(0, 1, 1, "or_greater") var shadow_size: int:
+@export_range(0, 1, 1, "or_greater") var shadow_blur: int = 1:
 	set(v):
-		shadow_size = v
+		shadow_blur = v
 		emit_changed()
 @export var shadow_offset: Vector2:
 	set(v):
 		shadow_offset = v
 		emit_changed()
-@export_custom(PROPERTY_HINT_LINK, "") var shadow_scale: Vector2 = Vector2.ONE:
+@export_custom(PROPERTY_HINT_LINK, "") var shadow_spread: Vector2:
 	set(v):
-		shadow_scale = Vector2.ZERO.max(v)
+		shadow_spread = v
 		emit_changed()
 
 # Antialiasing
@@ -501,13 +501,6 @@ func _draw_debug_rect(to_canvas_item, rect) -> void:
 
 
 func _draw(to_canvas_item: RID, rect: Rect2) -> void:
-	var corner_radius := Vector4(
-		corner_radius_top_left,
-		corner_radius_top_right,
-		corner_radius_bottom_right,
-		corner_radius_bottom_left
-	)
-
 	rect = rect.grow_individual(
 		expand_margin_left,
 		expand_margin_top,
@@ -515,22 +508,36 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 		expand_margin_bottom
 	)
 
+	if not rect.has_area():
+		return
+
+	var corner_radius := Vector4(
+		corner_radius_top_left,
+		corner_radius_top_right,
+		corner_radius_bottom_right,
+		corner_radius_bottom_left
+	)
+
 	# Skew
 	var transform := Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
 	RenderingServer.canvas_item_add_set_transform(to_canvas_item, transform)
 
 	if shadow_enabled:
-		var shadow_rect: Rect2 = rect.grow(shadow_size * 0.5)
-		var scale_grow = rect.size * (shadow_scale - Vector2.ONE)
-		shadow_rect.size += scale_grow
-		shadow_rect.position += -scale_grow * 0.5 + shadow_offset
+		var shadow_rect: Rect2 = rect.grow(shadow_blur * 0.5)
+		shadow_rect = shadow_rect.grow_individual(
+			shadow_spread.x * 0.5,
+			shadow_spread.y * 0.5,
+			shadow_spread.x * 0.5,
+			shadow_spread.y * 0.5,
+		)
+		shadow_rect.position += shadow_offset
 
 		_draw_rect(
 			to_canvas_item,
 			shadow_rect,
 			shadow_color,
-			_adjust_corner_radius(corner_radius, Vector4.ONE * -shadow_size),
-			shadow_size
+			_adjust_corner_radius(corner_radius, Vector4.ONE * -shadow_blur),
+			shadow_blur
 		)
 
 	if draw_center:
