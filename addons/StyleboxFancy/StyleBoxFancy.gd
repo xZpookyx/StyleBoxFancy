@@ -199,9 +199,9 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 		#RenderingServer.canvas_item_add_polyline(to_canvas_item, all_points, [Color.GREEN_YELLOW])
 
 
-func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D = null) -> void:
+func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radius: Vector4, aa: float, rect_texture: Texture2D = null, force_aa: bool = false) -> void:
 	# Simple rect check
-	if not corner_radius:
+	if not corner_radius and not force_aa:
 		if rect_texture:
 			RenderingServer.canvas_item_add_texture_rect(to_canvas_item, rect, rect_texture.get_rid(), false, rect_color)
 		else:
@@ -536,8 +536,10 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 			to_canvas_item,
 			shadow_rect,
 			shadow_color,
-			_adjust_corner_radius(corner_radius, Vector4.ONE * -shadow_blur),
-			shadow_blur
+			corner_radius,
+			shadow_blur,
+			null,
+			true
 		)
 
 	if draw_center:
