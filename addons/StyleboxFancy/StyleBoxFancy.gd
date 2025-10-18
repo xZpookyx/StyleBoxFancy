@@ -81,6 +81,10 @@ class_name StyleBoxFancy
 	set(v):
 		shadow_color = v
 		emit_changed()
+@export var shadow_texture: Texture2D:
+	set(v):
+		shadow_texture = v
+		emit_changed()
 @export_range(0, 1, 1, "or_greater") var shadow_blur: int = 1:
 	set(v):
 		shadow_blur = v
@@ -538,7 +542,7 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 			shadow_color,
 			corner_radius,
 			shadow_blur,
-			null,
+			shadow_texture,
 			true
 		)
 

@@ -285,7 +285,7 @@ anti_aliasing_size = 4.557
 
 [sub_resource type="Resource" id="Resource_y7dmn"]
 script = ExtResource("1_nqgo6")
-color = Color(0.8, 0.8, 0.8, 1)
+color = Color(0.800151, 0.800151, 0.800151, 0)
 blend = false
 ignore_stack = false
 width_left = 10
@@ -310,20 +310,20 @@ color = Color(1, 0.210127, 0.705323, 1)
 skew = Vector2(0, 0)
 draw_center = true
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_y7dmn")])
-corner_detail = 8
-corner_radius_top_left = 29
+corner_detail = 5
+corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 0
-expand_margin_left = 6.085
+expand_margin_left = 0.0
 expand_margin_top = 0.0
 expand_margin_right = 0.0
 expand_margin_bottom = 0.0
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.6)
-shadow_blur = 1
-shadow_offset = Vector2(0, 0)
-shadow_spread = Vector2(0, 0)
+shadow_blur = 15
+shadow_offset = Vector2(0, 3.845)
+shadow_spread = Vector2(-9.305, -9.305)
 anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
@@ -489,10 +489,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_20hsm")
 
 [node name="Flat2" type="Panel" parent="Control"]
 layout_mode = 0
-offset_left = 429.0
-offset_top = 208.0
-offset_right = 491.0
-offset_bottom = 256.0
+offset_left = 428.0
+offset_top = 218.0
+offset_right = 490.0
+offset_bottom = 266.0
 theme_override_styles/panel = SubResource("StyleBox_nqgo6")
 
 [node name="Fancy2" type="Panel" parent="Control"]
