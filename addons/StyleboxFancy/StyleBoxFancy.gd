@@ -3,23 +3,34 @@ extends StyleBox
 class_name StyleBoxFancy
 
 #region Properties
-
+## The background color of this stylebox.
+## Modulates [param texture] if it is set.
 @export var color: Color = Color(0.6, 0.6, 0.6):
 	set(v):
 		color = v
 		emit_changed()
+
+## The background texture of this stylebox.
 @export var texture: Texture2D:
 	set(v):
 		texture = v
 		emit_changed()
-@export var skew: Vector2:
-	set(v):
-		skew = v
-		emit_changed()
+
+## Toggles drawing the center of this stylebox.
 @export var draw_center: bool = true:
 	set(v):
 		draw_center = v
 		emit_changed()
+
+## Distorts the stylebox horizontally or vertically.
+## See [member StyleBoxFlat.skew] for more details.
+@export var skew: Vector2:
+	set(v):
+		skew = v
+		emit_changed()
+
+## An array of [StyleBorder]s, each border will be drawn one inside of the other
+## from top to bottom unless [member StyleBorder.ignore_stack] is enabled.
 @export var borders: Array[StyleBorder]:
 	set(v):
 		borders = v
@@ -29,85 +40,136 @@ class_name StyleBoxFancy
 				border.changed.connect(emit_changed)
 		emit_changed()
 
-# Corners
+
+#region Corners
+## Sets the number of vertices used for each corner, it includes the center rect,
+## borders, and shadow. See [member StyleBoxFlat.corner_detail] for more details.
 @export_range(1, 20, 1) var corner_detail: int = 8:
 	set(v):
 		corner_detail = v
 		emit_changed()
+
 @export_group("Corner Radius", "corner_radius")
+## The top-left corner's radius. If [code]0[/code], the corner is not rounded.
 @export_range(0, 1, 1, "or_greater") var corner_radius_top_left: int:
 	set(v):
 		corner_radius_top_left = v
 		emit_changed()
+
+## The top-right corner's radius. If [code]0[/code], the corner is not rounded.
 @export_range(0, 1, 1, "or_greater") var corner_radius_top_right: int:
 	set(v):
 		corner_radius_top_right = v
 		emit_changed()
+
+## The bottom-right corner's radius. If [code]0[/code], the corner is not rounded.
 @export_range(0, 1, 1, "or_greater") var corner_radius_bottom_right: int:
 	set(v):
 		corner_radius_bottom_right = v
 		emit_changed()
+
+## The bottom-left corner's radius. If [code]0[/code], the corner is not rounded.
 @export_range(0, 1, 1, "or_greater") var corner_radius_bottom_left: int:
 	set(v):
 		corner_radius_bottom_left = v
 		emit_changed()
+#endregion
 
-# Expands margins
+
+#region Expand margins
 @export_group("Expand Margins", "expand_margin_")
+## Expands the stylebox rect outside of the control rect on the left edge,
+## and allows negative values (but it wont draw if the rect size is negative). [br]
+## See [member StyleBoxFlat.expand_margin_left] for more details.
 @export var expand_margin_left: float:
 	set(v):
 		expand_margin_left = v
 		emit_changed()
+
+## Expands the stylebox rect outside of the control rect on the top edge,
+## and allows negative values (but it wont draw if the rect size is negative). [br]
+## See [member StyleBoxFlat.expand_margin_left] for more details.
 @export var expand_margin_top: float:
 	set(v):
 		expand_margin_top = v
 		emit_changed()
+
+## Expands the stylebox rect outside of the control rect on the right edge,
+## and allows negative values (but it wont draw if the rect size is negative). [br]
+## See [member StyleBoxFlat.expand_margin_left] for more details.
 @export var expand_margin_right: float:
 	set(v):
 		expand_margin_right = v
 		emit_changed()
+
+## Expands the stylebox rect outside of the control rect on the bottom edge,
+## and allows negative values (but it wont draw if the rect size is negative). [br]
+## See [member StyleBoxFlat.expand_margin_left] for more details.
 @export var expand_margin_bottom: float:
 	set(v):
 		expand_margin_bottom = v
 		emit_changed()
+#endregion
 
-# Shadow
+
+#region Shadow
 @export_group("Shadow", "shadow_")
+## Toggles drawing the shadow, allows for non blurred shadows unlike [StyleBoxFlat].
 @export var shadow_enabled: bool:
 	set(v):
 		shadow_enabled = v
 		emit_changed()
+
+## The shadow's color. Modulates [param shadow_texture] if it is set.
 @export var shadow_color: Color = Color(0.0, 0.0, 0.0, 0.6):
 	set(v):
 		shadow_color = v
 		emit_changed()
+
+## The shadow's texture.
 @export var shadow_texture: Texture2D:
 	set(v):
 		shadow_texture = v
 		emit_changed()
+
+## Sets the amount of blur the shadow will have.
 @export_range(0, 1, 1, "or_greater") var shadow_blur: int = 1:
 	set(v):
 		shadow_blur = v
 		emit_changed()
+
+## Offsets the shadow's rect relative to the stylebox.
 @export var shadow_offset: Vector2:
 	set(v):
 		shadow_offset = v
 		emit_changed()
+
+## Sets the size relative to the stylebox, higher values will extend the shadow's rect
+## and smaller values will shrink it. [br] [br]
+## [b]Note:[/b] if the rect is too small it wont draw.
 @export_custom(PROPERTY_HINT_LINK, "") var shadow_spread: Vector2:
 	set(v):
 		shadow_spread = v
 		emit_changed()
+#endregion
 
-# Antialiasing
+
+#region Anti aliasing
 @export_group("Anti Aliasing", "anti_aliasing_")
+## Makes the edges of the stylebox smoother.
+## See [member StyleBoxFlat.anti_aliasing] for more details.
 @export var anti_aliasing: bool = true:
 	set(v):
 		anti_aliasing = v
 		emit_changed()
+
+## Changes the size of the antialiasing effect. [code]1.0[/code] is recommended.
+## See [member StyleBoxFlat.anti_aliasing_size] for more details.
 @export var anti_aliasing_size: float = 1.0:
 	set(v):
 		anti_aliasing_size = v
 		emit_changed()
+#endregion
 
 #endregion
 
