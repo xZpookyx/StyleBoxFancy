@@ -218,9 +218,13 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 
 	if aa != 0: # if antialiasing
 		var inner_rect: Rect2 = rect.grow(-aa * 0.5)
+		# NOTE: Godot will report an error in rect.expand when its size is negative
+		# but will work anyways :/
+		inner_rect = inner_rect.expand(inner_rect.abs().get_center())
 		var outer_rect: Rect2 = rect.grow(aa * 0.5)
 		var inner_corner_radius: Vector4 = _fit_corner_radius_in_rect(corner_radius, inner_rect)
 		var ring_corner_radius: Vector4 = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(outer_rect, inner_rect))
+		ring_corner_radius = _fit_corner_radius_in_rect(ring_corner_radius, outer_rect)
 
 		_draw_ring(
 			to_canvas_item,
@@ -232,6 +236,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 			rect,
 			true
 		)
+		#_draw_debug_rect(to_canvas_item, inner_rect)
 
 		center_rect = inner_rect
 		center_corner_radius = inner_corner_radius
@@ -536,15 +541,16 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 		)
 		shadow_rect.position += shadow_offset
 
-		_draw_rect(
-			to_canvas_item,
-			shadow_rect,
-			shadow_color,
-			corner_radius,
-			shadow_blur,
-			shadow_texture,
-			true
-		)
+		if shadow_rect.has_area():
+			_draw_rect(
+				to_canvas_item,
+				shadow_rect,
+				shadow_color,
+				corner_radius,
+				shadow_blur,
+				shadow_texture,
+				true
+			)
 
 	if draw_center:
 		_draw_rect(
