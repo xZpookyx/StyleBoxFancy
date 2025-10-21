@@ -17,7 +17,7 @@ This plugin seeks to fill the gap between Godot's `StyleBoxFlat` and `StyleBoxTe
 The minimum Godot version required is 4.4
 
 ## Usage
-<img src="Assets/properties.png" width=400>
+<img src="Assets/properties.png" width=396>
 
 StyleBoxFancy comes with similar properties as StyleBoxFlat such as:
 * `Color`
@@ -35,17 +35,14 @@ Allows you to apply a `Texture2D` to your panel, it is compatible with rounded c
 If a texture is set its color will be modulated by the `color` property, so if you don't want to modify the texture's color then set `color` to white.
 
 ### Shadow
-<img src="Assets/shadow.png" width=400>
+<img src="Assets/shadow.png" width=389>
 
-Shadow has a dedicated `enabled` property that allows using shadows with 0 `size`, aka without blur.
+Shadow has a dedicated `enabled` property that allows using shadows with 0 `blur`.
 
-The `scale` property allows you to scale the shadow compared to its original panel size.
-
-> [!WARNING]
-> `scale` has inconsistent position and corner radius.
+The `spread` property will expand or shrink the shadow compared to its original panel size.
 
 ## Borders
-<img src="Assets/borders.png" width=400>
+<img src="Assets/borders.png" width=382>
 
 `StyleBoxFancy` implements borders as a list of `StyleBorder` so you can have more than 1 border, each `StyleBorder` has its own properties and are drawn stacked one on top of another. It includes the same properties as `StyleBoxFlat`'s border.
 
