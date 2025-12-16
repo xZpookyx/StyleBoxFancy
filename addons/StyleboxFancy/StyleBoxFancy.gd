@@ -42,6 +42,9 @@ class_name StyleBoxFancy
 
 
 #region Corners
+
+@export_group("Corners", "corner_")
+
 ## Sets the number of vertices used for each corner, it includes the center rect,
 ## borders, and shadow. See [member StyleBoxFlat.corner_detail] for more details.
 @export_range(1, 20, 1) var corner_detail: int = 8:
@@ -49,30 +52,90 @@ class_name StyleBoxFancy
 		corner_detail = v
 		emit_changed()
 
-@export_group("Corner Radius", "corner_radius")
+# TODO: Documentation
+@export_range(0, 1, 1, "or_greater") var corner_radius_setter: int
+@export_range(-4, 10, 0.005) var corner_curvature_setter: float = 1
+
+@export_tool_button("Set to all corners", "Edit")
+var corner_radius_all_action: Callable = _tool_button_set_to_all_corners
+
+func _tool_button_set_to_all_corners() -> void:
+	var undoredo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
+	undoredo.create_action("Set corner parameters to all corners")
+
+	undoredo.add_do_property(self, &"tl_corner_radius", corner_radius_setter)
+	undoredo.add_do_property(self, &"tr_corner_radius", corner_radius_setter)
+	undoredo.add_do_property(self, &"br_corner_radius", corner_radius_setter)
+	undoredo.add_do_property(self, &"bl_corner_radius", corner_radius_setter)
+	undoredo.add_do_property(self, &"tl_corner_curvature", corner_curvature_setter)
+	undoredo.add_do_property(self, &"tr_corner_curvature", corner_curvature_setter)
+	undoredo.add_do_property(self, &"br_corner_curvature", corner_curvature_setter)
+	undoredo.add_do_property(self, &"bl_corner_curvature", corner_curvature_setter)
+
+	undoredo.add_undo_property(self, &"tl_corner_radius", tl_corner_radius)
+	undoredo.add_undo_property(self, &"tr_corner_radius", tr_corner_radius)
+	undoredo.add_undo_property(self, &"br_corner_radius", br_corner_radius)
+	undoredo.add_undo_property(self, &"bl_corner_radius", bl_corner_radius)
+	undoredo.add_undo_property(self, &"tl_corner_curvature", tl_corner_curvature)
+	undoredo.add_undo_property(self, &"tr_corner_curvature", tr_corner_curvature)
+	undoredo.add_undo_property(self, &"br_corner_curvature", br_corner_curvature)
+	undoredo.add_undo_property(self, &"bl_corner_curvature", bl_corner_curvature)
+	undoredo.commit_action()
+
+
+@export_subgroup("Top left", "tl_corner_")
 ## The top-left corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_top_left: int:
+@export_range(0, 1, 1, "or_greater") var tl_corner_radius: int:
 	set(v):
-		corner_radius_top_left = v
+		tl_corner_radius = v
 		emit_changed()
 
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var tl_corner_curvature: float = 1:
+	set(v):
+		tl_corner_curvature = v
+		emit_changed()
+
+
+@export_subgroup("Top right", "tr_corner_")
 ## The top-right corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_top_right: int:
+@export_range(0, 1, 1, "or_greater") var tr_corner_radius: int:
 	set(v):
-		corner_radius_top_right = v
+		tr_corner_radius = v
 		emit_changed()
 
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var tr_corner_curvature: float = 1:
+	set(v):
+		tr_corner_curvature = v
+		emit_changed()
+
+@export_subgroup("Bottom right", "br_corner_")
 ## The bottom-right corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_bottom_right: int:
+@export_range(0, 1, 1, "or_greater") var br_corner_radius: int:
 	set(v):
-		corner_radius_bottom_right = v
+		br_corner_radius = v
 		emit_changed()
 
-## The bottom-left corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_bottom_left: int:
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var br_corner_curvature: float = 1:
 	set(v):
-		corner_radius_bottom_left = v
+		br_corner_curvature = v
 		emit_changed()
+
+@export_subgroup("Bottom left", "bl_corner_")
+## The bottom-left corner's radius. If [code]0[/code], the corner is not rounded.
+@export_range(0, 1, 1, "or_greater") var bl_corner_radius: int:
+	set(v):
+		bl_corner_radius = v
+		emit_changed()
+
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var bl_corner_curvature: float = 1:
+	set(v):
+		bl_corner_curvature = v
+		emit_changed()
+
 #endregion
 
 
@@ -173,42 +236,86 @@ class_name StyleBoxFancy
 
 #endregion
 
-func _get_rounded_polygon(rect: Rect2, corner_radius: Vector4) -> PackedVector2Array:
-	var corners: PackedVector2Array = _get_points_from_rect(rect)
+var corner_geometry: Array[PackedVector2Array]
 
-	var total_points: int = 0
-	for i in 4:
-		total_points += 1 if corner_radius[i] == 0 else corner_detail + 1
-
-	var polygon: PackedVector2Array
-	polygon.resize(total_points)
-
+func _superellipse_quadrant(exponent: float, detail: int) -> PackedVector2Array:
+	var n: float = pow(2, abs(exponent))
+	var points: PackedVector2Array
 
 	const HALF_PI: float = PI * 0.5
-	var angle_step: float = HALF_PI / corner_detail
-	var idx: int = 0
+	for i: int in range(detail + 1):
+		var theta: float = HALF_PI * i / detail
 
-	for corner_idx: int in 4:
-		var radius: float = corner_radius[corner_idx]
+		var cx: float = cos(theta)
+		var cy: float = sin(theta)
 
-		# Square corner
-		if radius == 0:
-			polygon[idx] = corners[corner_idx]
-			idx += 1
+		var x: float = pow(cx, 2.0 / n)
+		var y: float = pow(cy, 2.0 / n)
+		points.append(Vector2(x, y))
+	return points
+
+func _transform_points(points: PackedVector2Array, tx: float, ty: float) -> PackedVector2Array:
+	var out: PackedVector2Array
+	for p: Vector2 in points:
+		out.append(Vector2(p.x * tx, p.y * ty))
+	return out
+
+func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4) -> void:
+	var transforms: PackedVector2Array = [
+		Vector2(-1, -1),
+		Vector2(1, -1),
+		Vector2(1, 1),
+		Vector2(-1, 1),
+	]
+
+	var geometry_array: Array[PackedVector2Array]
+	for corner_idx in range(4):
+		if corner_radii[corner_idx] == 0:
+			geometry_array.append(PackedVector2Array([Vector2.ZERO]))
 			continue
 
-		var offset_x: float = radius if (corner_idx == 0 or corner_idx == 3) else -radius
-		var offset_y: float = radius if (corner_idx < 2) else -radius
-		var center: Vector2 = corners[corner_idx] + Vector2(offset_x, offset_y)
+		var curvature: float = corner_curvatures[corner_idx]
+		var corner_geometry: PackedVector2Array
+		var quadrant_points: PackedVector2Array = _superellipse_quadrant(curvature, corner_detail)
 
-		var base_angle: float = PI + HALF_PI * corner_idx
+		var sign = sign(curvature)
+		if curvature == 0:
+			sign = -1
 
-		for step: int in corner_detail + 1:
-			var angle: float = base_angle + angle_step * step
-			polygon[idx] = center + Vector2(cos(angle), sin(angle)) * radius
-			idx += 1
+		quadrant_points = _transform_points(
+			quadrant_points,
+			transforms[corner_idx].x * sign,
+			transforms[corner_idx].y * sign
+		)
 
-	return polygon
+		if curvature > 0:
+			if corner_idx % 2 == 1:
+				quadrant_points.reverse()
+
+			for point in quadrant_points:
+				corner_geometry.append(point - transforms[corner_idx] * sign)
+		else:
+			if corner_idx % 2 == 0:
+				quadrant_points.reverse()
+			corner_geometry = quadrant_points
+		geometry_array.append(corner_geometry)
+
+	corner_geometry = geometry_array
+
+
+func _get_rounded_rect(rect: Rect2, corner_radius: Vector4) -> PackedVector2Array:
+	var corners: PackedVector2Array = [
+		rect.position,
+		Vector2(rect.end.x, rect.position.y),
+		rect.end,
+		Vector2(rect.position.x, rect.end.y),
+	]
+
+	var points: PackedVector2Array
+	for corner_idx in range(4):
+		for point in corner_geometry[corner_idx]:
+			points.append(corners[corner_idx] + point * corner_radius[corner_idx])
+	return points
 
 
 func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
@@ -226,8 +333,8 @@ func _draw_ring(to_canvas_item: RID, inner_rect: Rect2, outer_rect: Rect2, corne
 
 	var inner_corner_radius = _adjust_corner_radius(corner_radius, _get_sides_width_from_rects(inner_rect, outer_rect))
 
-	var inner_points: PackedVector2Array = _get_rounded_polygon(inner_rect, inner_corner_radius)
-	var outer_points: PackedVector2Array = _get_rounded_polygon(outer_rect, corner_radius)
+	var inner_points: PackedVector2Array = _get_rounded_rect(inner_rect, inner_corner_radius)
+	var outer_points: PackedVector2Array = _get_rounded_rect(outer_rect, corner_radius)
 	var all_points: PackedVector2Array = inner_points + outer_points
 	var indices: PackedInt32Array = _triangulate_ring(inner_points, outer_points, corner_radius, inner_corner_radius)
 
@@ -303,7 +410,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 		center_rect = inner_rect
 		center_corner_radius = inner_corner_radius
 
-	var points: PackedVector2Array = _get_rounded_polygon(center_rect, center_corner_radius)
+	var points: PackedVector2Array = _get_rounded_rect(center_rect, center_corner_radius)
 
 	if rect_texture != null:
 		RenderingServer.canvas_item_add_polygon(
@@ -582,12 +689,21 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 	if not rect.has_area():
 		return
 
-	var corner_radius := Vector4(
-		corner_radius_top_left,
-		corner_radius_top_right,
-		corner_radius_bottom_right,
-		corner_radius_bottom_left
+	var corner_radii: Vector4 = Vector4(
+		tl_corner_radius,
+		tr_corner_radius,
+		br_corner_radius,
+		bl_corner_radius,
 	)
+
+	var corner_curvatures: Vector4 = Vector4(
+		tl_corner_curvature,
+		tr_corner_curvature,
+		br_corner_curvature,
+		bl_corner_curvature,
+	)
+
+	_generate_corner_geometry(corner_radii, corner_curvatures)
 
 	# Skew
 	var transform := Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
@@ -608,7 +724,7 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 				to_canvas_item,
 				shadow_rect,
 				shadow_color,
-				corner_radius,
+				corner_radii,
 				shadow_blur,
 				shadow_texture,
 				true
@@ -619,14 +735,14 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 			to_canvas_item,
 			rect,
 			color,
-			corner_radius,
+			corner_radii,
 			anti_aliasing_size if anti_aliasing else 0.0,
 			texture
 		)
 
 	if borders:
 		var border_rect: Rect2 = rect
-		var border_corner_radius: Vector4 = corner_radius
+		var border_corner_radii: Vector4 = corner_radii
 
 		for border: StyleBorder in borders:
 			if border == null: continue
@@ -636,7 +752,7 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 					to_canvas_item,
 					rect,
 					border,
-					corner_radius
+					corner_radii
 
 				)
 				continue
@@ -645,11 +761,11 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 				to_canvas_item,
 				border_rect,
 				border,
-				border_corner_radius
+				border_corner_radii
 			)
 
 			# Adjust parameters for the next border
-			border_corner_radius = _adjust_corner_radius(border_corner_radius, Vector4(
+			border_corner_radii = _adjust_corner_radius(border_corner_radii, Vector4(
 				border.width_left,
 				border.width_top,
 				border.width_right,
@@ -662,3 +778,16 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 				-border.width_right - border.inset_right,
 				-border.width_bottom - border.inset_bottom,
 			)
+
+#region Public methods
+func set_corner_radius_all(radius: int) -> void:
+	tl_corner_radius = radius
+	tr_corner_radius = radius
+	br_corner_radius = radius
+	bl_corner_radius = radius
+
+func set_corner_curvature_all(curvature: float) -> void:
+	tl_corner_curvature = curvature
+	tr_corner_curvature = curvature
+	br_corner_curvature = curvature
+	bl_corner_curvature = curvature
