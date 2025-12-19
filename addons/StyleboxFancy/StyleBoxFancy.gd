@@ -2,6 +2,15 @@
 extends StyleBox
 class_name StyleBoxFancy
 
+const Curvatures = {
+	ROUND = 1.0,
+	SQUIRCLE = 2.0,
+	BEVEL = 0.0,
+	SCOOP = -1.0,
+	REVERSE_SQUIRCLE = -2.0,
+	NOTCH = -4.0
+}
+
 #region Properties
 ## The background color of this stylebox.
 ## Modulates [param texture] if it is set.
@@ -54,7 +63,18 @@ class_name StyleBoxFancy
 
 # TODO: Documentation
 @export_range(0, 1, 1, "or_greater") var corner_radius_setter: int
-@export_range(-4, 10, 0.005) var corner_curvature_setter: float = 1
+@export_enum("Round", "Squircle", "Bevel", "Scoop", "Reverse squircle", "Notch")
+var corner_curvature_preset_setter: String = "Round":
+	set(v):
+		corner_curvature_preset_setter = v
+		if v != "Custom":
+			corner_curvature_setter = Curvatures.get(v.to_snake_case().to_upper(), corner_curvature_setter)
+
+@export_range(-4, 10, 0.005) var corner_curvature_setter: float = 1:
+	set(v):
+		corner_curvature_setter = v
+		if v not in Curvatures.values():
+			corner_curvature_preset_setter = "Custom"
 
 @export_tool_button("Set to all corners", "Edit")
 var corner_radius_all_action: Callable = _tool_button_set_to_all_corners

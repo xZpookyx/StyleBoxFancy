@@ -1,17 +1,9 @@
-[gd_scene load_steps=36 format=3 uid="uid://smo0o0fa3327"]
+[gd_scene load_steps=33 format=3 uid="uid://smo0o0fa3327"]
 
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="1_nqgo6"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="2_e7l11"]
 [ext_resource type="StyleBox" uid="uid://b1rljk4mthce4" path="res://Tests/NewCorner.tres" id="3_e7l11"]
 [ext_resource type="Script" uid="uid://d4lyufnanstns" path="res://Tests/TestCorners.gd" id="4_3yfbj"]
-
-[sub_resource type="Gradient" id="Gradient_20hsm"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ij3co"]
-gradient = SubResource("Gradient_20hsm")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dc28n"]
-texture = SubResource("GradientTexture2D_ij3co")
 
 [sub_resource type="Gradient" id="Gradient_ij3co"]
 interpolation_mode = 1
@@ -67,6 +59,7 @@ skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_oj8n5"), SubResource("Resource_0hynj")])
 corner_detail = 6
 corner_radius_setter = 0
+corner_curvature_preset_setter = null
 corner_curvature_setter = 1.0
 tl_corner_radius = 0
 tl_corner_curvature = 1.0
@@ -128,6 +121,7 @@ skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_t13ew")])
 corner_detail = 8
 corner_radius_setter = 0
+corner_curvature_preset_setter = null
 corner_curvature_setter = 1.0
 tl_corner_radius = 0
 tl_corner_curvature = 1.0
@@ -204,16 +198,17 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_20hsm"), SubResource("Resource_634l0")])
 corner_detail = 6
-corner_radius_setter = 0
-corner_curvature_setter = 1.0
-tl_corner_radius = 0
-tl_corner_curvature = 1.0
-tr_corner_radius = 0
-tr_corner_curvature = 1.0
-br_corner_radius = 0
-br_corner_curvature = 1.0
-bl_corner_radius = 0
-bl_corner_curvature = 1.0
+corner_radius_setter = 500
+corner_curvature_preset_setter = null
+corner_curvature_setter = 1.5
+tl_corner_radius = 500
+tl_corner_curvature = 1.5
+tr_corner_radius = 500
+tr_corner_curvature = 1.5
+br_corner_radius = 500
+br_corner_curvature = 1.5
+bl_corner_radius = 500
+bl_corner_curvature = 1.5
 expand_margin_left = 0.0
 expand_margin_top = 0.0
 expand_margin_right = 0.0
@@ -278,6 +273,7 @@ skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_nqgo6"), SubResource("Resource_3yfbj")])
 corner_detail = 4
 corner_radius_setter = 0
+corner_curvature_preset_setter = null
 corner_curvature_setter = 1.0
 tl_corner_radius = 0
 tl_corner_curvature = 1.0
@@ -285,7 +281,7 @@ tr_corner_radius = 0
 tr_corner_curvature = 1.0
 br_corner_radius = 0
 br_corner_curvature = 1.0
-bl_corner_radius = 0
+bl_corner_radius = 22
 bl_corner_curvature = 1.0
 expand_margin_left = 0.0
 expand_margin_top = 0.0
@@ -323,6 +319,7 @@ skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([])
 corner_detail = 8
 corner_radius_setter = 0
+corner_curvature_preset_setter = "Round"
 corner_curvature_setter = 1.0
 tl_corner_radius = 0
 tl_corner_curvature = 1.0
@@ -380,6 +377,7 @@ skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_e7l11")])
 corner_detail = 8
 corner_radius_setter = 0
+corner_curvature_preset_setter = null
 corner_curvature_setter = 1.0
 tl_corner_radius = 0
 tl_corner_curvature = 1.0
@@ -398,7 +396,7 @@ shadow_color = Color(0, 0, 0, 0.6)
 shadow_blur = 1
 shadow_offset = Vector2(0, 0)
 shadow_spread = Vector2(1, 1)
-anti_aliasing = true
+anti_aliasing = false
 anti_aliasing_size = 4.092
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
@@ -428,7 +426,7 @@ fill_from = Vector2(0, 1)
 [sub_resource type="Resource" id="Resource_y7dmn"]
 script = ExtResource("1_nqgo6")
 color = Color(1, 1, 1, 1)
-blend = false
+blend = true
 texture = SubResource("GradientTexture2D_y7dmn")
 ignore_stack = false
 width_left = 5
@@ -450,25 +448,26 @@ content_margin_right = -1.0
 content_margin_bottom = -1.0
 script = ExtResource("2_e7l11")
 color = Color(0, 0, 0, 1)
-draw_center = true
+draw_center = false
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_nqgo6")]([SubResource("Resource_y7dmn")])
 corner_detail = 8
 corner_radius_setter = 20
-corner_curvature_setter = 1.5
+corner_curvature_preset_setter = "Custom"
+corner_curvature_setter = -1.065
 tl_corner_radius = 20
-tl_corner_curvature = 1.5
+tl_corner_curvature = -0.96
 tr_corner_radius = 20
-tr_corner_curvature = 1.5
+tr_corner_curvature = 1.0
 br_corner_radius = 20
-br_corner_curvature = 1.5
+br_corner_curvature = 1.0
 bl_corner_radius = 20
-bl_corner_curvature = 1.5
+bl_corner_curvature = 1.0
 expand_margin_left = 0.0
 expand_margin_top = 0.0
 expand_margin_right = 0.0
 expand_margin_bottom = 0.0
-shadow_enabled = false
+shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.6)
 shadow_blur = 1
 shadow_offset = Vector2(0, 0)
@@ -487,18 +486,6 @@ grow_vertical = 2
 metadata/_edit_lock_ = true
 metadata/_edit_horizontal_guides_ = [602.0, 192.0, 259.0, 257.0, 254.0]
 metadata/_edit_vertical_guides_ = [415.0]
-
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_left = 42.0
-offset_top = 171.0
-offset_right = 199.0
-offset_bottom = 245.0
-theme_override_styles/panel = SubResource("StyleBoxTexture_dc28n")
-
-[node name="Label" type="Label" parent="PanelContainer"]
-layout_mode = 2
-text = "GANASTE!!"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
@@ -630,6 +617,6 @@ theme_override_styles/panel = SubResource("StyleBox_y7dmn")
 layout_mode = 0
 offset_left = 13.0
 offset_top = 427.0
-offset_right = 56.0
-offset_bottom = 467.0
+offset_right = 57.0
+offset_bottom = 468.0
 theme_override_styles/panel = SubResource("StyleBox_t13ew")
