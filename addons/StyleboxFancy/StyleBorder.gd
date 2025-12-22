@@ -85,3 +85,27 @@ class_name StyleBorder
 		inset_bottom = v
 		emit_changed()
 #endregion
+
+func get_width(side: Side) -> int:
+	match side:
+		SIDE_LEFT: return width_left
+		SIDE_TOP: return width_top
+		SIDE_RIGHT: return width_right
+		SIDE_BOTTOM: return width_bottom
+	return 0
+
+func get_width_min() -> int:
+	return min(width_left, width_top, width_right, width_bottom)
+
+func set_width(side: Side, width: int) -> void:
+	match side:
+		SIDE_LEFT: width_left = width
+		SIDE_TOP: width_top = width
+		SIDE_RIGHT: width_right = width
+		SIDE_BOTTOM: width_bottom = width
+
+func set_width_all(width: int) -> void:
+	width_left = width
+	width_top = width
+	width_right = width
+	width_bottom = width

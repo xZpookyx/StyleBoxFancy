@@ -258,12 +258,17 @@ func _tool_button_set_to_all_corners() -> void:
 
 var corner_geometry: Array[PackedVector2Array]
 
+
 func _superellipse_quadrant(exponent: float, detail: int) -> PackedVector2Array:
 	var n: float = pow(2, abs(exponent))
 	var points: PackedVector2Array
+	points.resize(detail + 1)
+
+	points[0] = Vector2(1, 0)
+	points[-1] = Vector2(0, 1)
 
 	const HALF_PI: float = PI * 0.5
-	for i: int in range(detail + 1):
+	for i: int in range(1, detail):
 		var theta: float = HALF_PI * i / detail
 
 		var cx: float = cos(theta)
@@ -271,13 +276,13 @@ func _superellipse_quadrant(exponent: float, detail: int) -> PackedVector2Array:
 
 		var x: float = pow(cx, 2.0 / n)
 		var y: float = pow(cy, 2.0 / n)
-		points.append(Vector2(x, y))
+		points[i] = Vector2(x, y)
 	return points
 
-func _transform_points(points: PackedVector2Array, tx: float, ty: float) -> PackedVector2Array:
+func _transform_points(points: PackedVector2Array, transform_vector: Vector2) -> PackedVector2Array:
 	var out: PackedVector2Array
 	for p: Vector2 in points:
-		out.append(Vector2(p.x * tx, p.y * ty))
+		out.append(p * transform_vector)
 	return out
 
 func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4) -> void:
@@ -288,15 +293,23 @@ func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4
 		Vector2(-1, 1),
 	]
 
+	var _quadrant_cache: Dictionary[float, PackedVector2Array]
 	var geometry_array: Array[PackedVector2Array]
 	for corner_idx in range(4):
+		# Point corner
 		if corner_radii[corner_idx] == 0:
 			geometry_array.append(PackedVector2Array([Vector2.ZERO]))
 			continue
 
-		var curvature: float = corner_curvatures[corner_idx]
+		var quadrant_points: PackedVector2Array
 		var corner_geometry: PackedVector2Array
-		var quadrant_points: PackedVector2Array = _superellipse_quadrant(curvature, corner_detail)
+		var curvature: float = corner_curvatures[corner_idx]
+
+		if _quadrant_cache.has(curvature):
+			quadrant_points = _quadrant_cache[curvature]
+		else:
+			quadrant_points = _superellipse_quadrant(curvature, corner_detail)
+			_quadrant_cache[curvature] = quadrant_points
 
 		var sign = sign(curvature)
 		if curvature == 0:
@@ -304,8 +317,7 @@ func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4
 
 		quadrant_points = _transform_points(
 			quadrant_points,
-			transforms[corner_idx].x * sign,
-			transforms[corner_idx].y * sign
+			transforms[corner_idx] * sign
 		)
 
 		if curvature > 0:
@@ -332,18 +344,25 @@ func _get_rounded_rect(rect: Rect2, corner_radius: Vector4) -> PackedVector2Arra
 	]
 
 	var points: PackedVector2Array
-	for corner_idx in range(4):
-		for point in corner_geometry[corner_idx]:
-			points.append(corners[corner_idx] + point * corner_radius[corner_idx])
+	var total_points: int
+	for corner: PackedVector2Array in corner_geometry:
+		total_points += corner.size()
+	points.resize(total_points)
+
+	var point_idx: int
+	for corner_idx: int in range(4):
+		for point: Vector2 in corner_geometry[corner_idx]:
+			points[point_idx] = point * corner_radius[corner_idx] + corners[corner_idx]
+			point_idx += 1
 	return points
 
 
 func _get_points_from_rect(rect: Rect2) -> PackedVector2Array:
 	return PackedVector2Array([
 		rect.position,
-		Vector2(rect.position.x + rect.size.x, rect.position.y),
+		Vector2(rect.end.x, rect.position.y),
 		rect.end,
-		Vector2(rect.position.x, rect.position.y + rect.size.y)
+		Vector2(rect.position.x, rect.end.y)
 	])
 
 
@@ -811,3 +830,17 @@ func set_corner_curvature_all(curvature: float) -> void:
 	tr_corner_curvature = curvature
 	br_corner_curvature = curvature
 	bl_corner_curvature = curvature
+
+func set_corner_radius(corner: Corner, radius: int):
+	match corner:
+		CORNER_TOP_LEFT: tl_corner_radius = radius
+		CORNER_TOP_RIGHT: tr_corner_radius = radius
+		CORNER_BOTTOM_LEFT: bl_corner_radius = radius
+		CORNER_BOTTOM_RIGHT: br_corner_radius = radius
+
+func set_expand_margin(side: Side, margin: float):
+	match side:
+		SIDE_LEFT: expand_margin_left = margin
+		SIDE_TOP: expand_margin_top = margin
+		SIDE_RIGHT: expand_margin_right = margin
+		SIDE_BOTTOM: expand_margin_bottom = margin

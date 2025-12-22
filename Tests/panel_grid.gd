@@ -21,6 +21,6 @@ func _ready():
 			panel.add_theme_stylebox_override("panel", styleboxfancy)
 		add_child(panel)
 
-func _process(delta):
+func _process(_delta):
 	for child: Panel in get_children():
 		child.queue_redraw()
