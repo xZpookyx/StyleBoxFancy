@@ -1,9 +1,7 @@
-[gd_scene load_steps=36 format=3 uid="uid://smo0o0fa3327"]
+[gd_scene load_steps=33 format=3 uid="uid://smo0o0fa3327"]
 
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="1_nqgo6"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="2_e7l11"]
-[ext_resource type="StyleBox" uid="uid://b1rljk4mthce4" path="res://Tests/NewCorner.tres" id="3_e7l11"]
-[ext_resource type="Script" uid="uid://d4lyufnanstns" path="res://Tests/TestCorners.gd" id="4_3yfbj"]
 
 [sub_resource type="Gradient" id="Gradient_ij3co"]
 interpolation_mode = 1
@@ -398,7 +396,7 @@ shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.6)
 shadow_blur = 16
 shadow_offset = Vector2(0, 0)
-shadow_spread = Vector2(1.98, 1.98)
+shadow_spread = Vector2(0, 0)
 anti_aliasing = false
 anti_aliasing_size = 50.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
@@ -460,20 +458,6 @@ shadow_spread = Vector2(1, 1)
 anti_aliasing = false
 anti_aliasing_size = 4.092
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
-
-[sub_resource type="StyleBox" id="StyleBox_y7dmn"]
-resource_local_to_scene = false
-resource_name = ""
-content_margin_left = -1.0
-content_margin_top = -1.0
-content_margin_right = -1.0
-content_margin_bottom = -1.0
-script = ExtResource("4_3yfbj")
-corner_shape = "Custom"
-corner_radius = 35
-corner_curvature = -1.94
-detail = 10
-metadata/_custom_type_script = "uid://d4lyufnanstns"
 
 [sub_resource type="Gradient" id="Gradient_3yfbj"]
 interpolation_mode = 2
@@ -664,31 +648,6 @@ offset_top = 277.0
 offset_right = 389.0
 offset_bottom = 359.0
 theme_override_styles/panel = SubResource("StyleBox_e7l11")
-
-[node name="New corners test" type="Panel" parent="Control"]
-layout_mode = 0
-offset_left = -5.0
-offset_top = -32.0
-offset_right = 15.0
-offset_bottom = -12.0
-rotation = 3.14159
-theme_override_styles/panel = ExtResource("3_e7l11")
-
-[node name="New corners test2" type="Panel" parent="Control"]
-layout_mode = 0
-offset_left = 42.0
-offset_top = -192.0
-offset_right = 194.0
-offset_bottom = -88.0
-theme_override_styles/panel = SubResource("StyleBox_y7dmn")
-
-[node name="New corners test3" type="Panel" parent="Control"]
-layout_mode = 0
-offset_left = 39.0
-offset_top = -195.0
-offset_right = 197.0
-offset_bottom = -85.0
-theme_override_styles/panel = SubResource("StyleBox_y7dmn")
 
 [node name="Test implemented" type="Panel" parent="Control"]
 layout_mode = 0

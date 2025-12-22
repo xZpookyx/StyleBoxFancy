@@ -285,7 +285,7 @@ func _transform_points(points: PackedVector2Array, transform_vector: Vector2) ->
 		out.append(p * transform_vector)
 	return out
 
-func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4) -> void:
+func _generate_corner_geometry(corner_curvatures: Vector4) -> void:
 	var transforms: PackedVector2Array = [
 		Vector2(-1, -1),
 		Vector2(1, -1),
@@ -295,12 +295,8 @@ func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4
 
 	var _quadrant_cache: Dictionary[float, PackedVector2Array]
 	var geometry_array: Array[PackedVector2Array]
-	for corner_idx in range(4):
-		# Point corner
-		if corner_radii[corner_idx] == 0:
-			geometry_array.append(PackedVector2Array([Vector2.ZERO]))
-			continue
 
+	for corner_idx in range(4):
 		var quadrant_points: PackedVector2Array
 		var corner_geometry: PackedVector2Array
 		var curvature: float = corner_curvatures[corner_idx]
@@ -335,7 +331,7 @@ func _generate_corner_geometry(corner_radii: Vector4, corner_curvatures: Vector4
 	corner_geometry = geometry_array
 
 
-func _get_rounded_rect(rect: Rect2, corner_radius: Vector4) -> PackedVector2Array:
+func _get_rounded_rect(rect: Rect2, corner_radii: Vector4) -> PackedVector2Array:
 	var corners: PackedVector2Array = [
 		rect.position,
 		Vector2(rect.end.x, rect.position.y),
@@ -344,16 +340,15 @@ func _get_rounded_rect(rect: Rect2, corner_radius: Vector4) -> PackedVector2Arra
 	]
 
 	var points: PackedVector2Array
-	var total_points: int
-	for corner: PackedVector2Array in corner_geometry:
-		total_points += corner.size()
-	points.resize(total_points)
 
-	var point_idx: int
 	for corner_idx: int in range(4):
-		for point: Vector2 in corner_geometry[corner_idx]:
-			points[point_idx] = point * corner_radius[corner_idx] + corners[corner_idx]
-			point_idx += 1
+		if corner_radii[corner_idx] == 0:
+			points.append(corners[corner_idx])
+		else:
+			var corner: PackedVector2Array
+			for point: Vector2 in corner_geometry[corner_idx]:
+				corner.append(point * corner_radii[corner_idx] + corners[corner_idx])
+			points.append_array(corner)
 	return points
 
 
@@ -434,6 +429,7 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 		var ring_corner_radius: Vector4 = _adjust_corner_radius(inner_corner_radius, _get_sides_width_from_rects(outer_rect, inner_rect))
 		ring_corner_radius = _fit_corner_radius_in_rect(ring_corner_radius, outer_rect)
 
+
 		_draw_ring(
 			to_canvas_item,
 			inner_rect,
@@ -468,9 +464,12 @@ func _draw_rect(to_canvas_item: RID, rect: Rect2, rect_color: Color, corner_radi
 
 
 func _draw_border(to_canvas_item: RID, rect: Rect2, border: StyleBorder, corner_radius: Vector4) -> void:
-	# TODO: In StyleBoxFlat the border gives a margin to the corner radius so it doesn't
+	# NOTE: In StyleBoxFlat the border gives a margin to the corner radius so it doesn't
 	# overlap with itself, however it gives the border a different corner radius than the
 	# underlying center panel.
+
+	# NOTE 2: I'm not sure if I want to have that behavior, css doesn't do it, but
+	# consider if you know how to fix the overlap when it is transparent, that would be awesome
 
 	var outer_rect: Rect2 = rect.grow_individual(-border.inset_left, -border.inset_top, -border.inset_right, -border.inset_bottom)
 	var inner_rect: Rect2 = outer_rect.grow_individual(-border.width_left, -border.width_top, -border.width_right, -border.width_bottom)
@@ -646,6 +645,7 @@ func _triangulate_ring(inner_ring: PackedVector2Array, outer_ring: PackedVector2
 
 		inner_idx += 1
 		outer_idx += 1
+
 	return triangles
 
 
@@ -716,6 +716,10 @@ func _draw_debug_rect(to_canvas_item, rect) -> void:
 	var points = _get_points_from_rect(rect)
 	RenderingServer.canvas_item_add_polyline(to_canvas_item, points, [Color.AQUA])
 
+func _draw_debug_polygon(to_canvas_item: RID, polygon: PackedVector2Array):
+	RenderingServer.canvas_item_add_polyline(to_canvas_item, polygon, [Color.AQUA])
+	RenderingServer.canvas_item_add_circle(to_canvas_item, polygon[0], 1, Color.RED)
+	RenderingServer.canvas_item_add_circle(to_canvas_item, polygon[-1], 1, Color.BLUE)
 
 func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 	rect = rect.grow_individual(
@@ -742,7 +746,7 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 		bl_corner_curvature,
 	)
 
-	_generate_corner_geometry(corner_radii, corner_curvatures)
+	_generate_corner_geometry(corner_curvatures)
 
 	# Skew
 	var transform := Transform2D(Vector2(1, -skew.y), Vector2(-skew.x, 1), Vector2(rect.size.y * skew.x * 0.5, rect.size.x * skew.y * 0.5))
