@@ -11,6 +11,8 @@ const Curvatures = {
 	NOTCH = -4.0
 }
 
+var _corner_geometry: Array[PackedVector2Array]
+
 #region Properties
 ## The background color of this stylebox.
 ## Modulates [param texture] if it is set.
@@ -61,6 +63,7 @@ const Curvatures = {
 		corner_detail = v
 		emit_changed()
 
+@export_subgroup("Set to all")
 # TODO: Documentation
 @export_range(0, 1, 1, "or_greater") var corner_radius_setter: int
 @export_enum("Round", "Squircle", "Bevel", "Scoop", "Reverse squircle", "Notch")
@@ -83,79 +86,75 @@ func _tool_button_set_to_all_corners() -> void:
 	var undoredo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
 	undoredo.create_action("Set corner parameters to all corners")
 
-	undoredo.add_do_property(self, &"tl_corner_radius", corner_radius_setter)
-	undoredo.add_do_property(self, &"tr_corner_radius", corner_radius_setter)
-	undoredo.add_do_property(self, &"br_corner_radius", corner_radius_setter)
-	undoredo.add_do_property(self, &"bl_corner_radius", corner_radius_setter)
-	undoredo.add_do_property(self, &"tl_corner_curvature", corner_curvature_setter)
-	undoredo.add_do_property(self, &"tr_corner_curvature", corner_curvature_setter)
-	undoredo.add_do_property(self, &"br_corner_curvature", corner_curvature_setter)
-	undoredo.add_do_property(self, &"bl_corner_curvature", corner_curvature_setter)
+	undoredo.add_do_property(self, &"corner_radius_top_left", corner_radius_setter)
+	undoredo.add_do_property(self, &"corner_radius_top_right", corner_radius_setter)
+	undoredo.add_do_property(self, &"corner_radius_bottom_right", corner_radius_setter)
+	undoredo.add_do_property(self, &"corner_radius_bottom_left", corner_radius_setter)
+	undoredo.add_do_property(self, &"corner_curvature_top_left", corner_curvature_setter)
+	undoredo.add_do_property(self, &"corner_curvature_top_right", corner_curvature_setter)
+	undoredo.add_do_property(self, &"corner_curvature_bottom_right", corner_curvature_setter)
+	undoredo.add_do_property(self, &"corner_curvature_bottom_left", corner_curvature_setter)
 
-	undoredo.add_undo_property(self, &"tl_corner_radius", tl_corner_radius)
-	undoredo.add_undo_property(self, &"tr_corner_radius", tr_corner_radius)
-	undoredo.add_undo_property(self, &"br_corner_radius", br_corner_radius)
-	undoredo.add_undo_property(self, &"bl_corner_radius", bl_corner_radius)
-	undoredo.add_undo_property(self, &"tl_corner_curvature", tl_corner_curvature)
-	undoredo.add_undo_property(self, &"tr_corner_curvature", tr_corner_curvature)
-	undoredo.add_undo_property(self, &"br_corner_curvature", br_corner_curvature)
-	undoredo.add_undo_property(self, &"bl_corner_curvature", bl_corner_curvature)
+	undoredo.add_undo_property(self, &"corner_radius_top_left", corner_radius_top_left)
+	undoredo.add_undo_property(self, &"corner_radius_top_right", corner_radius_top_right)
+	undoredo.add_undo_property(self, &"corner_radius_bottom_right", corner_radius_bottom_right)
+	undoredo.add_undo_property(self, &"corner_radius_bottom_left", corner_radius_bottom_left)
+	undoredo.add_undo_property(self, &"corner_curvature_top_left", corner_curvature_top_left)
+	undoredo.add_undo_property(self, &"corner_curvature_top_right", corner_curvature_top_right)
+	undoredo.add_undo_property(self, &"corner_curvature_bottom_right", corner_curvature_bottom_right)
+	undoredo.add_undo_property(self, &"corner_curvature_bottom_left", corner_curvature_bottom_left)
 	undoredo.commit_action()
 
 
-@export_subgroup("Top left", "tl_corner_")
+@export_subgroup("Corner Radius", "corner_radius_")
 ## The top-left corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var tl_corner_radius: int:
+@export_range(0, 1, 1, "or_greater") var corner_radius_top_left: int:
 	set(v):
-		tl_corner_radius = v
+		corner_radius_top_left = v
 		emit_changed()
 
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var tl_corner_curvature: float = 1:
-	set(v):
-		tl_corner_curvature = v
-		emit_changed()
-
-
-@export_subgroup("Top right", "tr_corner_")
 ## The top-right corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var tr_corner_radius: int:
+@export_range(0, 1, 1, "or_greater") var corner_radius_top_right: int:
 	set(v):
-		tr_corner_radius = v
+		corner_radius_top_right = v
 		emit_changed()
 
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var tr_corner_curvature: float = 1:
-	set(v):
-		tr_corner_curvature = v
-		emit_changed()
-
-@export_subgroup("Bottom right", "br_corner_")
 ## The bottom-right corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var br_corner_radius: int:
+@export_range(0, 1, 1, "or_greater") var corner_radius_bottom_right: int:
 	set(v):
-		br_corner_radius = v
+		corner_radius_bottom_right = v
 		emit_changed()
 
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var br_corner_curvature: float = 1:
-	set(v):
-		br_corner_curvature = v
-		emit_changed()
-
-@export_subgroup("Bottom left", "bl_corner_")
 ## The bottom-left corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var bl_corner_radius: int:
+@export_range(0, 1, 1, "or_greater") var corner_radius_bottom_left: int:
 	set(v):
-		bl_corner_radius = v
+		corner_radius_bottom_left = v
+		emit_changed()
+
+@export_subgroup("Corner Curvature", "corner_curvature_")
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var corner_curvature_top_left: float = 1:
+	set(v):
+		corner_curvature_top_left = v
 		emit_changed()
 
 # TODO: Documentation
-@export_range(-4, 10, 0.005) var bl_corner_curvature: float = 1:
+@export_range(-4, 10, 0.005) var corner_curvature_top_right: float = 1:
 	set(v):
-		bl_corner_curvature = v
+		corner_curvature_top_right = v
 		emit_changed()
 
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var corner_curvature_bottom_right: float = 1:
+	set(v):
+		corner_curvature_bottom_right = v
+		emit_changed()
+
+# TODO: Documentation
+@export_range(-4, 10, 0.005) var corner_curvature_bottom_left: float = 1:
+	set(v):
+		corner_curvature_bottom_left = v
+		emit_changed()
 #endregion
 
 
@@ -256,9 +255,7 @@ func _tool_button_set_to_all_corners() -> void:
 
 #endregion
 
-var corner_geometry: Array[PackedVector2Array]
-
-
+#region Draw
 func _superellipse_quadrant(exponent: float, detail: int) -> PackedVector2Array:
 	var n: float = pow(2, abs(exponent))
 	var points: PackedVector2Array
@@ -328,7 +325,7 @@ func _generate_corner_geometry(corner_curvatures: Vector4) -> void:
 			corner_geometry = quadrant_points
 		geometry_array.append(corner_geometry)
 
-	corner_geometry = geometry_array
+	_corner_geometry = geometry_array
 
 
 func _get_rounded_rect(rect: Rect2, corner_radii: Vector4) -> PackedVector2Array:
@@ -346,7 +343,7 @@ func _get_rounded_rect(rect: Rect2, corner_radii: Vector4) -> PackedVector2Array
 			points.append(corners[corner_idx])
 		else:
 			var corner: PackedVector2Array
-			for point: Vector2 in corner_geometry[corner_idx]:
+			for point: Vector2 in _corner_geometry[corner_idx]:
 				corner.append(point * corner_radii[corner_idx] + corners[corner_idx])
 			points.append_array(corner)
 	return points
@@ -733,17 +730,17 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 		return
 
 	var corner_radii: Vector4 = Vector4(
-		tl_corner_radius,
-		tr_corner_radius,
-		br_corner_radius,
-		bl_corner_radius,
+		corner_radius_top_left,
+		corner_radius_top_right,
+		corner_radius_bottom_right,
+		corner_radius_bottom_left,
 	)
 
 	var corner_curvatures: Vector4 = Vector4(
-		tl_corner_curvature,
-		tr_corner_curvature,
-		br_corner_curvature,
-		bl_corner_curvature,
+		corner_curvature_top_left,
+		corner_curvature_top_right,
+		corner_curvature_bottom_right,
+		corner_curvature_bottom_left,
 	)
 
 	_generate_corner_geometry(corner_curvatures)
@@ -821,30 +818,71 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 				-border.width_right - border.inset_right,
 				-border.width_bottom - border.inset_bottom,
 			)
+#endregion
 
 #region Public methods
-func set_corner_radius_all(radius: int) -> void:
-	tl_corner_radius = radius
-	tr_corner_radius = radius
-	br_corner_radius = radius
-	bl_corner_radius = radius
-
-func set_corner_curvature_all(curvature: float) -> void:
-	tl_corner_curvature = curvature
-	tr_corner_curvature = curvature
-	br_corner_curvature = curvature
-	bl_corner_curvature = curvature
-
-func set_corner_radius(corner: Corner, radius: int):
+# Getters
+func get_corner_radius(corner: Corner) -> int:
 	match corner:
-		CORNER_TOP_LEFT: tl_corner_radius = radius
-		CORNER_TOP_RIGHT: tr_corner_radius = radius
-		CORNER_BOTTOM_LEFT: bl_corner_radius = radius
-		CORNER_BOTTOM_RIGHT: br_corner_radius = radius
+		CORNER_TOP_LEFT: return corner_radius_top_left
+		CORNER_TOP_RIGHT: return corner_radius_top_right
+		CORNER_BOTTOM_LEFT: return corner_radius_bottom_left
+		CORNER_BOTTOM_RIGHT: return corner_radius_bottom_right
+		_: return 0
 
-func set_expand_margin(side: Side, margin: float):
+func get_corner_curvature(corner: Corner) -> float:
+	match corner:
+		CORNER_TOP_LEFT: return corner_curvature_top_left
+		CORNER_TOP_RIGHT: return corner_curvature_top_right
+		CORNER_BOTTOM_LEFT: return corner_curvature_bottom_left
+		CORNER_BOTTOM_RIGHT: return corner_curvature_bottom_right
+		_: return 0
+
+func get_expand_margin(side: Side) -> float:
+	match side:
+		SIDE_LEFT: return expand_margin_left
+		SIDE_TOP: return expand_margin_top
+		SIDE_RIGHT: return expand_margin_right
+		SIDE_BOTTOM: return expand_margin_bottom
+		_: return 0
+
+# Setters
+func set_corner_radius(corner: Corner, radius: int) -> void:
+	match corner:
+		CORNER_TOP_LEFT: corner_radius_top_left = radius
+		CORNER_TOP_RIGHT: corner_radius_top_right = radius
+		CORNER_BOTTOM_LEFT: corner_radius_bottom_left = radius
+		CORNER_BOTTOM_RIGHT: corner_radius_bottom_right = radius
+
+func set_corner_radius_all(radius: int) -> void:
+	corner_radius_top_left = radius
+	corner_radius_top_right = radius
+	corner_radius_bottom_right = radius
+	corner_radius_bottom_left = radius
+
+func set_corner_curvature(corner: Corner, curvature: int) -> void:
+	match corner:
+		CORNER_TOP_LEFT: corner_curvature_top_left = curvature
+		CORNER_TOP_RIGHT: corner_curvature_top_right = curvature
+		CORNER_BOTTOM_LEFT: corner_curvature_bottom_left = curvature
+		CORNER_BOTTOM_RIGHT: corner_curvature_bottom_right = curvature
+
+func set_corner_curvature_all(curvature: int) -> void:
+	corner_curvature_top_left = curvature
+	corner_curvature_top_right = curvature
+	corner_curvature_bottom_right = curvature
+	corner_curvature_bottom_left = curvature
+
+func set_expand_margin(side: Side, margin: float) -> void:
 	match side:
 		SIDE_LEFT: expand_margin_left = margin
 		SIDE_TOP: expand_margin_top = margin
 		SIDE_RIGHT: expand_margin_right = margin
 		SIDE_BOTTOM: expand_margin_bottom = margin
+
+func set_expand_margin_all(margin: float) -> void:
+	expand_margin_left = margin
+	expand_margin_top = margin
+	expand_margin_right = margin
+	expand_margin_bottom = margin
+#endregion
