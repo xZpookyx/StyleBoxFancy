@@ -818,6 +818,8 @@ func _draw(to_canvas_item: RID, rect: Rect2) -> void:
 				-border.width_right - border.inset_right,
 				-border.width_bottom - border.inset_bottom,
 			)
+
+	RenderingServer.canvas_item_add_set_transform(to_canvas_item, Transform2D.IDENTITY)
 #endregion
 
 #region Public methods

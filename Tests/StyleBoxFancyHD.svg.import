@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ds1a2dtd5mvjg"
-path="res://.godot/imported/StyleBoxFancy.svg-6da8cd1578f1d118ba3d9e533fc88d72.ctex"
+uid="uid://djmsx7jolhrqm"
+path="res://.godot/imported/StyleBoxFancyHD.svg-71f999aa82c494400b025a7baf84c511.ctex"
 metadata={
-"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/StyleboxFancy/StyleBoxFancy.svg"
-dest_files=["res://.godot/imported/StyleBoxFancy.svg-6da8cd1578f1d118ba3d9e533fc88d72.ctex"]
+source_file="res://Tests/StyleBoxFancyHD.svg"
+dest_files=["res://.godot/imported/StyleBoxFancyHD.svg-71f999aa82c494400b025a7baf84c511.ctex"]
 
 [params]
 
@@ -34,5 +33,5 @@ process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
-editor/scale_with_editor_scale=true
+editor/scale_with_editor_scale=false
 editor/convert_colors_with_editor_theme=false
