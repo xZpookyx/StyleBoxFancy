@@ -6,10 +6,11 @@ A plugin for Godot that allows for more complex and visually attractive panel de
 ## Why does this exist?
 There were several occasions where I wanted to create panel designs that sounded quite trivial, like a gradient with rounded corners, but it was impossible to do with either `StyleBoxFlat` or `StyleBoxTexture`. I found myself having to look for alternatives, such as creating a specific texture, using shaders, creating nodes with clip children, or manually drawing my nodes. Each of these options had its drawbacks, so I created my own StyleBox seeking to expand `StyleBoxFlat` functionality to make it a much more flexible tool. 
 
-Main features are:
+**Main features:**
 * Rounded panels with texture
 * Border textures
 * Stackable borders
+* Corner shapes
 
 This plugin seeks to fill the gap between Godot's `StyleBoxFlat` and `StyleBoxTexture`.
 
@@ -17,6 +18,8 @@ This plugin seeks to fill the gap between Godot's `StyleBoxFlat` and `StyleBoxTe
 The minimum Godot version required is 4.4
 
 ## Usage
+Add a new StyleBoxFancy to a panel or button.
+
 <img src="Assets/properties.png" width=396>
 
 StyleBoxFancy comes with similar properties as StyleBoxFlat such as:
@@ -27,12 +30,28 @@ StyleBoxFancy comes with similar properties as StyleBoxFlat such as:
 * `Shadow`
 * `Antialiasing`
 
-The new features are:
+> [!WARNING]
+> Setting a StyleBoxFancy or any other custom resource in the main theme of a project might yield `Parameter "SceneTree::get_singleton()" is null` error, this is a bug from godot,
+> see [this github issue](https://github.com/godotengine/godot/issues/111656)
+
+## Features
 
 ### Texture
 Allows you to apply a `Texture2D` to your panel, it is compatible with rounded corners and antialiasing. A common use for this is creating a rounded panel with a `GradientTexture2D` which is not possible using Godot's StyleBoxes.
 
 If a texture is set its color will be modulated by the `color` property, so if you don't want to modify the texture's color then set `color` to white.
+
+### Corner curvature
+Allows you to change the corner shape based on a [superellipse](https://en.wikipedia.org/wiki/Superellipse) formula, mirroring the upcoming css feature.
+
+Different curvature values give different corner shapes:
+* **1:** Round
+* **2:** Squircle
+* **0:** Bevel
+* **-1:** Scoop
+* **-2:** Reverse Squircle
+
+Positive values make **convex** corners that get closer to a square and negative values give **concave** corners.
 
 ### Shadow
 <img src="Assets/shadow.png" width=389>
@@ -65,7 +84,7 @@ This is not a problem for a majority of use cases, only games with lots of UI or
 > [!NOTE]
 > Tested with 1000 panels constantly being redrawn each frame with both StyleBoxes having a border and antialiasing on, using Godot's profiler measuring Frame Time (ms).
 > * StyleBoxFlat: **34.24 ms**
-> * StyleBoxFancy: **342.66 ms**
+> * StyleBoxFancy: **334.10 ms**
 
 ## Installation
 ### Asset library
