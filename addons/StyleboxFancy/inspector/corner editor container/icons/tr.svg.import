@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://duyhxrgq71a43"
-path="res://.godot/imported/corner_icon2.svg-55f445e64a0434834b19d4e523aea479.ctex"
+uid="uid://ci5gin4bu8hir"
+path="res://.godot/imported/tr.svg-45bbefc6e19840855234788c9b04fb87.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/StyleboxFancy/inspector/corner_icon2.svg"
-dest_files=["res://.godot/imported/corner_icon2.svg-55f445e64a0434834b19d4e523aea479.ctex"]
+source_file="res://addons/StyleboxFancy/inspector/corner editor container/icons/tr.svg"
+dest_files=["res://.godot/imported/tr.svg-45bbefc6e19840855234788c9b04fb87.ctex"]
 
 [params]
 
@@ -33,5 +34,5 @@ process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
 svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true

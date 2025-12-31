@@ -4,20 +4,36 @@ class_name CornerEditorContainer
 
 signal linked_corners
 signal property_changed(value: float, property: StringName)
+signal property_reverted(property: StringName)
+
+enum CornerStringNames {
+	radius_tl,
+	radius_tr,
+	radius_bl,
+	radius_br,
+	curvature_tl,
+	curvature_tr,
+	curvature_bl,
+	curvature_br,
+}
 
 const CORNER_STRINGNAMES: Array[StringName] = [
-	"corner_radius_top_left",
-	"corner_radius_top_right",
-	"corner_radius_bottom_left",
-	"corner_radius_bottom_right",
-	"corner_curvature_top_left",
-	"corner_curvature_top_right",
-	"corner_curvature_bottom_left",
-	"corner_curvature_bottom_right",
+	&"corner_radius_top_left",
+	&"corner_radius_top_right",
+	&"corner_radius_bottom_left",
+	&"corner_radius_bottom_right",
+	&"corner_curvature_top_left",
+	&"corner_curvature_top_right",
+	&"corner_curvature_bottom_left",
+	&"corner_curvature_bottom_right",
 ]
 
+@export var panel: PanelContainer
+@export var radius_controls: Control
+@export var curvature_controls: Control
 @export var link_button: Button
-@export var properties_dict: Dictionary[EditorSpinSlider, StringName]
+@export var properties_dict: Dictionary[Node, CornerStringNames]
+
 
 # NOTE: Accidentaly managed to instance a EditorSpinSlider inside the scene
 # so I don't need to generate them anymore, but I'll leave this just in case
@@ -33,28 +49,46 @@ func _get_radius_spinbox() -> EditorSpinSlider:
 	return editor_spinbox
 
 
+func _get_edited_property_from_node(node: Node) -> StringName:
+	if node in properties_dict:
+		return CORNER_STRINGNAMES[properties_dict[node]]
+	return ""
+
 func _property_changed(value: float, property: StringName):
 	property_changed.emit(value, property)
 
+func _property_revert(property: StringName) -> void:
+	property_reverted.emit(property)
 
 func _ready():
-	for spinbox: EditorSpinSlider in properties_dict:
-		if not spinbox.value_changed.is_connected(_property_changed):
-			spinbox.value_changed.connect(_property_changed.bind(properties_dict[spinbox]))
+	_on_radius_tab_button_pressed()
+
+	# Set themes
+	var editor_theme = EditorInterface.get_editor_theme()
+	panel.add_theme_stylebox_override("panel", editor_theme.get_stylebox("child_bg", "EditorProperty"))
+
+	# Connect signals
+	for node: Node in properties_dict:
+		var property = _get_edited_property_from_node(node)
+		if node is EditorSpinSlider:
+			if not node.value_changed.is_connected(_property_changed):
+				node.value_changed.connect(_property_changed.bind(property))
+
+		elif node is RevertButton:
+			if not node.pressed.is_connected(_property_revert):
+				node.pressed.connect(_property_revert.bind(property))
 
 
 func _on_link_button_pressed() -> void:
 	linked_corners.emit()
 
-
 func _on_radius_tab_button_pressed() -> void:
-	get_tree().call_group("Radius spinboxes", "show")
-	get_tree().call_group("Curvature spinboxes", "hide")
-
+	radius_controls.show()
+	curvature_controls.hide()
 
 func _on_curvature_tab_button_pressed() -> void:
-	get_tree().call_group("Radius spinboxes", "hide")
-	get_tree().call_group("Curvature spinboxes", "show")
+	radius_controls.hide()
+	curvature_controls.show()
 
 
 func is_linked() -> bool:
@@ -62,8 +96,12 @@ func is_linked() -> bool:
 		return false
 	return link_button.button_pressed
 
+func set_all_properties(stylebox: StyleBoxFancy) -> void:
+	if stylebox == null: return
 
-func set_property_value(value: int, corner: StringName) -> void:
-	var spinbox: EditorSpinSlider = properties_dict.find_key(corner)
-	if spinbox != null:
-		spinbox.set_value_no_signal(value)
+	for node: Node in properties_dict:
+		var property = _get_edited_property_from_node(node)
+		if node is EditorSpinSlider:
+			node.set_value_no_signal(stylebox.get(property))
+		if node is RevertButton:
+			node.set_can_revert(stylebox.property_can_revert(property))

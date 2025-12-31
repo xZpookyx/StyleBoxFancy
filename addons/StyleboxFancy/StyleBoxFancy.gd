@@ -3,12 +3,12 @@ extends StyleBox
 class_name StyleBoxFancy
 
 const Curvatures = {
-	ROUND = 1.0,
-	SQUIRCLE = 2.0,
-	BEVEL = 0.0,
-	SCOOP = -1.0,
-	REVERSE_SQUIRCLE = -2.0,
-	NOTCH = -4.0
+	"Round" = 1.0,
+	"Squircle" = 2.0,
+	"Bevel" = 0.0,
+	"Scoop" = -1.0,
+	"Reverse squircle" = -2.0,
+	"Notch" = -10.0
 }
 
 var _corner_geometry: Array[PackedVector2Array]
@@ -253,6 +253,24 @@ func _tool_button_set_to_all_corners() -> void:
 		emit_changed()
 #endregion
 
+#endregion
+
+#region Inspector
+func _property_can_revert(property: StringName) -> bool:
+	match property:
+		&"corner_radius_top_left", &"corner_radius_top_right", &"corner_radius_bottom_left", &"corner_radius_bottom_right":
+			return get(property) != 0
+		&"corner_curvature_top_left", &"corner_curvature_top_right", &"corner_curvature_bottom_left", &"corner_curvature_bottom_right":
+			return get(property) != 1
+		_:
+			return false
+
+func _property_get_revert(property: StringName):
+	match property:
+		&"corner_radius_top_left", &"corner_radius_top_right", &"corner_radius_bottom_left", &"corner_radius_bottom_right":
+			return 0
+		&"corner_curvature_top_left", &"corner_curvature_top_right", &"corner_curvature_bottom_left", &"corner_curvature_bottom_right":
+			return 1
 #endregion
 
 #region Draw

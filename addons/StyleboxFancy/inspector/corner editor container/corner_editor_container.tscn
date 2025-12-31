@@ -1,12 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://df2kverp315t8"]
+[gd_scene load_steps=13 format=3 uid="uid://df2kverp315t8"]
 
 [ext_resource type="Script" uid="uid://dsf52vsvsogxb" path="res://addons/StyleboxFancy/inspector/corner editor container/corner_editor_container.gd" id="1_r6tm4"]
-[ext_resource type="Texture2D" uid="uid://b1qswoa82s873" path="res://addons/StyleboxFancy/inspector/corner_icon.svg" id="2_u8m6u"]
+[ext_resource type="Texture2D" uid="uid://b1qswoa82s873" path="res://addons/StyleboxFancy/inspector/corner editor container/icons/tl.svg" id="2_u8m6u"]
 [ext_resource type="Script" uid="uid://dn8hu40tetyai" path="res://addons/StyleboxFancy/inspector/corner editor container/link_button.gd" id="3_u8m6u"]
+[ext_resource type="Script" uid="uid://d13ofhrshkxcr" path="res://addons/StyleboxFancy/inspector/corner editor container/revert_button.gd" id="4_tivkx"]
+[ext_resource type="Texture2D" uid="uid://ci5gin4bu8hir" path="res://addons/StyleboxFancy/inspector/corner editor container/icons/tr.svg" id="5_q644r"]
+[ext_resource type="Texture2D" uid="uid://bftee835eeax6" path="res://addons/StyleboxFancy/inspector/corner editor container/icons/bl.svg" id="6_f6m2c"]
+[ext_resource type="Texture2D" uid="uid://kxt7ientk4ju" path="res://addons/StyleboxFancy/inspector/corner editor container/icons/br.svg" id="7_nrcq3"]
+[ext_resource type="Script" uid="uid://mtdn6ihe1bj3" path="res://addons/StyleboxFancy/inspector/corner editor container/curvature_preset_button.gd" id="8_f6m2c"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_stc0f"]
 
-[sub_resource type="Image" id="Image_u8m6u"]
+[sub_resource type="Image" id="Image_f6m2c"]
 data = {
 "data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 92, 92, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 255, 255, 92, 92, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 92, 92, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 92, 92, 127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 231, 255, 90, 90, 54, 255, 94, 94, 57, 255, 93, 93, 233, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 231, 255, 90, 90, 54, 255, 94, 94, 57, 255, 93, 93, 233, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 91, 91, 42, 0, 0, 0, 0, 0, 0, 0, 0, 255, 91, 91, 42, 255, 93, 93, 233, 255, 92, 92, 232, 255, 93, 93, 41, 0, 0, 0, 0, 0, 0, 0, 0, 255, 91, 91, 42, 255, 93, 93, 233, 255, 92, 92, 232, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 91, 91, 45, 255, 93, 93, 44, 0, 0, 0, 0, 255, 91, 91, 42, 255, 91, 91, 42, 0, 0, 0, 0, 255, 91, 91, 45, 255, 93, 93, 44, 0, 0, 0, 0, 255, 91, 91, 42, 255, 91, 91, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 91, 91, 45, 255, 92, 92, 235, 255, 92, 92, 234, 255, 89, 89, 43, 0, 0, 0, 0, 0, 0, 0, 0, 255, 91, 91, 45, 255, 92, 92, 235, 255, 92, 92, 234, 255, 89, 89, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 92, 92, 235, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 233, 255, 91, 91, 59, 255, 92, 92, 61, 255, 92, 92, 235, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 233, 255, 91, 91, 59, 255, 92, 92, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 255, 93, 93, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 "format": "RGBA8",
@@ -15,23 +20,44 @@ data = {
 "width": 16
 }
 
-[sub_resource type="ImageTexture" id="ImageTexture_8hx6q"]
-image = SubResource("Image_u8m6u")
+[sub_resource type="ImageTexture" id="ImageTexture_nrcq3"]
+image = SubResource("Image_f6m2c")
 
-[node name="CornerEditorContainer" type="VBoxContainer" node_paths=PackedStringArray("link_button", "properties_dict")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rx5ek"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.037255, 0.035294, 0.040196, 1)
+border_color = Color(0.14902, 0.141176, 0.160784, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 3
+anti_aliasing = false
+
+[node name="CornerEditorContainer" type="VBoxContainer" node_paths=PackedStringArray("panel", "radius_controls", "curvature_controls", "link_button", "properties_dict")]
 offset_right = 252.0
 offset_bottom = 101.0
 script = ExtResource("1_r6tm4")
+panel = NodePath("PanelContainer")
+radius_controls = NodePath("PanelContainer/Radius controls")
+curvature_controls = NodePath("PanelContainer/Curvature controls")
 link_button = NodePath("HBoxContainer/LinkButton")
 properties_dict = {
-NodePath("GridContainer/Top left corner/Top left radius"): &"corner_radius_top_left",
-NodePath("GridContainer/Top right corner/Top right radius"): &"corner_radius_top_right",
-NodePath("GridContainer/Bottom left corner/Bottom left radius"): &"corner_radius_bottom_left",
-NodePath("GridContainer/Bottom right corner/Bottom right radius"): &"corner_radius_bottom_right",
-NodePath("GridContainer/Top left corner/Top left curvature"): &"corner_curvature_top_left",
-NodePath("GridContainer/Top right corner/Top right curvature"): &"corner_curvature_top_right",
-NodePath("GridContainer/Bottom left corner/Bottom left curvature"): &"corner_curvature_bottom_left",
-NodePath("GridContainer/Bottom right corner/Bottom right curvature"): &"corner_curvature_bottom_right"
+NodePath("PanelContainer/Radius controls/Top left corner/Top left revert button"): 0,
+NodePath("PanelContainer/Radius controls/Top left corner/Top left radius"): 0,
+NodePath("PanelContainer/Radius controls/Top right corner/Top right revert button"): 1,
+NodePath("PanelContainer/Radius controls/Top right corner/Top right radius"): 1,
+NodePath("PanelContainer/Radius controls/Bottom left corner/Bottom left revert button"): 2,
+NodePath("PanelContainer/Radius controls/Bottom left corner/Bottom left radius"): 2,
+NodePath("PanelContainer/Radius controls/Bottom right corner/Bottom right revert button"): 3,
+NodePath("PanelContainer/Radius controls/Bottom right corner/Bottom right radius"): 3,
+NodePath("PanelContainer/Curvature controls/Top left corner/TL curvature slider"): 4,
+NodePath("PanelContainer/Curvature controls/Top right corner/TR curvature slider"): 5,
+NodePath("PanelContainer/Curvature controls/Bottom left corner/BL curvature slider"): 6,
+NodePath("PanelContainer/Curvature controls/Bottom right corner/BR curvature slider"): 7
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -57,143 +83,283 @@ text = "Curvature"
 layout_mode = 2
 tooltip_text = "Lock/Unlock Corner Ratio"
 toggle_mode = true
-icon = SubResource("ImageTexture_8hx6q")
+icon = SubResource("ImageTexture_nrcq3")
 icon_alignment = 1
 script = ExtResource("3_u8m6u")
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rx5ek")
+
+[node name="Radius controls" type="GridContainer" parent="PanelContainer"]
+visible = false
 layout_mode = 2
 columns = 2
 
-[node name="Top left corner" type="HBoxContainer" parent="GridContainer"]
+[node name="Top left corner" type="HBoxContainer" parent="PanelContainer/Radius controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="GridContainer/Top left corner"]
+[node name="Top left revert button" type="Button" parent="PanelContainer/Radius controls/Top left corner"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-tooltip_text = "Top right"
-texture = ExtResource("2_u8m6u")
-expand_mode = 2
-stretch_mode = 3
+focus_mode = 1
+icon = ExtResource("2_u8m6u")
+flat = true
+icon_alignment = 1
+script = ExtResource("4_tivkx")
 
-[node name="Top left radius" type="EditorSpinSlider" parent="GridContainer/Top left corner" groups=["Radius spinboxes"]]
+[node name="Top left radius" type="EditorSpinSlider" parent="PanelContainer/Radius controls/Top left corner"]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_greater = true
 suffix = "px"
 editing_integer = true
 
-[node name="Top left curvature" type="EditorSpinSlider" parent="GridContainer/Top left corner" groups=["Curvature spinboxes"]]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -5.0
-max_value = 10.0
-step = 0.005
-value = 1.0
-allow_greater = true
-
-[node name="Top right corner" type="HBoxContainer" parent="GridContainer"]
+[node name="Top right corner" type="HBoxContainer" parent="PanelContainer/Radius controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="GridContainer/Top right corner"]
+[node name="Top right revert button" type="Button" parent="PanelContainer/Radius controls/Top right corner"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-tooltip_text = "Top right"
-texture = ExtResource("2_u8m6u")
-expand_mode = 2
-stretch_mode = 3
-flip_h = true
+focus_mode = 1
+icon = ExtResource("5_q644r")
+flat = true
+icon_alignment = 1
+script = ExtResource("4_tivkx")
 
-[node name="Top right radius" type="EditorSpinSlider" parent="GridContainer/Top right corner" groups=["Radius spinboxes"]]
+[node name="Top right radius" type="EditorSpinSlider" parent="PanelContainer/Radius controls/Top right corner"]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_greater = true
 suffix = "px"
 editing_integer = true
 
-[node name="Top right curvature" type="EditorSpinSlider" parent="GridContainer/Top right corner" groups=["Curvature spinboxes"]]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -5.0
-max_value = 10.0
-step = 0.005
-value = 1.0
-allow_greater = true
-
-[node name="Bottom left corner" type="HBoxContainer" parent="GridContainer"]
+[node name="Bottom left corner" type="HBoxContainer" parent="PanelContainer/Radius controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="GridContainer/Bottom left corner"]
+[node name="Bottom left revert button" type="Button" parent="PanelContainer/Radius controls/Bottom left corner"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-tooltip_text = "Bottom left"
-texture = ExtResource("2_u8m6u")
-expand_mode = 2
-stretch_mode = 3
-flip_v = true
+focus_mode = 1
+icon = ExtResource("6_f6m2c")
+flat = true
+icon_alignment = 1
+script = ExtResource("4_tivkx")
 
-[node name="Bottom left radius" type="EditorSpinSlider" parent="GridContainer/Bottom left corner" groups=["Radius spinboxes"]]
+[node name="Bottom left radius" type="EditorSpinSlider" parent="PanelContainer/Radius controls/Bottom left corner"]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_greater = true
 suffix = "px"
 editing_integer = true
 
-[node name="Bottom left curvature" type="EditorSpinSlider" parent="GridContainer/Bottom left corner" groups=["Curvature spinboxes"]]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = -5.0
-max_value = 10.0
-step = 0.005
-value = 1.0
-allow_greater = true
-
-[node name="Bottom right corner" type="HBoxContainer" parent="GridContainer"]
+[node name="Bottom right corner" type="HBoxContainer" parent="PanelContainer/Radius controls"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="TextureRect" type="TextureRect" parent="GridContainer/Bottom right corner"]
+[node name="Bottom right revert button" type="Button" parent="PanelContainer/Radius controls/Bottom right corner"]
+custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-tooltip_text = "Bottom right"
-texture = ExtResource("2_u8m6u")
-expand_mode = 2
-stretch_mode = 3
-flip_h = true
-flip_v = true
+focus_mode = 1
+icon = ExtResource("7_nrcq3")
+flat = true
+icon_alignment = 1
+script = ExtResource("4_tivkx")
 
-[node name="Bottom right radius" type="EditorSpinSlider" parent="GridContainer/Bottom right corner" groups=["Radius spinboxes"]]
+[node name="Bottom right radius" type="EditorSpinSlider" parent="PanelContainer/Radius controls/Bottom right corner"]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_greater = true
 suffix = "px"
 editing_integer = true
 
-[node name="Bottom right curvature" type="EditorSpinSlider" parent="GridContainer/Bottom right corner" groups=["Curvature spinboxes"]]
-visible = false
+[node name="Curvature controls" type="GridContainer" parent="PanelContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Top left corner" type="HBoxContainer" parent="PanelContainer/Curvature controls"]
 layout_mode = 2
 size_flags_horizontal = 3
-min_value = -5.0
-max_value = 10.0
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="TL curvature preset button" type="Button" parent="PanelContainer/Curvature controls/Top left corner" node_paths=PackedStringArray("popup_menu", "curvature_slider")]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+focus_mode = 1
+icon = ExtResource("2_u8m6u")
+flat = true
+icon_alignment = 1
+script = ExtResource("8_f6m2c")
+popup_menu = NodePath("TL Curvature presets popup")
+curvature_slider = NodePath("../TL curvature slider")
+
+[node name="TL Curvature presets popup" type="PopupMenu" parent="PanelContainer/Curvature controls/Top left corner/TL curvature preset button"]
+item_count = 6
+item_0/text = "Round"
+item_0/id = 0
+item_1/text = "Squircle"
+item_1/id = 1
+item_2/text = "Bevel"
+item_2/id = 2
+item_3/text = "Scoop"
+item_3/id = 3
+item_4/text = "Reverse squircle"
+item_4/id = 4
+item_5/text = "Notch"
+item_5/id = 5
+
+[node name="TL curvature slider" type="EditorSpinSlider" parent="PanelContainer/Curvature controls/Top left corner"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -7.0
+max_value = 7.0
 step = 0.005
 value = 1.0
-allow_greater = true
+
+[node name="Top right corner" type="HBoxContainer" parent="PanelContainer/Curvature controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="TR curvature preset button" type="Button" parent="PanelContainer/Curvature controls/Top right corner" node_paths=PackedStringArray("popup_menu", "curvature_slider")]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+focus_mode = 1
+icon = ExtResource("5_q644r")
+flat = true
+icon_alignment = 1
+script = ExtResource("8_f6m2c")
+popup_menu = NodePath("TR Curvature presets popup")
+curvature_slider = NodePath("../TR curvature slider")
+
+[node name="TR Curvature presets popup" type="PopupMenu" parent="PanelContainer/Curvature controls/Top right corner/TR curvature preset button"]
+auto_translate_mode = 1
+item_count = 6
+item_0/text = "Round"
+item_0/id = 0
+item_1/text = "Squircle"
+item_1/id = 1
+item_2/text = "Bevel"
+item_2/id = 2
+item_3/text = "Scoop"
+item_3/id = 3
+item_4/text = "Reverse squircle"
+item_4/id = 4
+item_5/text = "Notch"
+item_5/id = 5
+
+[node name="TR curvature slider" type="EditorSpinSlider" parent="PanelContainer/Curvature controls/Top right corner"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -7.0
+max_value = 7.0
+step = 0.005
+value = 1.0
+
+[node name="Bottom left corner" type="HBoxContainer" parent="PanelContainer/Curvature controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="BL curvature preset button" type="Button" parent="PanelContainer/Curvature controls/Bottom left corner" node_paths=PackedStringArray("popup_menu", "curvature_slider")]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+focus_mode = 1
+icon = ExtResource("6_f6m2c")
+flat = true
+icon_alignment = 1
+script = ExtResource("8_f6m2c")
+popup_menu = NodePath("BL Curvature presets popup")
+curvature_slider = NodePath("../BL curvature slider")
+
+[node name="BL Curvature presets popup" type="PopupMenu" parent="PanelContainer/Curvature controls/Bottom left corner/BL curvature preset button"]
+auto_translate_mode = 1
+item_count = 6
+item_0/text = "Round"
+item_0/id = 0
+item_1/text = "Squircle"
+item_1/id = 1
+item_2/text = "Bevel"
+item_2/id = 2
+item_3/text = "Scoop"
+item_3/id = 3
+item_4/text = "Reverse squircle"
+item_4/id = 4
+item_5/text = "Notch"
+item_5/id = 5
+
+[node name="BL curvature slider" type="EditorSpinSlider" parent="PanelContainer/Curvature controls/Bottom left corner"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -7.0
+max_value = 7.0
+step = 0.005
+value = 1.0
+
+[node name="Bottom right corner" type="HBoxContainer" parent="PanelContainer/Curvature controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="BR curvature preset button" type="Button" parent="PanelContainer/Curvature controls/Bottom right corner" node_paths=PackedStringArray("popup_menu", "curvature_slider")]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+focus_mode = 1
+icon = ExtResource("7_nrcq3")
+flat = true
+icon_alignment = 1
+script = ExtResource("8_f6m2c")
+popup_menu = NodePath("BR Curvature presets popup")
+curvature_slider = NodePath("../BR curvature slider")
+
+[node name="BR Curvature presets popup" type="PopupMenu" parent="PanelContainer/Curvature controls/Bottom right corner/BR curvature preset button"]
+auto_translate_mode = 1
+item_count = 6
+item_0/text = "Round"
+item_0/id = 0
+item_1/text = "Squircle"
+item_1/id = 1
+item_2/text = "Bevel"
+item_2/id = 2
+item_3/text = "Scoop"
+item_3/id = 3
+item_4/text = "Reverse squircle"
+item_4/id = 4
+item_5/text = "Notch"
+item_5/id = 5
+
+[node name="BR curvature slider" type="EditorSpinSlider" parent="PanelContainer/Curvature controls/Bottom right corner"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -7.0
+max_value = 7.0
+step = 0.005
+value = 1.0
 
 [connection signal="pressed" from="HBoxContainer/RadiusTabButton" to="." method="_on_radius_tab_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/CurvatureTabButton" to="." method="_on_curvature_tab_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/LinkButton" to="." method="_on_link_button_pressed"]
 [connection signal="toggled" from="HBoxContainer/LinkButton" to="HBoxContainer/LinkButton" method="_on_toggled"]
+[connection signal="pressed" from="PanelContainer/Curvature controls/Top left corner/TL curvature preset button" to="PanelContainer/Curvature controls/Top left corner/TL curvature preset button" method="_on_pressed"]
+[connection signal="index_pressed" from="PanelContainer/Curvature controls/Top left corner/TL curvature preset button/TL Curvature presets popup" to="PanelContainer/Curvature controls/Top left corner/TL curvature preset button" method="_on_popup_index_pressed"]
+[connection signal="pressed" from="PanelContainer/Curvature controls/Top right corner/TR curvature preset button" to="PanelContainer/Curvature controls/Top right corner/TR curvature preset button" method="_on_pressed"]
+[connection signal="index_pressed" from="PanelContainer/Curvature controls/Top right corner/TR curvature preset button/TR Curvature presets popup" to="PanelContainer/Curvature controls/Top right corner/TR curvature preset button" method="_on_popup_index_pressed"]
+[connection signal="pressed" from="PanelContainer/Curvature controls/Bottom left corner/BL curvature preset button" to="PanelContainer/Curvature controls/Bottom left corner/BL curvature preset button" method="_on_pressed"]
+[connection signal="index_pressed" from="PanelContainer/Curvature controls/Bottom left corner/BL curvature preset button/BL Curvature presets popup" to="PanelContainer/Curvature controls/Bottom left corner/BL curvature preset button" method="_on_popup_index_pressed"]
+[connection signal="pressed" from="PanelContainer/Curvature controls/Bottom right corner/BR curvature preset button" to="PanelContainer/Curvature controls/Bottom right corner/BR curvature preset button" method="_on_pressed"]
+[connection signal="index_pressed" from="PanelContainer/Curvature controls/Bottom right corner/BR curvature preset button/BR Curvature presets popup" to="PanelContainer/Curvature controls/Bottom right corner/BR curvature preset button" method="_on_popup_index_pressed"]

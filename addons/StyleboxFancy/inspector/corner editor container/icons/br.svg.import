@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b1qswoa82s873"
-path="res://.godot/imported/corner_icon.svg-ba55402de83e0030a44628b9a7eaa8f5.ctex"
+uid="uid://kxt7ientk4ju"
+path="res://.godot/imported/br.svg-5bd994883d096f5bdd255a9e19463564.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/StyleboxFancy/inspector/corner_icon.svg"
-dest_files=["res://.godot/imported/corner_icon.svg-ba55402de83e0030a44628b9a7eaa8f5.ctex"]
+source_file="res://addons/StyleboxFancy/inspector/corner editor container/icons/br.svg"
+dest_files=["res://.godot/imported/br.svg-5bd994883d096f5bdd255a9e19463564.ctex"]
 
 [params]
 
