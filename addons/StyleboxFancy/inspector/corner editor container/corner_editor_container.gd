@@ -5,6 +5,8 @@ class_name CornerEditorContainer
 signal linked_corners
 signal property_changed(value: float, property: StringName)
 signal property_reverted(property: StringName)
+signal multi_property_changed(values: Array, properties: Array[StringName])
+signal multi_property_reverted(properties: Array[StringName])
 
 enum CornerStringNames {
 	radius_tl,
@@ -33,7 +35,7 @@ const CORNER_STRINGNAMES: Array[StringName] = [
 @export var curvature_controls: Control
 @export var link_button: Button
 @export var properties_dict: Dictionary[Node, CornerStringNames]
-
+@export_custom(PROPERTY_HINT_LINK, "") var test: Vector4
 
 # NOTE: Accidentaly managed to instance a EditorSpinSlider inside the scene
 # so I don't need to generate them anymore, but I'll leave this just in case
@@ -48,17 +50,36 @@ func _get_radius_spinbox() -> EditorSpinSlider:
 	editor_spinbox.suffix = "px"
 	return editor_spinbox
 
-
 func _get_edited_property_from_node(node: Node) -> StringName:
 	if node in properties_dict:
 		return CORNER_STRINGNAMES[properties_dict[node]]
 	return ""
 
 func _property_changed(value: float, property: StringName):
-	property_changed.emit(value, property)
+	if link_button.button_pressed:
+		var values: Array
+		values.resize(4)
+		values.fill(value)
+
+		if CORNER_STRINGNAMES.find(property) < 4:
+			var properties: Array[StringName]
+			properties.assign(CORNER_STRINGNAMES.slice(0, 4))
+			multi_property_changed.emit(values, properties)
+		else:
+			var properties: Array[StringName]
+			properties.assign(CORNER_STRINGNAMES.slice(4, 8))
+			multi_property_changed.emit(values, properties)
+	else:
+		property_changed.emit(value, property)
 
 func _property_revert(property: StringName) -> void:
-	property_reverted.emit(property)
+	if link_button.button_pressed:
+		# NOTE: Only corner radius have a revert button
+		var properties: Array[StringName]
+		properties.assign(CORNER_STRINGNAMES.slice(0, 4))
+		multi_property_reverted.emit(properties)
+	else:
+		property_reverted.emit(property)
 
 func _ready():
 	_on_radius_tab_button_pressed()
@@ -74,7 +95,7 @@ func _ready():
 			if not node.value_changed.is_connected(_property_changed):
 				node.value_changed.connect(_property_changed.bind(property))
 
-		elif node is RevertButton:
+		elif node is Button:
 			if not node.pressed.is_connected(_property_revert):
 				node.pressed.connect(_property_revert.bind(property))
 
@@ -103,5 +124,5 @@ func set_all_properties(stylebox: StyleBoxFancy) -> void:
 		var property = _get_edited_property_from_node(node)
 		if node is EditorSpinSlider:
 			node.set_value_no_signal(stylebox.get(property))
-		if node is RevertButton:
-			node.set_can_revert(stylebox.property_can_revert(property))
+		if node is Button:
+			node.disabled = !stylebox.property_can_revert(property)
