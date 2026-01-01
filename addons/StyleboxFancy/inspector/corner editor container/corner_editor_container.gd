@@ -35,7 +35,6 @@ const CORNER_STRINGNAMES: Array[StringName] = [
 @export var curvature_controls: Control
 @export var link_button: Button
 @export var properties_dict: Dictionary[Node, CornerStringNames]
-@export_custom(PROPERTY_HINT_LINK, "") var test: Vector4
 
 # NOTE: Accidentaly managed to instance a EditorSpinSlider inside the scene
 # so I don't need to generate them anymore, but I'll leave this just in case
