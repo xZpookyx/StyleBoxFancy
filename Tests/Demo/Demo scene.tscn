@@ -1,9 +1,9 @@
 [gd_scene load_steps=63 format=3 uid="uid://6vt487oixuy0"]
 
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="1_6wg1k"]
-[ext_resource type="Texture2D" uid="uid://djmsx7jolhrqm" path="res://Tests/StyleBoxFancyHD.svg" id="1_gmbbs"]
+[ext_resource type="Texture2D" uid="uid://djmsx7jolhrqm" path="res://Tests/Demo/StyleBoxFancyHD.svg" id="1_gmbbs"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="2_fualm"]
-[ext_resource type="FontFile" uid="uid://kuedcwtejp32" path="res://Tests/Lato-Bold.ttf" id="2_wrtj3"]
+[ext_resource type="FontFile" uid="uid://kuedcwtejp32" path="res://Tests/Demo/Lato-Bold.ttf" id="2_wrtj3"]
 
 [sub_resource type="Gradient" id="Gradient_gmbbs"]
 interpolation_mode = 2

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://kuedcwtejp32"
-path="res://.godot/imported/Lato-Bold.ttf-061b7c5f76995d12f855d3820bd004ae.fontdata"
+path="res://.godot/imported/Lato-Bold.ttf-722d04785724a827f6529b8870fcbd99.fontdata"
 
 [deps]
 
-source_file="res://Tests/Lato-Bold.ttf"
-dest_files=["res://.godot/imported/Lato-Bold.ttf-061b7c5f76995d12f855d3820bd004ae.fontdata"]
+source_file="res://Tests/Demo/Lato-Bold.ttf"
+dest_files=["res://.godot/imported/Lato-Bold.ttf-722d04785724a827f6529b8870fcbd99.fontdata"]
 
 [params]
 

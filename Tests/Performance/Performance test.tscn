@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dbg5ray6e3jnd"]
 
-[ext_resource type="Script" uid="uid://cl4fgqya32xyr" path="res://Tests/panel_grid.gd" id="1_11pmt"]
+[ext_resource type="Script" uid="uid://cl4fgqya32xyr" path="res://Tests/Performance/panel_grid.gd" id="1_11pmt"]
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="2_21ch7"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="3_6tmmj"]
 

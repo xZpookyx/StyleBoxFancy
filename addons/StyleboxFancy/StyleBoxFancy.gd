@@ -2,6 +2,10 @@
 extends StyleBox
 class_name StyleBoxFancy
 
+## An advanced [StyleBox] which supports textures, multiple borders and corner
+## shapes.
+
+
 ## [b]Curvature presets[/b] [br][br]
 ## [b]Round:[/b] Default value, makes a normal circle. [br][br]
 ## [b]Squircle:[/b] Intermediate shape between a square and a circle. Needs a
@@ -20,8 +24,8 @@ const Curvatures = {
 	"Notch" = -7.0
 }
 
-## Used to save each corner's geometry that is reused for each rounded rect generated
-## as it is scaled depending on the corner radius
+# Used to save each corner's geometry that is reused for each rounded rect generated
+# as it is scaled depending on the corner radius
 var _corner_geometry: Array[PackedVector2Array]
 
 #region Properties
