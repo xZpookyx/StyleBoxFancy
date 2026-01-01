@@ -41,8 +41,17 @@ Allows you to apply a `Texture2D` to your panel, it is compatible with rounded c
 
 If a texture is set its color will be modulated by the `color` property, so if you don't want to modify the texture's color then set `color` to white.
 
+### Corners
+
+<img src="Assets/corners.png" width=283>
+
+This plugin comes with its own inspector for corner editing for ease of use and compactness.
+* **Linking** allows you to set all corner values at the same time.
+* In the **Radius** tab clicking on the corner icons reverts their value to 0.
+* In the **Curvature** tab clicking on the corner icons shows a list of presets for curvatures.
+
 ### Corner curvature
-Allows you to change the corner shape based on a [superellipse](https://en.wikipedia.org/wiki/Superellipse) formula, mirroring the upcoming css feature.
+Allows you to change the corner shape based on a [superellipse](https://en.wikipedia.org/wiki/Superellipse) formula.
 
 Different curvature values give different corner shapes:
 * **1:** Round
@@ -51,7 +60,7 @@ Different curvature values give different corner shapes:
 * **-1:** Scoop
 * **-2:** Reverse Squircle
 
-Positive values make **convex** corners that get closer to a square and negative values give **concave** corners.
+Positive values make outward curves that get closer to a square at high values and negative values makes inward curves.
 
 ### Shadow
 <img src="Assets/shadow.png" width=389>
