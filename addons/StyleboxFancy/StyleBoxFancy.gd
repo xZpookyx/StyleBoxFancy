@@ -2,20 +2,31 @@
 extends StyleBox
 class_name StyleBoxFancy
 
+## [b]Curvature presets[/b] [br][br]
+## [b]Round:[/b] Default value, makes a normal circle. [br][br]
+## [b]Squircle:[/b] Intermediate shape between a square and a circle. Needs a
+## higher corner radius to visually compensate comparated to a round corner. [br][br]
+## [b]Bevel:[/b] Makes the corner a straight line, it acts the same as if
+## [member corner_detail] value were 1. [br][br]
+## [b]Scoop:[/b] The inverse of a round corner. [br][br]
+## [b]Reverse squircle:[/b] The inverse of a squircle corner. [br][br]
+## [b]Notch:[/b] Makes a square cut inside the corner.
 const Curvatures = {
 	"Round" = 1.0,
 	"Squircle" = 2.0,
 	"Bevel" = 0.0,
 	"Scoop" = -1.0,
 	"Reverse squircle" = -2.0,
-	"Notch" = -10.0
+	"Notch" = -7.0
 }
 
+## Used to save each corner's geometry that is reused for each rounded rect generated
+## as it is scaled depending on the corner radius
 var _corner_geometry: Array[PackedVector2Array]
 
 #region Properties
 ## The background color of this stylebox.
-## Modulates [param texture] if it is set.
+## Modulates [member texture] if it is set.
 @export var color: Color = Color(0.6, 0.6, 0.6):
 	set(v):
 		color = v
@@ -63,95 +74,59 @@ var _corner_geometry: Array[PackedVector2Array]
 		corner_detail = v
 		emit_changed()
 
-@export_subgroup("Set to all")
-# TODO: Documentation
-@export_range(0, 1, 1, "or_greater") var corner_radius_setter: int
-@export_enum("Round", "Squircle", "Bevel", "Scoop", "Reverse squircle", "Notch")
-var corner_curvature_preset_setter: String = "Round":
-	set(v):
-		corner_curvature_preset_setter = v
-		if v != "Custom":
-			corner_curvature_setter = Curvatures.get(v.to_snake_case().to_upper(), corner_curvature_setter)
-
-@export_range(-4, 10, 0.005) var corner_curvature_setter: float = 1:
-	set(v):
-		corner_curvature_setter = v
-		if v not in Curvatures.values():
-			corner_curvature_preset_setter = "Custom"
-
-@export_tool_button("Set to all corners", "Edit")
-var corner_radius_all_action: Callable = _tool_button_set_to_all_corners
-
-func _tool_button_set_to_all_corners() -> void:
-	var undoredo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
-	undoredo.create_action("Set corner parameters to all corners")
-
-	undoredo.add_do_property(self, &"corner_radius_top_left", corner_radius_setter)
-	undoredo.add_do_property(self, &"corner_radius_top_right", corner_radius_setter)
-	undoredo.add_do_property(self, &"corner_radius_bottom_right", corner_radius_setter)
-	undoredo.add_do_property(self, &"corner_radius_bottom_left", corner_radius_setter)
-	undoredo.add_do_property(self, &"corner_curvature_top_left", corner_curvature_setter)
-	undoredo.add_do_property(self, &"corner_curvature_top_right", corner_curvature_setter)
-	undoredo.add_do_property(self, &"corner_curvature_bottom_right", corner_curvature_setter)
-	undoredo.add_do_property(self, &"corner_curvature_bottom_left", corner_curvature_setter)
-
-	undoredo.add_undo_property(self, &"corner_radius_top_left", corner_radius_top_left)
-	undoredo.add_undo_property(self, &"corner_radius_top_right", corner_radius_top_right)
-	undoredo.add_undo_property(self, &"corner_radius_bottom_right", corner_radius_bottom_right)
-	undoredo.add_undo_property(self, &"corner_radius_bottom_left", corner_radius_bottom_left)
-	undoredo.add_undo_property(self, &"corner_curvature_top_left", corner_curvature_top_left)
-	undoredo.add_undo_property(self, &"corner_curvature_top_right", corner_curvature_top_right)
-	undoredo.add_undo_property(self, &"corner_curvature_bottom_right", corner_curvature_bottom_right)
-	undoredo.add_undo_property(self, &"corner_curvature_bottom_left", corner_curvature_bottom_left)
-	undoredo.commit_action()
-
-
+# They are edited through the inspector plugin
 @export_subgroup("Corner Radius", "corner_radius_")
 ## The top-left corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_top_left: int:
+@export_storage var corner_radius_top_left: int:
 	set(v):
 		corner_radius_top_left = v
 		emit_changed()
 
 ## The top-right corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_top_right: int:
+@export_storage var corner_radius_top_right: int:
 	set(v):
 		corner_radius_top_right = v
 		emit_changed()
 
 ## The bottom-right corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_bottom_right: int:
+@export_storage var corner_radius_bottom_right: int:
 	set(v):
 		corner_radius_bottom_right = v
 		emit_changed()
 
 ## The bottom-left corner's radius. If [code]0[/code], the corner is not rounded.
-@export_range(0, 1, 1, "or_greater") var corner_radius_bottom_left: int:
+@export_storage var corner_radius_bottom_left: int:
 	set(v):
 		corner_radius_bottom_left = v
 		emit_changed()
 
+
 @export_subgroup("Corner Curvature", "corner_curvature_")
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var corner_curvature_top_left: float = 1:
+## The top-right corner shape. [br][br]
+## Represents the value of a superellipse function which gives different curve
+## shapes. Positive numbers makes corner shapes curved outward which get closer
+## to a square corner as the value gets higher, negative values makes corner
+## shapes curved inward, they are the exact inverse of their positive values. [br][br]
+## See [constant Curvatures] for some preset values.
+@export_storage var corner_curvature_top_left: float = 1:
 	set(v):
 		corner_curvature_top_left = v
 		emit_changed()
 
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var corner_curvature_top_right: float = 1:
+## The top-right corner shape. See [member corner_curvature_top_left] for more details.
+@export_storage var corner_curvature_top_right: float = 1:
 	set(v):
 		corner_curvature_top_right = v
 		emit_changed()
 
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var corner_curvature_bottom_right: float = 1:
+## The bottom-right corner shape. See [member corner_curvature_top_left] for more details.
+@export_storage var corner_curvature_bottom_right: float = 1:
 	set(v):
 		corner_curvature_bottom_right = v
 		emit_changed()
 
-# TODO: Documentation
-@export_range(-4, 10, 0.005) var corner_curvature_bottom_left: float = 1:
+## The bottom-left corner shape. See [member corner_curvature_top_left] for more details.
+@export_storage var corner_curvature_bottom_left: float = 1:
 	set(v):
 		corner_curvature_bottom_left = v
 		emit_changed()
@@ -202,7 +177,7 @@ func _tool_button_set_to_all_corners() -> void:
 		shadow_enabled = v
 		emit_changed()
 
-## The shadow's color. Modulates [param shadow_texture] if it is set.
+## The shadow's color. Modulates [member shadow_texture] if it is set.
 @export var shadow_color: Color = Color(0.0, 0.0, 0.0, 0.6):
 	set(v):
 		shadow_color = v

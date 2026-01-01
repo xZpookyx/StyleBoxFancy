@@ -9,7 +9,6 @@ extends VBoxContainer
 
 func set_themes():
 	var editor_theme: Theme = EditorInterface.get_editor_theme()
-	editor_theme.font
 	title_text.add_theme_stylebox_override("normal", editor_theme.get_stylebox("normal", "EditorHelpBitTitle"))
 	content_text.add_theme_stylebox_override("normal", editor_theme.get_stylebox("normal", "EditorHelpBitContent"))
 

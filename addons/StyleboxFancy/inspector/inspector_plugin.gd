@@ -5,13 +5,8 @@ const CornerEditor = preload("res://addons/StyleboxFancy/inspector/corner_editor
 func _can_handle(object: Object):
 	return object is StyleBoxFancy
 
-#func _parse_property(object, type, name, hint_type, hint_string, usage_flags, wide):
-	#if name == "corner_detail":
-		#add_property_editor("", CornerEditor.new())
-
 func _parse_group(object: Object, group: String):
 	if group == "Corners":
-
 		add_property_editor_for_multiple_properties(
 			"Corner Properties",
 			[
@@ -26,3 +21,4 @@ func _parse_group(object: Object, group: String):
 			],
 			CornerEditor.new()
 		)
+		return true
