@@ -1,18 +1,18 @@
 [gd_scene load_steps=63 format=3 uid="uid://6vt487oixuy0"]
 
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="1_6wg1k"]
-[ext_resource type="Texture2D" uid="uid://djmsx7jolhrqm" path="res://Tests/Demo/StyleBoxFancyHD.svg" id="1_gmbbs"]
+[ext_resource type="Texture2D" uid="uid://djmsx7jolhrqm" path="res://Scenes/Demo/StyleBoxFancyHD.svg" id="1_gmbbs"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="2_fualm"]
-[ext_resource type="FontFile" uid="uid://kuedcwtejp32" path="res://Tests/Demo/Lato-Bold.ttf" id="2_wrtj3"]
+[ext_resource type="FontFile" uid="uid://kuedcwtejp32" path="res://Scenes/Demo/Lato-Bold.ttf" id="2_wrtj3"]
 
-[sub_resource type="Gradient" id="Gradient_gmbbs"]
+[sub_resource type="Gradient" id="Gradient_yqmts"]
 interpolation_mode = 2
 interpolation_color_space = 2
 offsets = PackedFloat32Array(0, 0.541528, 1)
 colors = PackedColorArray(0.282812, 0.279164, 0.189097, 1, 0.222656, 0.318846, 0.254598, 1, 0.211082, 0.296038, 0.344985, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wrtj3"]
-gradient = SubResource("Gradient_gmbbs")
+gradient = SubResource("Gradient_yqmts")
 fill_from = Vector2(0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_cypu8"]
@@ -71,9 +71,6 @@ draw_center = true
 skew = Vector2(-0.5, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_gmbbs"), SubResource("Resource_wrtj3")])
 corner_detail = 8
-corner_radius_setter = 0
-corner_curvature_preset_setter = "Round"
-corner_curvature_setter = 1.0
 corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
@@ -133,9 +130,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_cypu8")])
 corner_detail = 8
-corner_radius_setter = 10
-corner_curvature_preset_setter = "Round"
-corner_curvature_setter = 1.0
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -210,9 +204,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_fualm"), SubResource("Resource_y4gm3")])
 corner_detail = 8
-corner_radius_setter = 45
-corner_curvature_preset_setter = "Squircle"
-corner_curvature_setter = 2.0
 corner_radius_top_left = 45
 corner_radius_top_right = 45
 corner_radius_bottom_right = 45
@@ -278,9 +269,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_pjt4y")])
 corner_detail = 8
-corner_radius_setter = 30
-corner_curvature_preset_setter = "Scoop"
-corner_curvature_setter = -1.0
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 30
@@ -356,9 +344,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_20hsm"), SubResource("Resource_634l0")])
 corner_detail = 6
-corner_radius_setter = 50
-corner_curvature_preset_setter = "Round"
-corner_curvature_setter = 1.0
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
@@ -432,9 +417,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_k0pi6"), SubResource("Resource_a8beh")])
 corner_detail = 8
-corner_radius_setter = 25
-corner_curvature_preset_setter = "Bevel"
-corner_curvature_setter = 0.0
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
@@ -463,7 +445,7 @@ blend = false
 ignore_stack = false
 width_left = 5
 width_top = 5
-width_right = 6
+width_right = 5
 width_bottom = 5
 inset_left = 0
 inset_top = 0
@@ -486,7 +468,7 @@ texture = SubResource("GradientTexture2D_fjpgp")
 ignore_stack = false
 width_left = 5
 width_top = 5
-width_right = 6
+width_right = 5
 width_bottom = 5
 inset_left = 0
 inset_top = 0
@@ -507,9 +489,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_5kq8b"), SubResource("Resource_u7jyk")])
 corner_detail = 8
-corner_radius_setter = 100
-corner_curvature_preset_setter = "Round"
-corner_curvature_setter = 1.0
 corner_radius_top_left = 196
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
@@ -595,9 +574,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_84iu2"), SubResource("Resource_xcaov")])
 corner_detail = 8
-corner_radius_setter = 50
-corner_curvature_preset_setter = "Squircle"
-corner_curvature_setter = 2.0
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
@@ -661,9 +637,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_2ellv")])
 corner_detail = 8
-corner_radius_setter = 0
-corner_curvature_preset_setter = "Round"
-corner_curvature_setter = 1.0
 corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
@@ -681,7 +654,7 @@ shadow_color = Color(0, 0, 0, 0.6)
 shadow_blur = 1
 shadow_offset = Vector2(0, 0)
 shadow_spread = Vector2(0, 0)
-anti_aliasing = true
+anti_aliasing = false
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
@@ -758,9 +731,6 @@ draw_center = true
 skew = Vector2(0.2, 0)
 borders = Array[ExtResource("1_6wg1k")]([SubResource("Resource_o5ijw"), SubResource("Resource_fjpgp")])
 corner_detail = 8
-corner_radius_setter = 20
-corner_curvature_preset_setter = "Squircle"
-corner_curvature_setter = 2.0
 corner_radius_top_left = 20
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20

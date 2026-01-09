@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://djmsx7jolhrqm"
-path="res://.godot/imported/StyleBoxFancyHD.svg-54554319c303ead8328c795f963787ac.ctex"
+path="res://.godot/imported/StyleBoxFancyHD.svg-23bb9d70789f8ae336694d007a18e866.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Tests/Demo/StyleBoxFancyHD.svg"
-dest_files=["res://.godot/imported/StyleBoxFancyHD.svg-54554319c303ead8328c795f963787ac.ctex"]
+source_file="res://Scenes/Demo/StyleBoxFancyHD.svg"
+dest_files=["res://.godot/imported/StyleBoxFancyHD.svg-23bb9d70789f8ae336694d007a18e866.ctex"]
 
 [params]
 

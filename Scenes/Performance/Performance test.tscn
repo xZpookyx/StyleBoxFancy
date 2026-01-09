@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dbg5ray6e3jnd"]
 
-[ext_resource type="Script" uid="uid://cl4fgqya32xyr" path="res://Tests/Performance/panel_grid.gd" id="1_11pmt"]
+[ext_resource type="Script" uid="uid://cl4fgqya32xyr" path="res://Scenes/Performance/panel_grid.gd" id="1_11pmt"]
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="2_21ch7"]
 [ext_resource type="Script" uid="uid://bkl6g25jwb47h" path="res://addons/StyleboxFancy/StyleBoxFancy.gd" id="3_6tmmj"]
 
@@ -43,9 +43,6 @@ draw_center = true
 skew = Vector2(0, 0)
 borders = Array[ExtResource("2_21ch7")]([SubResource("Resource_jykvq")])
 corner_detail = 8
-corner_radius_setter = 5
-corner_curvature_preset_setter = "Round"
-corner_curvature_setter = 1.0
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
