@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://g0b6setpwfvp"]
+[gd_scene load_steps=19 format=3 uid="uid://g0b6setpwfvp"]
 
 [ext_resource type="FontFile" uid="uid://kuedcwtejp32" path="res://Scenes/Demo/Lato-Bold.ttf" id="1_bu5fk"]
 [ext_resource type="Script" uid="uid://cjmmhbp1b5312" path="res://addons/StyleboxFancy/StyleBorder.gd" id="2_1oc3m"]
@@ -7,8 +7,7 @@
 [sub_resource type="Gradient" id="Gradient_gmbbs"]
 interpolation_mode = 2
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.541528, 1)
-colors = PackedColorArray(0.219608, 0.0784314, 0.00784314, 1, 0.345098, 0.2, 0.0666667, 1, 0.537934, 0.279502, 0.128837, 1)
+colors = PackedColorArray(0.157448, 0.236117, 0.303179, 1, 0.121698, 0.366343, 0.331075, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ltcql"]
 gradient = SubResource("Gradient_gmbbs")
@@ -17,14 +16,27 @@ fill_from = Vector2(0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_rholk"]
 font = ExtResource("1_bu5fk")
 font_size = 130
-font_color = Color(0.972549, 0.701961, 0.27451, 1)
+font_color = Color(0.835153, 0.997673, 0.948388, 1)
 shadow_size = 25
 
+[sub_resource type="Resource" id="Resource_w84ef"]
+script = ExtResource("2_1oc3m")
+color = Color(1, 1, 1, 1)
+blend = false
+ignore_stack = false
+width_left = 10
+width_top = 10
+width_right = 10
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
 [sub_resource type="Gradient" id="Gradient_4r53h"]
-interpolation_mode = 2
 interpolation_color_space = 2
-offsets = PackedFloat32Array(0, 0.5, 1)
-colors = PackedColorArray(0.939518, 0.604518, 0.305771, 1, 0.973567, 0.821931, 0.214139, 1, 0.607142, 0.831449, 0.220188, 1)
+colors = PackedColorArray(0.901722, 0.430031, 0.257857, 1, 1, 0.862251, 0.116117, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_fyqw4"]
 gradient = SubResource("Gradient_4r53h")
@@ -43,7 +55,7 @@ color = Color(1, 1, 1, 1)
 texture = SubResource("GradientTexture2D_fyqw4")
 draw_center = true
 skew = Vector2(0, 0)
-borders = Array[ExtResource("2_1oc3m")]([])
+borders = Array[ExtResource("2_1oc3m")]([SubResource("Resource_w84ef")])
 corner_detail = 8
 corner_radius_top_left = 135
 corner_radius_top_right = 135
@@ -66,6 +78,21 @@ anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
+[sub_resource type="Resource" id="Resource_bpapi"]
+script = ExtResource("2_1oc3m")
+color = Color(1, 1, 1, 1)
+blend = false
+ignore_stack = false
+width_left = 10
+width_top = 10
+width_right = 10
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
 [sub_resource type="StyleBox" id="StyleBox_vdofj"]
 resource_local_to_scene = false
 resource_name = ""
@@ -78,7 +105,7 @@ color = Color(1, 1, 1, 1)
 texture = SubResource("GradientTexture2D_fyqw4")
 draw_center = true
 skew = Vector2(0, 0)
-borders = Array[ExtResource("2_1oc3m")]([])
+borders = Array[ExtResource("2_1oc3m")]([SubResource("Resource_bpapi")])
 corner_detail = 8
 corner_radius_top_left = 75
 corner_radius_top_right = 75
@@ -101,6 +128,21 @@ anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
+[sub_resource type="Resource" id="Resource_g26r3"]
+script = ExtResource("2_1oc3m")
+color = Color(1, 1, 1, 1)
+blend = false
+ignore_stack = false
+width_left = 10
+width_top = 10
+width_right = 10
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
 [sub_resource type="StyleBox" id="StyleBox_8men7"]
 resource_local_to_scene = false
 resource_name = ""
@@ -113,7 +155,7 @@ color = Color(1, 1, 1, 1)
 texture = SubResource("GradientTexture2D_fyqw4")
 draw_center = true
 skew = Vector2(0, 0)
-borders = Array[ExtResource("2_1oc3m")]([])
+borders = Array[ExtResource("2_1oc3m")]([SubResource("Resource_g26r3")])
 corner_detail = 8
 corner_radius_top_left = 50
 corner_radius_top_right = 50
@@ -136,6 +178,21 @@ anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
+[sub_resource type="Resource" id="Resource_owkfx"]
+script = ExtResource("2_1oc3m")
+color = Color(1, 1, 1, 1)
+blend = false
+ignore_stack = false
+width_left = 10
+width_top = 10
+width_right = 10
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
 [sub_resource type="StyleBox" id="StyleBox_mvqua"]
 resource_local_to_scene = false
 resource_name = ""
@@ -148,7 +205,7 @@ color = Color(1, 1, 1, 1)
 texture = SubResource("GradientTexture2D_fyqw4")
 draw_center = true
 skew = Vector2(0, 0)
-borders = Array[ExtResource("2_1oc3m")]([])
+borders = Array[ExtResource("2_1oc3m")]([SubResource("Resource_owkfx"), null])
 corner_detail = 8
 corner_radius_top_left = 50
 corner_radius_top_right = 50
@@ -171,6 +228,21 @@ anti_aliasing = true
 anti_aliasing_size = 1.0
 metadata/_custom_type_script = "uid://bkl6g25jwb47h"
 
+[sub_resource type="Resource" id="Resource_27p05"]
+script = ExtResource("2_1oc3m")
+color = Color(1, 1, 1, 1)
+blend = false
+ignore_stack = false
+width_left = 10
+width_top = 10
+width_right = 10
+width_bottom = 10
+inset_left = 0
+inset_top = 0
+inset_right = 0
+inset_bottom = 0
+metadata/_custom_type_script = "uid://cjmmhbp1b5312"
+
 [sub_resource type="StyleBox" id="StyleBox_8d7hp"]
 resource_local_to_scene = false
 resource_name = ""
@@ -183,7 +255,7 @@ color = Color(1, 1, 1, 1)
 texture = SubResource("GradientTexture2D_fyqw4")
 draw_center = true
 skew = Vector2(0, 0)
-borders = Array[ExtResource("2_1oc3m")]([])
+borders = Array[ExtResource("2_1oc3m")]([SubResource("Resource_27p05")])
 corner_detail = 8
 corner_radius_top_left = 50
 corner_radius_top_right = 50
